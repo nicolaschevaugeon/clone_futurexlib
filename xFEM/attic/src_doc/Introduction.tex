@@ -1,0 +1,58 @@
+                   
+\section*{Qu'est-ce que \texttt{xfem} }\label{IntroGene}
+
+\code{xfem} est une libraire de classes et de fonctions C++, document\'ee en partie par ce
+pr\'esent document. Elle permet de mettre en oeuvre des applications
+de calculs fond\'ees sur l'approche des El\'ements Finis Etendus (X-FEM en anglais pour Extended Finite Element Method, voir
+chapitre~\ref{elements_finis_etendus}). Cette librairie utilise \`a la fois les possibilit\'es de la programmation objets et de la programmation g\'en\'erique (template) du C++. Elle ne constitue
+pas \`a proprement parl\'e une application ou un code de calcul
+particulier, mais doit \'etre consid\'er\'ee comme une boite \`a outils de
+\guil{fonctions} de bases assimilables aux fonctions ou commandes
+Matlab op\'erant sur des objets d\'eclar\'es par l'utilisateur. Un certain nombre d'applications particuli\'ere ont n\'eanmoins \'et\'e d\'evelopp\'ees et sont accessibles dans le r\'epertoire \code{Applis}.
+
+\code{xfem}  est d\'evelopp\'e de mani\'ere collaborative par des
+chercheurs appartenant \`a des \'equipes ou des laboratoires diff\'erents.
+Pour cette raison, cette librairie est d\'evelopp\'ee avec l'aide d'un
+logiciel de d\'eveloppement collaboratif ; autrefois CVS puis aujourd'hui SVN (chapitre~\ref{InstallationXfem}) permettant de contr\'eler la coh\'erence des diff\'erents
+d\'eveloppements. Il permet de charger une version du code  et
+de soumettre des nouveaux d\'eveloppements. 
+   
+Pour assurer que les d\'eveloppements ne viennent pas corrompre les
+d\'eveloppements ant\'erieurs, des cas tests sont ex\'ecut\'es toutes les
+nuits par des t\^aches planifi\'ees qui comparent les nouveau r\'esultats
+aux r\'esultats ant\'erieurs et signale toute anomalie.  Ces m\'emes cas tests
+doivent \^etre ex\'ecut\'es par les d\'eveloppeurs avant toute diffusion de
+leurs nouveaux d\'eveloppements afin de v\'erifier que leur apport ne perturbent pas les d\'eveloppement pr\'ec\'edents. Ceci ce fait simplement par une commande (\code{make check}: voir le chapitre \ref{Compilation}).
+
+La p\'erennit\'e du d\'eveloppement de la librairie xfem ne peut \^etre assur\'ee que par une
+documentation syst\'ematique. Celle-ci peut \^etre assur\'ee par chaque d\'eveloppeur dans les d\'eveloppements auquel il contribue. Certains commentaires particuliers peuvent \^etre d\'estin\'es \`a la documentation automatique par DOXYGEN (voir le chapitre~\ref{doxygen}). Ce logiciel qui g\'en\'ere une documentation syst\'ematique \`a partir des sources C++ peut \'egalement  interpr\'et\'es certains commentaires qu'il ins\'ere dans la documentation (voir \web{http://intraweb.ec-nantes.fr/labnet} rubrique D\'eveloppement, puis DOXYGEN).
+
+
+\section*{Objectifs de ce document}
+Le but de ce document est de  fournir un premier support permettant
+aux nouveaux d\'eveloppeurs de se lancer dans des d\'eveloppements C++ 
+utilisant la librairie \code{xfem} et les librairies associ\'ees, en particulier avec 
+les outils utilis\'es a l'ECN (svn, emacs, BuildUtil, ...).
+
+Un autre but de cette documentation est d'offrir une vue d'ensemble
+de la librairie  \code{xfem} afin d'am\'eliorer le code, les cas-tests
+et les capacit\'es de d\'eveloppement de chacun autour de la librairie \code{xfem}. 
+Aujourd'hui, ce but n'est pas encore atteint, mais il appartient \`a chacun de faire \'evoluer 
+ce document (voir chapitre~\ref{doclatex}), lui m\'eme en d\'eveloppement collaboratif.
+%\code{/Xfem/Xfem/Xfem/src_doc})
+
+\section*{Organisation du document}
+Ce guide est d\'ecompos\'e en plusieurs parties :
+\begin{itemize}
+\item[-] la partie~\ref{GettingStarted} fournit les premiers principes de fonctionnement. Pour le d\'ebutant, elle fournit les instructions pour installer et compiler les librairies en expliquant les outils utilis\'es (SVN, BuildUtil,...). Puis le lancement d'un cas test est d\'ecrit afin de v\'erifier que tout est bien installer. 
+
+\item[-] la partie~\ref{tools_and_lib} fournit une aide sur les utiliatires \code{emacs} et \code{gmsh}. Concernant \code{emacs}, le d\'ebutant trouvera les quelques commandes \`a retenir pour commencer \`a d\'evelopper avec cet \'editeurs (\textit{couper, copier, coller, chercher, \guil{undo}, sauver} ainsi que les touches de raccourcis pour \textit{compiler, chercher l'erreur suivante, etc...}), ainsi que l'explication pour transformer cet utilitaires en un v\'eritable environnement de d\'eveloppement C++~;
+
+\item[-] la partie~\ref{TheoryManual} fournit la base th\'eorique des m\'ethodes d\'evelopp\'ees dans \code{xfem}~; 
+
+\item[-] enfin, la partie~\ref{UserManual} donnera les notions \`a la base des classes \index{Documentation!classes} d'objets sp\'ecifiques \`a \code{xfem} (en court d'\'ecriture)~;
+
+\item[-] une annexes (partie~\ref{annexes}) rassemble des informations compl\'ementaires comme l'administration du serveur CVS, un m\'emento du langage C++ et une description de la mani\'ere dont ce document est d\'evelopp\'e. 
+\end{itemize}
+
+

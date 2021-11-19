@@ -1,0 +1,26 @@
+# lines starting by a # are comment lines
+##########
+# COMPUTER INFORMATION
+MESH_FILE_TYPE   = msh
+MESH_FILE        = data/square_6x6quad.msh
+
+
+###################################################
+ZONE 121  = {MAT_CLASS = newtonian_fluid MAT_PARAM = data/law.mat}
+####################################################
+####################################################
+
+
+##2D case
+##square
+
+BC_LINE  109 ={  VELOCITY_X   FIX = 0.0 VELOCITY_Y   FIX = 0.0  }
+BC_LINE  111 ={  VELOCITY_X   FIX = 0.0 VELOCITY_Y   FIX = 0.0  }
+BC_POINT 102 ={  PRESSURE     FIX = 0.0 }
+
+
+
+
+
+
+

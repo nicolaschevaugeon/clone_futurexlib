@@ -1,0 +1,125 @@
+\clearpage
+\section{la notions de forme bilin\'eaire et lin\'eaire}
+
+\subsection{Probl\`eme de r\'ef\'erence}
+
+Reprenons le probl\`eme de r\'ef\'erence de la section~\ref{probleme_de_reference}. L'\'equation~\ref{eq:varia} se r\'esume
+\`a trouver le champ $\bfu$ satisfaisant :
+\begin{equation}
+    \label{eq:varia_2}
+    \int_{\Ome}   \bfeps(\bfu):\bfC:\bfeps(\bfv) \dint \Ome =
+    \int_{\Gam_t} \ov{\bft}\cdot\bfv  \dint \Gam
+\end{equation}
+quelque soit le champ de d\'eplacement virtuel $\bfv$. Apr\`es lin\'earisation de l'op\'erateur $ \bfeps(.)$, le premier
+ terme de l'\'equation~\ref{eq:varia_2} est une forme bilin\'eaire en  $\bfu$ et  $\bfv$. Le deuxi\`eme terme est une forme
+ lin\'eaire en $\bfv$.
+
+
+En discr\'etisant le domaine par des \'el\'ement finis et en \'ecrivant le  champ  sous la forme :
+\begin{equation}
+    \bfu(\bfx) = \sum_i^N a_i \bfphi_i(\bfx)
+\end{equation}
+on arrive \`a un syst\`eme d'\'equation de type :
+\begin{equation}
+\label{eq:global_systeme}
+K_{ij} a_j = f_i, \quad i = 1, \ldots, N
+\end{equation}
+où la sommation sur l'indice $j$ est d'application et où
+\begin{eqnarray}
+K_{ij} & = & \int_{\Ome}   \bfeps(\bfphi_i):\bfC:\bfeps(\bfphi_j) \dint
+\Ome \\
+f_i & = & \int_{\Gam_t} \ov{\bft}\cdot\bfphi_i  \dint \Gam
+\end{eqnarray}
+
+\subsection{Projection L2}
+
+De mani\`ere generale, l'\'ecriture du principe variationnel sur un mod\`ele \'el\'ements finis conduit \`a la construction de
+ formes bi-lin\'eaires et lin\'eaires. Ces derni\`eres sont construites par int\'egration sur chaque \'el\'ement de fonction de forme
+ ou de leur d\'eriv\'ees puis l'assemblage des matrices \'el\'ementaires dans une matrice globale.
+
+Ces op\'erations peuvent varier d'un probl\`eme \`a l'autre et font appel \`a diff\'erentes m\'ethodes. Pour g\'erer ces m\'ethodes :
+
+\begin{description}
+\item[--] \code{xFormBilinear} est une classe g\'en\'erale d'object permettant de d\'efinir des formes bilin\'eaires. Cette classe
+est d\'eriv\'ee en  formes classiques (voir graphe d'h\'eritage ci-dessous). La forme construite d\'epend de l'application d'une
+ \guil{loi de comportement} au sens de la m\'ecanique, et de l'application des op\'erateurs \`a appliquer sur les fonctions de
+ forme $\bfphi_i(\bfx)$ (op\'erateur gradient, op\'erateur identit\'e, ...) ;
+\inheritgraph{15cm}{xFormBilinear}
+
+\item[--] \code{xIntegrationRuleBasic}, permet de d\'efinir le type d'int\'egration sur les \'el\'ements.
+
+
+\item[--] \code{xAssemblerBasic} permet de d\'efinir le type d'assemblage.
+\item[--] \code{xFormLinear}  est une classe g\'en\'erale d'object permettant de d\'efinir des formes lin\'eaires.
+\inheritgraph{15cm}{xFormLinear}
+
+\end{description}
+
+Prenons l'exemple d'une projection L2  d'une fonction $f(x)$. On recherche les valeurs nodales $u_i$ satisfaisant
+ l'\'equation suivante :
+\begin{equation}
+    \label{eq:L2proj}
+    \int_{\Ome}   \bfu(x)  \bfv(x) \dint \Ome =
+    \int_{\Ome} f(x) \bfv(x)  \dint \Ome  \hspace{2cm} \forall \hspace{2mm} \bfv
+\end{equation}
+ce qui se traduit par :
+\begin{equation}
+    \label{eq:L2proj-disc}
+    \int_{\Ome} u_i  \bfphi_i \bfphi_j \dint \Ome =
+    \int_{\Gam} f(x) \bfphi_j \dint \Gam
+\end{equation}
+
+Cette \'equation conduit \`a une forme bilin\'eaire sans op\'erateur sur les fonctions $\bfphi_i$ (op\'erateur identit\'e).
+Cet exemple est programm\'e dans le fichier \code{main.cc} du repertoire \code{devel/l2proj} de la librairie \code{Xfem}.
+ L'\'equation \ref{eq:L2proj-disc} se programme de la mani\`ere suivante :
+
+\begin{verbatim}
+ //un exemple de projection L2
+xDoubleManager vals;
+xSpaceLagrange temp_space("TEMPERATURE", SCALAR, DEGREE_ONE);
+xField         temp(&vals, temp_space);
+xValueCreator<xValueDouble>  creator_double;
+
+DeclareInterpolation(temp, creator_double, mesh.begin(2), mesh.end(2));
+
+xStateDofCreator<> snh(double_manager, "dofs");
+DeclareState(temp, snh, mesh.begin(2), matrix.end(2));
+
+xCSRVector b(vals.size("dofs"));
+xCSRVector sol(vals.size("dofs"));
+xCSRMatrix A(vals.size("dofs"));
+xAssemblerBasic<> assembler(A, b);
+
+xIntegrationRuleBasic integration_rule(2);
+
+xFormBilinearWithoutLaw<xValOperator<xIdentity<double> >,
+                        xValOperator<xIdentity<double> > > bilin;
+
+Assemble(bilin, assembler, integration_rule, temp, temp, mesh.begin(2), mesh.end(2));
+
+
+xFormLinearWithLoad<xValOperator<xIdentity<double> >, xEval<double> >  lin(t_exact);
+
+Assemble(lin, assembler, integration_rule, temp, mesh.begin(2), mesh.end(2));
+
+system.Solve(b, sol);
+Visit(xWriteSolutionVisitor(sol.begin()), vals.begin("dofs"), vals.end("dofs"));
+\end{verbatim}
+
+Les objets courant d'alg\`ebre lin\'eaire  (\code{xCSRVector, xCSRMatrix}) sont d\'efinis sur de la base de classe de la librairie
+ MTL auquelles sont ajouter des notions d'it\'erateur.
+
+
+\subsection{A d\'evelopper ....}
+
+notions d'assembleur et d'assemblage :   xAssemblerBasic<> assembler(A, b);
+
+type d'integrateur : xIntegrationRuleBasic integration\_rule(2);
+
+
+Assemble(bilin, assembler, integration\_rule, temp, temp, mesh.begin(2), mesh.end(2));
+
+que signifie :
+
+system.Solve(b, sol);
+Visit(xWriteSolutionVisitor(sol.begin()), vals.begin("dofs"), vals.end("dofs"));

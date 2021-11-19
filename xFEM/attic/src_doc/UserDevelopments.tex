@@ -1,0 +1,517 @@
+
+
+L'ensemble des lignes de codes de \code{xfem}, \code{xext} ou
+\code{xfem} utilise des notions propre au C++, \`a la librairie STL ou
+m\^eme la librairie boost. Pour les d\'ebutants en C++ qui ont des
+notions de programmation dans un autre langage (en Fortran, par
+exemple), cette partie a pour vocation d'introduire bri\`evement  ce
+nouveau langage et ces librairies en d\'egageant se qu'il faut en
+retenir.
+
+
+Les habitu\'es du C++ peuvent passer cette section.
+
+\section{Les grandes lignes}
+
+
+\subsection{la synthaxe :}
+
+Dans les exemples qui suivent, certains termes sont mis entre
+crochets ( \code{< >}). Cette notation d\'esigne un param\`etre \`a
+l'interieur d'une syntaxe. Par exemple, le type d'une variable not\'ee
+\code{<type>} peut \^etre remplac\'ee par :
+\begin{center}
+\begin{tabular}{ p{3cm} p{9cm} }
+\hline
+Type      &      Description \\
+\hline
+\code{int} & entier   \\
+\code{unsigned int} & entier positif   \\
+\code{long} & entier double pr\'ecision  \\
+\code{unsigned long} & entier double pr\'ecision positif   \\
+\code{float} & r\'eel  \\
+\code{double} & r\'eel double pr\'ecision \\
+\code{char} & caract\`ere   \\
+\code{string} & chaîne de caract\`eres    \\
+\code{bool}  & bool\'een    \\
+\hline
+\end{tabular}
+\end{center}
+
+
+\vspace{2em} le corps du texte s'\'ecrit en tenant compte des r\`egles
+suivantes :
+\begin{center}
+\begin{tabular}{ p{3cm} p{9cm} }
+\hline
+Signe      &      Description \\
+\hline
+\code{;} & les lignes se terminent par un point-virgule \\
+ \{ \hspace{1cm} \} & les fonctions sont \'ecrites entre accolades \\
+\code{//} & les commentaires s'\'ecrivent apr\`es un double slash\\
+\code{const} & devant une d\'eclaration, permet de d\'efinir une constante valable dans tout le programme  \\
+\hline
+\end{tabular}
+\end{center}
+
+\vspace{2em} Le programme principal s'\'ecrit comme une fonction :
+
+\begin{verbatim}
+                int main(int argc, char *argv[])
+                {
+                     ...
+                }
+\end{verbatim}
+
+
+
+%\subsection{Les op\'erateurs d'affectation}
+\vspace{2em} En plus des op\'erations classiques sur les variables, le
+C++ poss\`edent quelques raccourcis syntaxique pour les  op\'erateurs
+d'affectation :
+\begin{center}
+\begin{tabular}{ p{3cm} p{9cm} }
+\hline
+Op\'erateur      &      Action \\
+\hline
+a++      &      incr\'ementation de \code{a} \'equivalent \`a \code{a=a+1} \\
+a\-\-             &      d\'ecr\'ementation de \code{a} \'equivalent \`a \code{a=a-1} \\
+a += b             &      \'equivalent \`a \code{a=a+b} \\
+b=a++      &       \code{b} reçoit la valeur \code{a} puis \code{a} est incr\'ement\'e \\
+b=++a       &       \code{a} est incr\'ement\'e puis \code{b} reçoit la valeur \code{a}   \\
+\hline
+\end{tabular}
+\end{center}
+
+
+
+\vspace{2em}
+%\subsection{Les op\'erateurs logiques}
+les op\'erateurs logiques ressemblent  \`a ceux de nombreux codes :
+\begin{center}
+\begin{tabular}{ p{3cm} p{9cm} }
+\hline
+Op\'erateur      &      Signification \\
+\hline
+$==$             &      \'egal \`a\\
+$!=$             &      diff\'erent de \\
+$>$ \hspace{1cm} $<$      &      plus grand que, plus petit que       \\
+$>=$ \hspace{.75cm} $<=$      &       plus grand ou \'egal que, plus petit ou \'egal que             \\
+\&\&       &      ET logique (AND)\\
+$\|\|$             & OU logique (OR)      \\
+!             & contraire de {NOT}\\
+\hline
+\end{tabular}
+\end{center}
+
+
+\vspace{2em}
+%\subsection{Les pointeurs}
+Les pointeurs sont largement utilis\'es en C++. Leur utilisation   se
+fait de la synthaxe suivante :
+\begin{center}
+\begin{tabular}{ p{3cm} p{9cm} }
+\hline
+Op\'erateur      &      Signification \\
+\hline
+\code{\&a}       &      adresse de  \code{a}) \\
+\code{int* p}       &       d\'eclaration d'un pointeur de \code{int} nomm\'e \code{p}\\
+\code{*p}      &       la chose point\'ee par  \code{p})\\
+\code{<type>*}       &       d\'eclaration d'un pointeur de \code{<type>}\\
+\code{*(...\&)}  &       = identit\'e. Le contenu de l'adresse d'une variable est la variable elle-m\^eme. \\
+\hline
+\end{tabular}
+\end{center}
+
+
+\vspace{2em}
+%\subsection{Les controleurs}
+les controleurs sont classiques. La syntaxe est la suivante :
+\begin{center}
+\begin{longtable}{ p{6cm} p{6cm} }
+\hline
+Contrôleur      &      Syntaxe \\
+\hline
+tant que... &  \code{while( \emph{ cond }) \{   }         \\
+            &  \code{       \emph{action}   }            \\
+            &  \code{                      \} }            \\
+\\pour...   &  \code{for( int i=0 ; i < max ; i++) }       \\
+            &  \code{       \emph{action}   }            \\
+            &  \code{                      \} }            \\
+\\ sortie de boucle pour   &  \code{break;}        \\
+\\ contituation imm\'ediate de boucle pour   &  \code{continue;} \\
+\\ selon... faire  &  \code{switch( nValeur)\{}            \\
+                &  \code{    case \emph{val1}:     }            \\
+                &  \code{                           ...; }            \\
+                &  \code{                           break; }            \\
+                &  \code{    case \emph{val2}:  }            \\
+                &  \code{                           ...; }            \\
+                &  \code{                           break; }            \\
+                 &  \code{    defaut; ... }            \\
+                &  \code{ \} }            \\
+\hline
+\end{longtable}
+\end{center}
+
+
+
+\subsection{Les fonctions :}
+
+Le C++ ne connaît que les fonctions. L'\'equivalent d'un
+\emph{sous-programme} ou \emph{subroutine} serait une fonction de
+type vide (\code{void}) dont  les param\`etres sont les variables de
+passage. Une fonction s'\'ecrit sous la forme :
+\begin{verbatim}
+        <type_fcn> nom(<type_arg1> argument1,<type_arg2> argument2)
+        {
+            ...
+        return <expression>
+        }
+\end{verbatim}
+Une fonction peut \^etre utilis\'ee sans \^etre \'ecrite \emph{a priori} ;
+le compilateur a alors besoin du \emph{prototype} de la fonction,
+c'est \`a dire les lignes de d\'eclaration :
+\begin{verbatim}
+        <type_fcn> nom (<type_arg1> argument1,<type_arg2> argument2)
+        {
+            //  un petit commentaire peut \^etre le bienvenu tout de m\^eme...
+        };
+\end{verbatim}
+Le \emph{prototype} doit \^etre inclus via la commande \code{\#include
+"fonction"}   lorsqu'il est \'ecrit dans le fichier \code{fonction.h}.
+
+
+La particularit\'e des fonctions en C++ est qu'elles ne modifient pas
+la valeur des arguments, tout comme $y=f(x)$ fournit une valeur \`a
+$y$ sans modifie $x$. C'est la valeur de $x$ au moment de l'appel
+qui est transmise \`a $f()$. Pour pouvoir modifier une valeur il
+convient de construire la fonction $f()$ en passant l'adresse de
+$x$, par exemple, si \code{pVal} utilise l'adresse de \code{val}:
+\begin{verbatim}
+        void fcn(double* pVal)
+        {
+        };
+\end{verbatim}
+Ci-dessus, le param\`etre d\'eclar\'e \`a la fonction est un pointeur.
+
+L'appel se fait par l'adresse de la valeur :
+\begin{verbatim}
+        double val=10.5
+        fcn(val&)
+\end{verbatim}
+
+
+Une autre façon est la passage par \emph{r\'ef\'erence}, c'est \`a dire
+par l'adresse (le pointeur). La r\'ef\'erence n'est pas \`a proprement
+parl\'e un vrai type, mais une syntaxe particuli\`ere pour indiquer que
+l'on peut modifier le contenu d'un param\`etre (argument) :
+\begin{verbatim}
+        void fonction(double& val)
+        {
+        }
+\end{verbatim}
+Ci-dessus, le param\`etre d\'eclar\'e \`a la fonction est une r\'ef\'erence \`a la
+valeur.
+
+
+L'appel se fait par la valeur elle-m\^eme :
+\begin{verbatim}
+        double val=10.5
+        fcn(val)
+\end{verbatim}
+
+
+Il convient de faire attention \`a la port\'ee des variables internes
+des fonctions:
+\begin{itemize}
+\item une variable locale d'une fonction est inconnue du programme principal ;
+\item une variable locale \code{static}  est connue du programme principal ;
+\item une variable locale d'une fonction d\'eclar\'ee par \code{new} est gard\'ee en m\'emoire est utilisable dans le programme principal (peut \^etre d\'etruite par la fonction \code{delete}).
+\end{itemize}
+
+\subsection{Les classes}
+
+Il existe, comme en fortran, la notion de \code{structure}, mais est
+et peu utilis\'ee car contenu dans la notion de \code{class}. Seule la
+notion de \code{class} est donc \`a retenir. Les classes sont
+largement utilis\'ees en C++. C'est la base m\^eme de la Programmation
+Orient\'ee Object (POO).
+
+
+La syntaxe de d\'eclaration d'une classe est la suivante :
+\begin{verbatim}
+        class <non_de_la_classe>
+        {
+            public:
+            static <type_1> <nom_1> ;
+            <type_...> <nom_...> ;
+            ...
+            <type_fcn1> <nom_fcn1>
+            {
+            }
+            protected:
+            <type_2> <nom_2> ;
+            <type_...> <nom_...> ;
+            ...
+            <type_fcn2> <nom_fcn2>
+            {
+            }
+            private:
+            <type_3> <nom_3> ;
+            <type_...> <nom_...> ;
+            ...
+            <type_fcn3> <nom_fcn3>
+            {
+            }
+            ...
+            ...
+        };
+\end{verbatim}
+Les objets sont des instances d'une classe, tout comme une variable
+est l'instance d'un r\'eel (par exemple), c'est \`a dire un \'el\'ement
+d'un certain ensemble (type). Les objets peuvent donc \^etre point\'es
+ou r\'ef\'erenc\'e pour une fonction comme n'importe quel autre type de
+variable. On peut \'egalement affect\'e la m\'emoire sur le tas en
+utilisant un \code{new} lors de la d\'eclaration \`a l'int\'erieur d'une
+fonction.
+
+\note{les membres de donn\'ees \code{static} sont des membres commun \`a
+tous les objets de la classe (par exemple, un num\'ero qui peut \^etre
+incr\'ementer \`a chaque cr\'eation d'objet). C'est un variable globale
+qui doit \^etre initialiser dans le programme principal.}
+
+L'utilisation d'une fonction \code{demarrer} ou variable publique
+\code{longueur} d'un  objet \code{maVoiture} de classe
+\code{vehicule} se fait  par l'interm\'ediaire d'un point \guil{.}
+selon la synthaxe  \code{objet.fonction()}, par exemple:
+\begin{verbatim}
+        vehicule maVoiture;
+        vmaVoiture.demarrer();
+        maVoiture.longueur = 10.;
+\end{verbatim}
+Cependant, il est pr\'ef\'erable de travailler avec uniquement des
+fonctions. L'id\'eal \'etant  d'avoir une fonction publique \code{fixeLongueur} (la variable \code{longueur} sera alors rendue \code{protected})
+dans la classe du type \code{vehicule}  pour \'ecrire :
+\begin{verbatim}
+        vehicule maVoiture;
+        maVoiture.demarrer();
+        maVoiture.fixeLongueur(10.);
+\end{verbatim}
+les fonctions internes \`a la classe sont appel\'ees fonctions
+\emph{membres}. L'ensemble des fonctions membres   d'une classe
+d\'efinit l'\emph{interface} de la classe. Cette interface permet
+l'utilisation de la classe, m\^eme si l'impl\'ementation des fonctions
+\'evolue. Le prototype d'une classe peut \^etre (fortement conseill\'e) \'ecrit dans un fichier
+inclus \code{*.h}. Ainsi, il est possible de d\'eclarer une fonction
+membre sans la programmer. Elle est d\'eclar\'ee et utilisable. La
+programmation pouvant se faire au fur et \`a mesure des cas \`a traiter
+ou des d\'erivations de la classe. Le code source de la classe peut
+\^etre \'ecrit dans un autre fichier \code{*.cc} comme n'importe quelle
+autre fonction moyennant l'utilisation de sont nom complet  :
+\begin{verbatim}        nomDeLaClassnom::DeLaFonction()  \end{verbatim}
+(les fonctions membres peuvent \^etre surcharg\'ees si n\'ecessaire).
+
+
+Lorsqu'on utilise le pointeur d'un objet, l'acc\`es aux fonctions
+membres se fait par l'op\'erateur \code{->} :
+\begin{verbatim}
+        vehicule maVoiture;
+        vehicule* ptmaVoiture = &maVoiture;
+
+        ptmaVoiture->demarrer();        // est \'equivalent \`a  :
+        maVoiture.demarrer();
+
+        // alors que ceci est faut :
+        *ptmaVoiture.demarrer();
+
+        // mais ceci serait acceptable bien que peu employ\'e :
+        (*ptmaVoiture).demarrer();
+\end{verbatim}
+
+
+Une fonction particuli\`ere appel\'ee \emph{constructeur} ou
+\emph{op\'erateur parenth\`ese} permet d'initialiser un objet \`a ça
+d\'eclaration.
+\begin{verbatim}
+        class vehicule
+        {
+            public:
+            vehicule()
+            {
+                // en sortie d'usine : initialiser le compteur \`a z\'ero
+                ...
+            }
+        }
+\end{verbatim}
+Il peut en exister plusieurs selon le nombre et le type d'argument pass\'es pour construire l'objet.
+
+
+Une autre fonction particuli\`ere appel\'ee \emph{destructeur} ou
+\emph{op\'erateur ~} permet de lib\'erer la m\'emoire contenant l'objet.
+Elle doit g\'en\'eralement contenir la fonction \code{delete} si le
+cr\'eateur contient  la commande \code{new}.
+
+
+Encore une autre fonction particuli\`ere appel\'ee \emph{constructeur de
+copie}  permet au C++ de construire une copie d'un object lorsqu'il
+est pass\'e dans une fonction. Il permet, en fait, de construire la
+r\'ef\'erence de l'objet et donc de faire une copie \guil{parfaite} de l'objet, en particulier lorsque la structure de l'object est complexe ou de taille variable, ce que ne ferait pas un constructeur par d\'efaut. Il s'\'ecrit :
+\begin{verbatim}
+        class vehicule
+        {
+            public:
+            vehicule(vehicule& v)
+            {
+               ...
+            }
+        }
+\end{verbatim}
+
+La d\'eclaration des classes d\'eriv\'ees se fait de la mani\`ere suivante :
+\begin{verbatim}
+        class voiture : public vehicule
+        {
+           public:
+            voiture(...) : ... , ... // ajouter les constructeurs
+                                     // des classes composant
+                                     // la classe voiture
+            {...}
+        }
+\end{verbatim}
+
+
+Pour beneficier du polymorphisme, les functions membres doivent \^etre
+d\'eclar\'ee \code{virtuel}.
+\begin{verbatim}
+        class vehicule
+        {
+            public:
+            vitual void FaireLePlein()
+            ...
+        };
+\end{verbatim}
+La fonction virtuelle sera alors d\'efinie au cas par cas en fonction
+des classes d\'eriv\'ees (par exemple : vehiculeDiesel, vehiculeEssence,
+vehiculeGPL,...) car la façon de FaireLePlein diff\`erent  en fonction
+du type de v\'ehicule, alors que la fonction de FaireLePlein doit
+toujours exister (en tout cas pour les v\'ehicules motoris\'es).
+
+
+Les fonctions membres \code{statique}s et les constructeurs ne
+peuvent pas \^etre d\'eclar\'ees virtuelle alors que les d\'estructeurs
+devraient \^etre toujours virtuel.
+
+
+
+Les classes \guil{abstraites} sont des classes qui ne peuvent \^etre
+utilis\'ees telles quelles. Seule leurs classes d\'eriv\'ees peuvent \^etre
+instanci\'ee. Ce sont des classes contenant une ou plusieurs
+\guil{fonctions virtuelles pures}, c'est \`a dire ne contenant pas
+d'impl\'ementation. Ce type de fonction est d\'eclar\'ees par :
+\begin{verbatim}
+        virtual void fonction_toto(...) = 0;
+\end{verbatim}
+Les classes \guil{abstraites}, m\^emes si elles ne peut pas \^etre
+instanci\'ee, peuvent \^etre pass\'ee comme param\`etre de fonction car lors
+de l'appel de cette fonction la classe r\'eellement pass\'ee sera une
+sous-classes concr\`ete.
+
+
+Les fichiers inclus d\'ecrivant les classes prennent la forme suivante
+:
+\begin{verbatim}
+       #ifndef _MaClasse_
+       #define _MaClasse_
+
+       #include <...>
+       #include "xToto.h"
+       ...
+
+       namespace xfem
+       {
+              class MaClasse {
+              private:
+                  ...
+              public:
+                  ...
+              };
+       }
+       #endif
+\end{verbatim}
+Ici, le \code{namespace xfem} signifie que la classe est d\'efinie
+dans la librairie \code{xfem}.
+
+Le programme principale, quant \`a lui s'\'ecrira sous la forme suivante
+:
+\begin{verbatim}
+       #include <...>
+       #include "..."
+       ...
+
+       using namespace xfem;
+       int main(int argc, char *argv[])
+       {
+             ...
+       }
+\end{verbatim}
+Ici,  \code{using namespace xfem} pr\'ecise que les classes appel\'ee
+sans pr\'ecision appartiennent \`a l'espace de nom \code{xfem}.
+
+\section{Les \code{Templates}}
+
+Les \code{Template} sont une façon de d\'eclar\'ee une classe (ou une fonction) de mani\`ere \guil{g\'en\'erique}, c'est \`a dire sans donner explicitement le type des variables ou classes utilis\'ees \`a l'int\'erieur.
+Une classe \code{template <class T> class liste} permet de d\'efinir une classe de liste sans pr\'eciser le type du contenu de la liste. C'est un \guil{patron de classe}. Elle sera \guil{typ\'ee} lors de l'instanciation d'une liste particuli\`ere, par exemple :
+\code{liste<int> ma\_liste\_d\_entier}.
+
+La classe peut \^etre templatis\'ee plusieurs fois, si elle n\'ecessite l'utilisation de plusieurs types diff\'erents d'objets : \code{template <class T, class U> class A}.
+
+(voir les livres sp\'ecialis\'es pour plus d'information)
+
+
+
+
+\section{gcc \index{gcc}}
+
+voir les site officiel de gcc :
+\web{http://www.gnu.org/software/gcc/gcc.html}
+
+
+\section{STL: Standard Template Library \index{Library!stl}}
+
+The Standard Template Library (STL) is a software library included
+in the C++ Standard Library. It provides \textbf{containers},
+\textbf{iterators}, and \textbf{algorithms}. More specifically, the
+C++ Standard Library is based on the STL published by SGI. Both
+include some features not found in the other. SGI's STL is rigidly
+specified as a set of headers, while ISO C++ does not specify header
+content, and allows implementation either in the headers, or in a
+true library.
+
+The  STL provides many of the basic algorithms and data structures
+of computer science. The STL is a generic  library, meaning that its
+components are heavily parameterized: almost every component in the
+STL is a template. You should make sure that you understand how
+templates work in C++ before you use the STL. Containers and
+algorithms
+
+Like many class libraries, the STL includes container classes:
+classes whose purpose is to contain other objects. The STL includes
+the classes \textbf{vector}, \textbf{list}, \textbf{deque},
+\textbf{set}, \textbf{multiset}, \textbf{map}, \textbf{multimap},
+\textbf{hash\_set}, \textbf{hash\_multiset}, \textbf{hash\_map}, and
+\textbf{hash\_multimap}. Each of these classes is a template, and
+can be instantiated to contain any type of object.
+
+SGI documentation can be found here:
+\web{http://www.sgi.com/tech/stl/}
+
+A large French documentation can be found here:
+\web{http://www.moteurprog.com/Tutoriaux/VisiteTuto.php?ID_tuto=92}
+
+
+
+
+\section{La librairie BGL: Boost Graphic Library}
+
+
+\textit{(\`a faire...)}

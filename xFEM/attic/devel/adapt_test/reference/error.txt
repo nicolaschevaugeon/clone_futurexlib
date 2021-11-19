@@ -1,0 +1,4 @@
+energy  is  3.64
+err abs is  9.30196e-10
+err rel is  4.87555e-10
+vol     is  4

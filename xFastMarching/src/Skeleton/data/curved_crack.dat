@@ -1,0 +1,18 @@
+# lines starting by a # are comment lines
+##########
+# COMPUTER INFORMATION
+MESH_FILE_TYPE   = msh
+MESH_FILE        = data/curved_crack.msh
+
+##2D case
+BC_LINE  8 = {  CUSTOM     FIX =   0. }
+
+
+
+
+
+
+
+
+
+

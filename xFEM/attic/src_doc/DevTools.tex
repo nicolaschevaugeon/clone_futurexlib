@@ -1,0 +1,73 @@
+
+
+
+
+\section{Libraries}
+
+This chapter gives a bref description of the libaries  \code{/AOMD},
+\code{/Solver}, \code{/STL} and  \code{/Treillis}.
+
+
+\subsection{\code{Treillis/AOMD/}: Algorithm Oriented Mesh Database library \index{Library!AOMD}\index{Library!Trellis} }
+
+Contains the meshing library used to work with \code{xfem} .
+
+\paragraph*{Description}
+
+ The aim of the Algorithm Oriented Mesh Database (AOMD) is to be a mesh management library (or database) that is able
+  to provide a variety of services for mesh users. The optimal form of the mesh representation is application dependant
+  with different applications requiring different sets of mesh adjacencies.
+
+ AOMD supports hybrid meshes (Triangles, Quads, Hexes, Tets, Prisms and Pyramids). The parallel paradigm used is
+ the Rensselaer  Partitioning Method (RPM).
+
+AOMD is written in C++ and it uses STL as well for containers,
+iterators and algorithms. Parallel communications are made using the
+Message Passing Interface (MPI). Optimal message packing is made
+using the autopack library that was developed at Argonne National
+Labs by Ray Loy.
+
+AOMD provides advanced services like automatic mesh refinement and
+coarsening. Mesh refinement introduces load unbalance in partitions.
+This unbalance is not acceptable if one wants to achieve scalable
+parallel software. The solution to this unbalance is to dynamically
+re-partition the mesh. Some load balancing libraries are available
+on the web. The library Zoltan from Sandia is a package which
+includes four load balancing libraries based on both graph and
+octree partitioning. Classically, the balancer takes as input a
+representation of the parallel mesh (octree or partitioned graph)
+and provides as output a partition vector telling on which partition
+a given mesh entity has to be in order to restore the load balance.
+The completion of dynamic re-partitioning consists of dynamically
+moving the appropriate entities from one partition to another.
+
+For DOXYGEN documentation:
+\web{http://www.scorec.rpi.edu/AOMD/Doc/html/index.html}
+
+
+\subsection{\code{Solver/} \index{Library!Solver}}
+
+Contains:
+
+\begin{itemize}
+\item  The Iterative Template Library (ITL):   \web{http://www.osl.iu.edu/research/itl/}
+\item  The Matrix Template Library (MTL):   \web{http://www.osl.iu.edu/research/mtl/}
+\item the Portable, Extensible Toolkit for  Scientific Computation (PETSc):
+ \web{http://www-unix.mcs.anl.gov/petsc/petsc-as/index.html}
+\item The  SuperLU library (SuperLU): \web{http://crd.lbl.gov/~xiaoye/SuperLU/}
+\item The  Taucs: a Library of Sparse Linear Solvers \web{http://www.tau.ac.il/~stoledo/taucs/}
+\end{itemize}
+
+ the solver's library Sparskit used for \code{xfem}:
+
+\web{http://www-users.cs.umn.edu/~saad/software/SPARSKIT/sparskit.html}
+
+\subsection{\code{Xext/} \index{Library!Xext}}
+
+This library contains general developments for \code{xfem} which are
+only available for ECN users.
+
+\subsection{\code{Xcrack/} \index{Library!Xcrack}}
+
+This library contains  developments for crack propagation and is
+only available for ECN users.

@@ -1,0 +1,111 @@
+entities/SModelMember.cc, .h
+	changed so that we can set the tag to correspond to the
+	model tag given by Simmetrix model interface.  Used
+	only for AOMD version 4 sms file as of 9/2/04.
+	9/2/04 -- acbauer, seole
+-----------------
+* support acisModel. the following files are added:
+	util/SBoundingBox2d.cc
+	util/SBoundingBox2d.h 
+	2/01/2004  -olowee
+	
+* support meshModel. the following files are added:
+        interface/ModelTypes.h
+        util/AttachData.h            
+        util/AttachableData.cc      
+        util/AttachableData.h      
+        util/AttachDataId.cc      
+        util/AttachDataId.h         
+        util/AttachDataManager.cc   
+        util/AttachDataManager.h   
+        entities/ModelDataManager.cc
+        entities/ModelDataManager.h
+        entities/ModelDataId.h
+        entities/ModelDataId.cc
+        entities/ModelEntityID.cc
+        entities/ModelEntityID.h
+*tagged as v2_0_2    3/12/2003  -li
+
+
+* checkout from Attic and make it depends on nothing by:
+  - clean attribute and mesh inverse classification stuff out of model
+  - move the necessary utilities into model
+* tagged as v2_0_1   09/06/2002  -li
+
+
+--------------------------
+
+
+version 1.2
+-----------
+* topoModel can now set it's bounding box size
+* new data attachement routines
+* mesh inverse classification redone, functions to get this now in
+  SMesh class rather than GEntity classes
+* SModelMember now stores entity tags, constructors for entities 
+  must pass their tags
+* added GEN_inClosure - determines if a model entity is on the closure of 
+  another
+* added GEN_reparam - reparametrize one entity w/r to another
+
+version 1.1
+-----------
+* update for mesh 4.1
+
+version 1.0
+-----------
+* mesh inverse classification added
+* classes renamed (poor choice of original names)
+  - GShellUse -> GShell
+  - GEdgeUseSide -> GEdgeUse
+  - GEdgeUse -> GEdgeUsePair
+* in C interface: GEU_* -> GEUP_*
+* fixed TopoModel to work with information retrieved in a smd file
+* changes writeSMD so that it now stores the bounds of the model
+* changed readSMD to retrieve the bounds of a model in a smd file
+* added the virtual function to SGModel called readBounds that retrieve
+the bounds in a smd file
+* added readBounds to TopoModel that stores the retrieved bounds and
+use them when there is no RealModel
+
+version 0.8
+-----------
+* functionality added to augment models without seams on periodic faces
+  this involves making a copy of the topology (TopoModel) and calling
+  TopoModel::augmentPeriodicFaces
+* derived classes must make the following changes:
+  - GEdge::reparamOnFace replaces GFace::parFromEdgePar
+  - GFace::surfPeriodic added
+* GFace::periodic now should return true only if the actual face (rather
+  than the surface underlying the face) is periodic. The meaning of this
+  before was a little unclear.
+* now uses util/0.2
+
+version 0.7
+-----------
+- following functions now const:
+  GEntity::{continuous,degenerate,periodic,geomType}
+  
+- SGModel and GEntity are now both derived classes of SModelMember
+  Attributes can be attached to both model entities and the model itself
+- SGModel::type() renamed to SGModel::modeler()
+
+version 0.6
+-----------
+- GEntity::type() and GEN_type() now return appropriate values for uses
+
+version 0.5
+-----------
+- GE_point and GF_point now return a value to indicate the validity of the
+  point (1 = valid, 0 = invalid)
+- model now stores local copy of topology
+- attributes are attached directly to GEntity objects
+- new C interface operators
+- can split edges and faces
+
+
+version 0.2
+-----------
+- added operators:
+  GEntity::bounds - returns bounding box of entity
+- ShapesModel constructor arg changed to from char * to const SString &

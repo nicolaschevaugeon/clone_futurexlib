@@ -1,0 +1,88 @@
+PROC0 :
+ has a number of remote copies : 1 on procs :  3 Owner is 0
+ Am I Owner ? 1
+ has b number of remote copies : 1 on procs :  1 Owner is 0
+ Am I Owner ? 1
+ has c number of remote copies : 2 on procs :  2 3 Owner is 0
+ Am I Owner ? 1
+ has d number of remote copies : 2 on procs :  1 2 Owner is 0
+ Am I Owner ? 1
+PROC0 own 4 entities
+PROC1 own 1 entities
+PROC2 own 1 entities
+PROC3 own 1 entities
+ OK The partition is correct 
+Partman is build
+Testing exchange OwnerGather for int data
+P0 Receive for a info 401 from 3
+P0 Receive for b info 202 from 1
+P0 Receive for c info 303 from 2
+P0 Receive for c info 403 from 3
+P0 Receive for d info 204 from 1
+P0 Receive for d info 304 from 2
+OwnerGather Done
+Testing exchange OwnerScatter for int data
+P0 Send for a info 131 to 3
+P0 Send for b info 112 to 1
+P0 Send for c info 123 to 2
+P0 Send for c info 133 to 3
+P0 Send for d info 114 to 1
+P0 Send for d info 124 to 2
+OwnerScatter Done
+Testing exchange AllGather for int data
+P0 Send for a info 131 to 3
+P0 Send for b info 112 to 1
+P0 Send for c info 123 to 2
+P0 Send for c info 133 to 3
+P0 Send for d info 114 to 1
+P0 Send for d info 124 to 2
+P0 Receive for a info 401 from 3
+P0 Receive for b info 202 from 1
+P0 Receive for c info 303 from 2
+P0 Receive for c info 403 from 3
+P0 Receive for d info 204 from 1
+P0 Receive for d info 304 from 2
+AllGather Done
+Testing exchange OwnerGather for pseudo-random size vector of pseudo-random double data
+P0 Receive for a info 2 2370.487348 338.838121 from 3
+P0 Receive for b info 4 2666.798266 381.192886 6.899806 0.002214 from 1
+P0 Receive for c info 1 2963.109185 from 2
+P0 Receive for c info 1 2963.109185 from 3
+P0 Receive for d info 3 3259.420103 465.902417 8.433097 from 1
+P0 Receive for d info 3 3259.420103 465.902417 8.433097 from 2
+OwnerGather Done
+Testing exchange OwnerScatter for pseudo-random size vector of pseudo-random double data
+P0 Send for a info 2 9481.949391 1355.352485 to 3
+P0 Send for b info 4 5333.596532 762.385773 13.799613 0.004427 to 1
+P0 Send for c info 1 11852.436739 to 3
+P0 Send for c info 1 8889.327554 to 2
+P0 Send for d info 3 6518.840206 931.804834 16.866193 to 1
+P0 Send for d info 3 9778.260309 1397.707250 25.299290 to 2
+OwnerScatter Done
+Testing exchange Sender Only Keys for int to pseudo-random targets
+Proc 0 Will send/receive data associated to object a to/from procs  1
+Proc 0 Will send/receive data associated to object b to/from procs  1 2
+Proc 0 Will send/receive data associated to object d to/from procs  1
+P0 Send for a info 112 to 1
+P0 Send for b info 114 to 1
+P0 Send for b info 124 to 2
+P0 Send for d info 118 to 1
+P0 Receive  1 infos from P 2: 308 For each recieved info a int is computed with rank an will be sent back: 306
+P0 Receive  1 infos from P 3: 404 For each recieved info a int is computed with rank an will be sent back: 401
+P0 Receive  2 infos from P 1: 208 204 For each recieved info a int is computed with rank an will be sent back: 207 203
+ exchange Sender Only Keys for int to pseudo-random targets Done
+Testing exchange Receive Only Keys for int from sources defined above
+P0 Receive for a info 111 from 1
+P0 Receive for b info 113 from 1
+P0 Receive for b info 122 from 2
+P0 Receive for d info 117 from 1
+ exchange Receive Only Keys for int from pseudo-random sources Done
+Testing exchange Sender Only Keys for  pseudo-random size vector of pseudo-random double data to pseudo-random targets
+P0 Send for a info 3 16353.575250 14414.057496 11866.784307 to 1
+P0 Send for b info 1 18689.800285 to 1
+P0 Send for b info 1 28034.700428 to 2
+P0 Send for d info 2 23362.250357 20591.510708 to 1
+P0 Receive from P 1  a block of 2 infos : 11681.125178 10295.755354 a block of 1 infos : 9344.900143 For each vector values a double is computed with rank and will be sent back when implemented: 10681.125178 9295.755354 8344.900143
+P0 Receive from P 2  a block of 2 infos : 11681.125178 10295.755354 For each vector values a double is computed with rank and will be sent back when implemented: 9681.125178 8295.755354
+P0 Receive from P 3  a block of 1 infos : 15185.462732 For each vector values a double is computed with rank and will be sent back when implemented: 12185.462732
+ exchange Sender Only Keys for double vect to pseudo-random targets Done

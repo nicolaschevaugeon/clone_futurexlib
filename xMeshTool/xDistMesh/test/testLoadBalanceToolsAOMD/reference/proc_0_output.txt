@@ -1,0 +1,16 @@
+### I'M PROC 0
+Mesh Loaded on proc 0
+Mesh statistc for current partition : 
+ V 155 E 678 F 888 R 364
+## FIRST PASS RANDOM PARTITIONING ON 2 PARTITIONS
+Mesh statistc for current partition : 
+ V 153 E 599 F 626 R 192
+## SECOND PASS METIS PARTITIONNING ON 2 PARTITIONS
+Mesh statistc for current partition : 
+ V 93 E 378 F 479 R 193
+## THIRD PASS METIS PARTITIONNING -> BACK TO 1 PARTITION
+Mesh statistc for current partition : 
+ V 155 E 678 F 888 R 364
+## FOURTH PASS METIS PARTITIONNING 4 PARTITIONS
+Mesh statistc for current partition : 
+ V 49 E 196 F 250 R 102

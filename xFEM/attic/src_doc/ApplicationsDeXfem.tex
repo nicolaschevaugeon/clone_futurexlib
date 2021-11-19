@@ -1,0 +1,453 @@
+
+
+\section{Applications et Mise en oeuvre}
+\label{sec:applications-et-mise}
+
+L'impl\'ementation de l'approche X-FEM dans un code \'el\'ements
+finis standard requiert un certain nombre d'extensions
+du code cible. Ces extensions concernent au minimum les points
+suivants :
+\begin{itemize}
+\item La gestion des level sets ;
+\item L'int\'egration des matrices et des vecteurs \'el\'ementaires ;
+\item La s\'election des degr\'es de libert\'e \`a enrichir ;
+\item Le stockage de ces degr\'es de libert\'e ;
+\item Le post-traitement.
+\end{itemize}
+Chacun de ces points est explicit\'e ci-dessous.
+Bien entendu, le travail sp\'ecifique \`a r\'ealiser dans un code
+d\'epend de son architecture et il est d\'elicat de tirer
+des r\`egles g\'en\'erales.
+
+
+
+Dans l'approche X-FEM, certaines surfaces physiques
+(voire toutes) vont \^etre localis\'ees sur le maillage \`a l'aide
+d'un champ \'el\'ements finis. Le code doit donc \^etre capable de
+g\'erer \`a la fois des champs physiques (vitesse, pression, ...)
+et des champs dont l'iso-z\'ero localise une surface
+physique. La possibilit\'e d'extraire ces iso-z\'eros est
+importante
+si l'on veut \^etre capable d'imposer par exemple
+une pression dans un trou ou
+sur les l\`evres d'une fissure (dans une canalisation par exemple).
+
+La level set permet ensuite par son changement de signe de d\'efinir
+les supports \index{Support} qui doivent \^etre enrichis. Le nombre et
+la nature des degr\'es de libert\'e en un noeud est variable et d\'epend
+de la position relative du support de ce noeud par rapport \`a la
+fissure (ou l'interface mat\'eriau). Il faut \^etre capable de g\'erer
+sur le plan informatique cette diversit\'e dans les degr\'es de libert\'e.
+Un \'el\'ement peut n'avoir que quelques noeuds enrichis. Le type
+d'enrichissement peut aussi \'evoluer dans le temps (propagation d'une
+fissure par exemple).
+
+L'int\'egration des matrices de raideur et des forces ext\'erieures
+fait intervenir des fonctions discontinues voire singuli\`eres sur les
+\'el\'ements coup\'es par la fissure. De m\^eme, si un \'el\'ement
+est coup\'e par le bord d'un trou, il faut limiter l'int\'egration \`a
+la partie mati\`ere de l'\'el\'ement. Un soin particulier est donc \`a
+apporter dans l'int\'egration des matrices de raideur \'el\'ementaires.
+Notre exp\'erience sur le sujet nous a amen\'e \`a suivre l'approche
+suivante. Dans un premier temps, il faut d\'ecouper l'\'el\'ement en
+sous-domaines d'int\'egration sur lesquels les fonctions \`a int\'egrer
+sont continues. Ensuite, sur chaque sous-domaine une r\`egle
+appropri\'ee d'int\'egration doit \^etre choisie. Pour la gestion des
+trous, interface mat\'eriaux ou partie Heaviside de la mod\'elisation
+d'une fissure, une int\'egration par points de Gauss classique
+convient. Pour les fonctions singuli\`eres de front de fissure,
+l'int\'egration de Gauss converge tr\`es mal. Il faut privil\'egier une
+int\'egration ad hoc \cite{Bechet05}.
+
+
+
+Enfin, au niveau du post-traitement, il faut \^etre capable
+de visualiser des champs discontinus sur les \'el\'ements pour
+effectivement voir les \'el\'ements coup\'es par une fissure se
+scinder.
+
+
+
+\subsection{Application en m\'ecanique de la rupture \index{Rupture}}
+
+Cinq exemples sont trait\'es dans ce chapitre. Les trois premiers
+concernent le calcul des facteurs d'intensit\'e de contrainte pour
+diff\'erentes configurations: une fissure inclin\'ee sous tension dans
+une membrane, une fissure elliptique inclin\'ee dans un cube sous
+tension et enfin une fissure en forme de Y (fissure \`a branches). Le
+quatri\`eme exemple concerne la propagation d'une fissure en forme de
+lentille de contact et le dernier la mod\'elisation de bandes de
+cisaillement dans un massif perc\'e d'un tunnel.
+
+\subsubsection{Le probl\`eme de Griffith: une fissure inclin\'ee}
+Les facteurs d'intensit\'e de contrainte d'une fissure dans une plaque
+infinie sous tension sont donn\'es par la solution de Griffith :
+\begin{subequations}
+\begin{align}
+K_I &= \sigma\sqrt{\pi a}~\mbox{cos}^2(\beta) \\
+K_{II} &= \sigma\sqrt{\pi a}~\mbox{sin}(\beta)~\mbox{cos}(\beta)
+\end{align}
+\end{subequations}
+o\`u $a$ et la demi-longueur de la fissure, $\sigma$ l'intensit\'e du
+chargement et $\beta$ l'angle entre le chargement et la fissure. Ce
+probl\`eme est mod\'elis\'e  figure~\ref{fig:plate2} dans une plaque
+carr\'ee suffisamment grande par rapport \`a la taille de la fissure.
+Le maillage utilis\'e est uniforme et contient $40\times 40$
+\'el\'ements. Les facteurs d'intensit\'e de contrainte obtenus avec
+X-FEM pour diff\'erents angles $\beta$ sont compar\'es avec les
+facteurs de r\'ef\'erence
+figure~\ref{fig:rotk1k2}~\cite{Moes:discont}. L'accord est
+excellent. Notons que le m\^eme maillage ($40\times 40$
+\'el\'ements) est utilis\'e pour \emph{tous} les angles $\beta$. Seul
+la position relative de la fissure par rapport au maillage change.
+
+
+
+\twofigures{5cm}{plate2}{9cm}{rotk1k2}{Le probl\`eme de la plaque
+fissur\'ee sous
+       tension: $W = 10 in.$, $a = 0.5 in.$ ; (a), Comparatif entre les facteurs
+       d'intensit\'e de
+       contrainte num\'eriques (X-FEM) et de r\'ef\'erence
+       en fonction de l'angle de chargement  $\beta$ pour le
+       probl\`eme de la plaque fissur\'ee ; (b) }{fig:plaque_fissuree}
+
+
+
+\subsubsection{Fissure elliptique inclin\'ee sous tension}
+
+Le second exemple est celui d'une fissure elliptique inclin\'ee sous
+tension \cite{Moes3DGrowthI}. La fissure est plane mais la courbure
+du front n'est pas constante. La solution exacte de ce probl\`eme
+(pour un probl\`eme infini) est donn\'ee dans \cite{KassirSih66}. Dans
+le calcul, le cube \`a un cot\'e de taille $h$ et est charg\'e selon l'axe
+$Z$, voir figure~\ref{fig:ellipse}. L'axe majeur de l'ellipse est
+selon l'axe $X$ et de taille $a$. L'axe mineur de taille $b=a/2$ est
+orient\'e selon la bissectrice du quadrant $XY$ (la fissure est donc
+inclin\'ee \`a 45 degr\'es du chargement). Les dimensions sont choisies de
+telle sorte que l'hypoth\`ese de milieu infini soit applicable
+($h/a=10$). Le coefficient de Poisson est 0.3 et le module de Young
+\'egal \`a 1. La Figure~\ref{fig:Kellipse} montre une  comparaison entre
+les solutions exactes et num\'eriques obtenues avec X-FEM. Le d\'etail
+du calcul des facteurs d'intensit\'e de contraintes est donn\'e
+dans~\cite{Moes3DGrowthI}. La signification de l'abscisse $\theta$
+(en degr\'es) est donn\'ee sur la figure~\ref{fig:angle}. Le nombre de
+degr\'es de libert\'e est de 130.000 et la taille caract\'eristique des
+\'el\'ements pr\`es du front de la fissure est de l'ordre du dixi\`eme de
+l'axe majeur de l'ellipse.
+
+
+\twofigures{7cm}{ellipse}{6cm}{angle}{Une fissure elliptique inclin\'ee dans
+       un cube sous tension ; (a), d\'efinition de la position angulaire le long du
+  front de la fissure ; (b) }{fig:fissure_elliptique}
+
+\onefigure{10cm}{Kellipse}{Les facteurs d'intensit\'e de
+     contraintes exacts (ligne continue) et calcul\'es (symboles)
+     pour la fissure elliptique en fonction de la position
+     angulaire sur le front.}
+
+
+
+\subsubsection{Une fissure en forme de Y}
+
+Cette exemple, tir\'e de \cite{Daux:holes}, permet de montrer la
+possibilit\'e qu'offre X-FEM de g\'erer des fissures \`a branches. On
+consid\`ere une fissure \`a branches sym\'etriques dans une plaque de
+largeur $2w$ et de hauteur $2H$ soumise \`a une tension de valeur
+$\sigma$ perpendiculaire \`a la fissure principale,
+figure~\ref{fig:mesh_infinite}. La taille de la plaque est grande
+par rapport \`a la taille de la fissure ($w=20$, $H=16$ et $a=1.$)
+de mani\`ere \`a pouvoir utiliser la solution de r\'ef\'erence pour
+une plaque infinie donn\'ee par Chen et Hasebe (1995).
+\nocite{Chen:branching} Notons que dans le calcul, la fissure n'est
+pas repr\'esent\'ee \`a l'aide de level sets mais de segments de droite.
+
+Les facteurs d'intensit\'e de contrainte normalis\'es en pointes de
+fissures A et B sont d\'efinis par
+\begin{equation}
+F_{I}^{A} = K_{I}^{A}/\sigma \sqrt{\pi c} \mbox{ }, \quad
+F_{I}^{B} = K_{I}^{B}/\sigma \sqrt{\pi c} \mbox{ }, \quad
+F_{II}^{B} = K_{II}^{B}/\sigma \sqrt{\pi c} \nonumber
+\end{equation}
+Les r\'esultats obtenus avec X-FEM pour $F_{I}^{A}$, $F_{I}^{B}$ et
+$F_{II}^{B}$ sont compar\'es aux valeurs de r\'ef\'erence pour
+diff\'erents rapports $b/a$ et angles $\theta$ dans la
+Table~\ref{tab:infinite_br}. Le maillage utilis\'e est donn\'e
+figure~\ref{fig:mesh_infinite}.
+
+Dans le cas  $b/a = 1$ et $\theta = \pi/4$, l'influence du
+raffinement est montr\'ee dans la Table~\ref{tab:robust}. La taille
+moyenne des \'el\'ements en fond de fissure est $h$. On observe que
+les r\'esultats num\'eriques convergent vers les r\'esultats de
+r\'ef\'erence avec le raffinement du maillage. Les r\'esultats sont
+d\'ej\`a excellents pour un rapport $h/a$ de 0.1
+
+
+\twofigures{6cm}{mesh_infinite}{6cm}{mesh_infinite_zoom}{Le maillage
+utilis\'e pour le probl\`eme de la fissure
+  \`a branches (1218 noeuds, $h/a$ = 0.12) ; (a), un zoom dans la
+  r\'egion de la fissure ; (b).}{fig:mesh_infinite}
+
+\begin{table}[!p]
+\begin{center}
+\begin{tabular}{cccccccc} \hline
+&$\theta$ & \multicolumn{2}{c}{$15^\circ$} & \multicolumn{2}{c}{$45^\circ$} &
+\multicolumn{2}{c}{$75^\circ$} \\
+\hline
+$b/a$ & & X-FEM & $\star$ & X-FEM & $\star$ & X-FEM & $\star$ \\
+\hline
+&$F_{I}^{A}$  & 1.016 & 1.018 & 1.045 & 1.044 & 1.118 & 1.117 \\
+1.0 & $F_{I}^{B}$ & 0.750 & 0.737 & 0.493 &
+0.495 & 0.061 & 0.061 \\
+& $F_{II}^{B}$ & 0.123 & 0.114 & 0.504 & 0.506 & 0.535 & 0.541 \\
+\hline
+& $F_{I}^{A}$ & 1.015 & 1.016 & 1.036 & 1.036 & 1.086 & 1.087 \\
+0.8 & $F_{I}^{B}$ & 0.736 & 0.735 & 0.494 &
+0.495 & 0.057 & 0.056 \\
+& $F_{II}^{B}$ & 0.107 & 0.107 & 0.497 & 0.498 & 0.546 & 0.551 \\
+\hline
+& $F_{I}^{A}$ & 1.012 & 1.011 & 1.022 & 1.023 & 1.035 & 1.037 \\
+0.4 & $F_{I}^{B}$ & 0.752 & 0.729 & 0.502 & 0.504 & 0.067 & 0.066 \\
+& $F_{II}^{B}$ & 0.096 & 0.078 & 0.459 & 0.460 & 0.542 & 0.542 \\
+\hline
+\multicolumn{8}{l}{($\star$) Solution de r\'ef\'erence de Chen et Hasebe (1995)}
+\end{tabular}
+\end{center}
+\caption{Facteurs d'intensit\'e de contrainte normalis\'es pour
+         diff\'erents rapports $b/a$ et angles $\theta$ pour le
+         probl\`eme de la fissure en forme de Y.}
+\label{tab:infinite_br}
+\end{table}
+
+\begin{table} [htbp]
+\begin{center}
+\begin{tabular}{ccccccccc} \hline
+\mbox{ } $h/a$ \mbox{ }& 0.40 & 0.30 & 0.22 & 0.14 & 0.12 & 0.10 &
+0.05 & $\star$ \\
+\hline
+$F_{I}^{A}$ & 0.963 & 1.009 & 1.027 & 1.042 & 1.045 &
+1.045 & 1.044 & 1.044 \\
+$F_{I}^{B}$ & 0.460 & 0.468 & 0.498 & 0.494 & 0.493 &
+0.495 & 0.496 & 0.495 \\
+$F_{II}^{B}$ & 0.458 & 0.464 & 0.501 & 0.505 & 0.504 &
+0.507 & 0.508 & 0.506 \\
+\hline
+\multicolumn{9}{l}{($\star$) Solution de r\'ef\'erence de Chen et Hasebe (1995)}
+\end{tabular}
+\end{center}
+\caption{Facteurs d'intensit\'e de contrainte num\'eriques et de
+  r\'ef\'erence  normalis\'es pour diff\'erents rapports $h/a$
+  (probl\`eme de la fissure en forme de Y avec $b/a=1.$ et
+   $\theta=45^\circ$).}
+\label{tab:robust}
+\end{table}
+
+
+\subsubsection{Propagation d'une fissure en forme de lentille}
+
+Dans cette exemple,  on consid\`ere une fissure en forme de lentille
+plac\'ee dans un cube soumis \`a de la tension hydrostatique
+\cite{Moes3DGrowthII}. La g\'eom\'etrie de la fissure,
+figure~\ref{fig:im12}, est caract\'eris\'ee par un rayon $R=0.005$ et un
+angle azimuthal $\alpha=45^o$. Le cube a  un cot\'e de 0.05. Le
+chargement est de type fatigue et on consid\`ere une loi de
+propagation de Paris. La direction de propagation est donn\'ee par la
+direction dans laquelle la contrainte circonf\'erentielle
+($\sigma_{\theta \theta}$) est maximale.
+
+Le maillage utilis\'e est non structur\'e et compos\'e de 8895 tetra\`edres
+  et 1767 noeuds. Ce maillage ne respecte pas la position de
+la fissure. La figure~\ref{fig:im13} donne la direction et amplitude
+de la vitesse initiale de la fissure (avanc\'ee par nombre de cycle de
+chargement). On observe une sym\'etrie de cette distribution.
+
+La figure~\ref{fig:im14} montre la position de la fissure apr\`es 15
+pas de propagation. Il faut noter que le front de la fissure est
+maintenant compos\'e de quatre fronts ind\'ependants (les quatre
+faces du cube ayant \'et\'e coup\'ees). Ce changement de topologie
+du front ne demande aucune attention particuli\`ere
+dans l'algorithme de propagation
+par level sets. On note que la convexit\'e du front a \'egalement
+chang\'e.
+
+\onefigure{9cm}{im12}{Forme initiale de la fissure lentille dans
+  le cube.}
+
+\twofigures{6cm}{im13}{6cm}{im14}{Distribution initiale de la vitesse de propagation
+ sur le front de la fissure en forme de lentille ; (a),
+ position de la fissure apr\`es 15 pas de propagation ; (b)}{fig:fissure3D}
+
+\subsubsection{Bande de cisaillement autour d'un tunnel}
+Comme dernier exemple de ``m\'ecanique de la rupture'',
+consid\'erons le probl\`eme
+d'un tunnel creus\'e dans une roche avec joints, figure \ref{fig:tunnel}.
+Ce probl\`eme met en
+jeu \`a la fois des surfaces de discontinuit\'e et des bords libres (tunnel)
+et a \'et\'e trait\'e dans \cite{Belytschko:circle}.
+Le maillage utilis\'e, tr\`es simple,
+est montr\'e figure \ref{fig:tunnelmesh}. Il ne respecte ni la position
+du tunnel, ni la position des joints. L'enrichissement au niveau des
+joints ne fait intervenir qu'une discontinuit\'e tangentielle. La figure
+\ref{fig:tunnel_disp_x} montre le d\'eplacement horizontal obtenu.
+On peut noter la discontinuit\'e de ce champ au passage des joints.
+Cet exemple met en \'evidence la possibilit\'e avec X-FEM de
+n'enrichir et ne rendre discontinu que la composante tangentielle
+du d\'eplacement pr\`es des joints.
+Ces bandes de glissement se superposent sans probl\`eme, chacune
+ajoutant
+son enrichissement propre dans l'approximation.
+
+\twofigures{7.75cm}{tunnel}{5cm}{tunnelmesh}{Repr\'esentation sch\'ematique du \guil{jointed
+       rocks problem}; (a),  maillage utilis\'e avec la position
+       des joints et du tunnel ; (b)}{fig:tunnel}
+
+\onefigure{11cm}{tunnel_disp_x}{D\'eplacement horizontal discontinu au niveau des joints.}
+
+
+
+
+
+\subsection{Application \`a la th\'eorie de l'homog\'en\'eisation \index{Homog\'en\'eisation}}
+La possibilit\'e de repr\'esenter des interfaces mat\'eriaux
+complexes sans devoir les mailler est
+particuli\`erement attractive par exemple pour homog\'en\'eiser
+des milieux p\'eriodiques.
+Peu de simulations de cellules composites
+ou al\'eatoires peuvent \^etre r\'ealis\'ees \`a l'heure actuelle
+\`a cause de la difficult\'e dans le r\'ealisation du maillage.
+Cette difficult\'e est d'autant plus aiguë si l'on souhaite
+que le maillage soit p\'eriodique pour imposer facilement
+la condition de p\'eriodicit\'e sur le champ micro inconnu.
+
+On traitera deux exemples dans cette section :
+un exemple de validation (bi-couche) et
+un exemple sur l'homog\'en\'eisation de milieux al\'eatoires
+(X-FEM est tr\`es attrayant car un seul maillage peut \^etre
+consid\'er\'e pour toutes les configurations).
+D'autres exemples peuvent \^etre trouv\'es dans~\cite{MoesCloirec02}
+et \cite{Cartraud04}. En particulier, dans ce dernier papier,
+un exemple d'homog\'en\'eisation de câble est consid\'er\'e.
+
+\subsubsection{Bi-couche p\'eriodique}
+Le cas d'un bi-couche est un probl\`eme simple dont
+la solution est lin\'eaire par morceau.
+L'objectif est, ici, de  v\'erifier
+que l'espace X-FEM enrichi est capable de repr\'esenter exactement
+la solution m\^eme si l'interface
+n'est pas maill\'ee.
+La p\'eriode consid\'er\'ee
+est de forme cubique. Le maillage est compos\'e de
+162 t\'etra\`edres (27 cellules cubiques chacune compos\'ee de
+6 t\'etra\`edres). Une coupe du maillage est montr\'ee
+figure~\ref{fig:periodic} avec une indication de la nature
+des diff\'erents noeuds.
+La
+d\'eform\'ee correspondant \`a une d\'eformation macroscopique de
+cisaillement dans le plan de l'interface est pr\'esent\'ee
+figure~\ref{fig:bi_layer_disp}. On
+v\'erifie la bonne prise en compte de la discontinuit\'e,
+avec une d\'eform\'ee lin\'eaire par morceaux dans l'\'el\'ement fini où les
+deux mat\'eriaux sont pr\'esents. Enfin, on v\'erifie que la solution
+num\'erique coincide avec la solution analytique du probl\`eme
+donn\'ee dans \cite{Dumontet90}.
+
+\onefigure{12cm}{periodic}{Vue d'une coupe du maillage du bi-couche
+    p\'eriodique avec l'indication du type de noeud.}
+
+%
+\onefigure{7cm}{bi_layer_disp}{D\'eform\'ee du bi-couche
+    p\'eriodique dans un mode de cisaillement. On peut distinguer
+    les \'el\'ements finis et les sous-cellules utilis\'ees pour
+    l'int\'egration de la matrice de raideur sur les \'el\'ements
+    tranch\'es par l'interface.}
+
+
+\twofigures{6cm}{spheres}{6cm}{spheres-bis}{Position de 32 sph\`eres dans une cellule p\'eriodique pour
+  deux ``tirs'' al\'eatoires diff\'erents. Les surfaces visualis\'ees
+  correspondent dans chaque cas \`a l'iso-z\'ero de la level set.}{fig:spheress}
+
+
+
+\subsubsection{Mat\'eriau \`a inclusions sph\'eriques}
+%
+Nous traitons \`a pr\'esent un mat\'eriau \'elastique \`a inclusions
+sph\'eriques, r\'eparties de façon al\'eatoire dans la matrice, cet
+exemple est tir\'e de \cite{Michel99}. Nous \'etudions donc plusieurs
+cellules, avec dans chacune une r\'epartition al\'eatoire (mais
+p\'eriodique) des inclusions.
+
+La m\'ethode X-FEM s'av\`ere ici particuli\`erement int\'eressante,
+puisque le m\^eme maillage peut \^etre utilis\'e pour ces diff\'erentes
+cellules. Il s'agit d'un maillage r\'egulier, avec
+$32 \times 32 \times 32 $ cellules cubiques chacune compos\'ee
+de 6 \'el\'ements t\'etra\`edriques. Pour deux configurations de
+cellules
+diff\'erentes, la figure~\ref{fig:spheress} donne la position
+de l'iso-z\'ero de la level set.
+
+Les caract\'eristiques m\'ecaniques de la particule et de la matrice
+sont respectivement $E_p = 70$ GPa, $\nu_p = 0.2$ et $E_m = 3$
+GPa, $\nu_m = 0.35$, avec un taux d'inclusion de 26,78\%. Pour la
+raideur homog\'en\'eis\'ee $a^{hom}_{1111}$, en prenant la valeur
+moyenne sur diff\'erentes cellules, on obtient $7,611$ GPa pour 8
+particules et 7,711 pour 32 particules, soit des r\'esultats tr\`es
+proches de ceux donn\'es dans \cite{Michel99}.
+D'autres exemples d'homog\'en\'eisation p\'eriodique sont trait\'es dans
+\cite{MoesCloirec02}.
+%
+
+
+
+\section{Conclusion et autres lectures}
+\label{sec:conclusion-et-autres}
+
+Ce document a r\'esum\'e succinctement la technologie X-FEM,
+coupl\'ee \`a la puissance de la m\'ethode des level sets, pour
+mod\'eliser des surfaces de discontinuit\'e dans un champ
+ou sa d\'eriv\'ee (ou dans la mati\`ere : pr\'esence de trous).
+Ces surfaces pouvant \^etre fixes ou mobiles.
+
+Deux types d'applications ont \'et\'e privil\'egi\'es : la
+m\'ecanique de la rupture et l'homog\'en\'eisation.
+
+Il ne nous a pas \'et\'e permis dans ce document de balayer
+tout l'apport que repr\'esente la partition de l'unit\'e
+et les level sets pour la mod\'elisation de fissures.
+Cet apport  s'\'etend rapidement compte tenu du nombre
+grandissant d'\'equipes \`a travers le monde qui
+utilisent maintenant ces techniques.
+Sans \^etre exhaustif, voici quelques domaines de d\'eveloppement
+important actuel en m\'ecanique num\'erique de la rupture :
+\begin{itemize}
+\item Passage de la m\'ecanique de l'endommagement \`a la
+  m\'ecanique de la rupture : la probl\'ematique est ici
+la transition de la micro-fissuration \`a une fissure macroscopique
+\'etablie~\cite{patzak03,deborst04}.
+ L'approche X-FEM permet de faire cette transition
+  num\'erique sur un m\^eme maillage. Il est important de noter que
+m\^eme si X-FEM offre des avanc\'ees \emph{num\'eriques}, le
+  passage en terme de \emph{mod\`ele} reste un probl\`eme d\'elicat.
+\item M\'ecanique de la rupture non lin\'eaire :
+la fissuration en milieu subissant de grande transformation
+(caoutchouc par exemple) a \'et\'e \'etudi\'ee
+dans~\cite{dolbow04}
+et~\cite{Legrain05}. La
+prise en compte du contact sur les l\`evres de la fissure
+a \'et\'e consid\'er\'e dans \cite{Dolbow:contact} et la
+pr\'esence d'une zone coh\'esive dans~\cite{WellsSluys01}
+et \cite{MoesCohesive}.
+\item La multi-fissuration et le ph\'enom\`ene de percolation a
+\'et\'e consid\`ere en 2D dans~\cite{BudynMulti}.
+\item La fissuration dynamique est un domaine important mais difficile
+  car le nombre de degr\'es de libert\'e \'evolue dans le temps et
+  la stabilit\'e des sch\'emas num\'eriques standard doit \^etre
+  r\'eexamin\'ee. Des avanc\'ees importantes sur ce sujet ont
+  \'et\'e obtenues par  \cite{BelytschkoDyn03} et \cite{Rethore05}.
+\item La possibilit\'e de la rencontre de plusieurs fissures
+  coplanaires
+a \'et\'e \'etudi\'ee dans \cite{chopp03}.
+\end{itemize}
+
+De m\^eme, nous n'avons pu d\'ecrire plus en d\'etail d'autres domaines
+d'applications comme l'optimisation de forme \cite{BelytschkoOpti03}
+ou le suivi de front de solidification
+\cite{ChessaPhase2002,DolbowPhase2002}.

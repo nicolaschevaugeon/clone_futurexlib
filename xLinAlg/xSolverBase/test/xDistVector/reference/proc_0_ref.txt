@@ -1,0 +1,1078 @@
+In proc 0 Starting
+Test with real_single arithmetic
+Test retriving distIndex from x : 1
+Initial x state : 
+###########################
+Vector of dimension 4 is:
+0.5 1 0.333333 1 
+###########################
+dot  : x.x  9
+x state after dot : 
+###########################
+Vector of dimension 4 is:
+1 1 1 1 
+###########################
+x state after passing in global state : 
+###########################
+Vector of dimension 4 is:
+1 1 1 1 
+###########################
+z copy of X when in global state : 
+###########################
+Vector of dimension 4 is:
+1 1 1 1 
+###########################
+x state after being copied : 
+1 1 1 1 
+Initial y state : 
+###########################
+Vector of dimension 4 is:
+1 2 8 10 
+###########################
+y state after gather : 
+###########################
+Vector of dimension 4 is:
+2 2 24 10 
+###########################
+A state : 
+
+Initial w state : 
+###########################
+Vector of dimension 4 is:
+1 2 3 4 
+###########################
+w state after gather : 
+###########################
+Vector of dimension 4 is:
+2 2 9 4 
+###########################
+B state : 
+
+new B state : 
+
+w state after scatter in insert mode on : 
+###########################
+Vector of dimension 4 is:
+21 22 23 24 
+###########################
+w state after scatter in insert mode off (auto switching modes) : 
+###########################
+Vector of dimension 4 is:
+21 22 23 24 
+###########################
+w state after scatter in insert mode off and global value(auto switching modes) : 
+###########################
+Vector of dimension 4 is:
+21 22 23 24 
+###########################
+w state after scatter in insert mode off and not in reduced state (auto switching modes) : 
+###########################
+Vector of dimension 4 is:
+21 22 23 24 
+###########################
+y state after y=2*x+y  : 
+###########################
+Vector of dimension 4 is:
+4 4 26 12 
+###########################
+x state after passing in local state : 
+###########################
+Vector of dimension 4 is:
+1 1 1 1 
+###########################
+z state after modification  : 
+###########################
+Vector of dimension 4 is:
+1 2 8 10 
+###########################
+z state after y=-1*z+y  : 
+###########################
+Vector of dimension 4 is:
+1 2 8 10 
+###########################
+y state after y=-1*z+y  : 
+###########################
+Vector of dimension 4 is:
+2 2 2 2 
+###########################
+dot  : y.z  186
+z state after dot y.z  : 
+###########################
+Vector of dimension 4 is:
+2 2 24 10 
+###########################
+y state after dot y.z  : 
+###########################
+Vector of dimension 4 is:
+2 2 2 2 
+###########################
+z state after y=-1*z+y  : 
+###########################
+Vector of dimension 4 is:
+2 2 24 10 
+###########################
+y state after y=-1*z+y  : 
+###########################
+Vector of dimension 4 is:
+0 0 -22 -8 
+###########################
+x state after z=-1*x+z  : 
+###########################
+Vector of dimension 4 is:
+1 2 1 1 
+###########################
+z state after z=-1*x+z  : 
+###########################
+Vector of dimension 4 is:
+1 0 23 9 
+###########################
+nrm2  : z  34.7707
+z state after nrm2  : 
+###########################
+Vector of dimension 4 is:
+0 0 23 9 
+###########################
+z state after y=-1*z+y  : 
+###########################
+Vector of dimension 4 is:
+0 0 23 9 
+###########################
+y state after y=-1*z+y  : 
+###########################
+Vector of dimension 4 is:
+0 0 -45 -17 
+###########################
+x state after scaling by 3.5 and locally by 2.  : 
+###########################
+Vector of dimension 4 is:
+3.5 7 3.5 3.5 
+###########################
+x state after scaling by 2./7.  : 
+###########################
+Vector of dimension 4 is:
+3 2 1 1 
+###########################
+x,y,z state before test on operator + - *  : 
+###########################
+Vector of dimension 4 is:
+3 2 1 1 
+###########################
+###########################
+Vector of dimension 4 is:
+0 0 -45 -17 
+###########################
+###########################
+Vector of dimension 4 is:
+0 0 23 9 
+###########################
+x,y,z state after test on operator + - * : 
+###########################
+Vector of dimension 4 is:
+3 2 1 1 
+###########################
+###########################
+Vector of dimension 4 is:
+0 0 -45 -17 
+###########################
+###########################
+Vector of dimension 4 is:
+-3 -2 -25 -11 
+###########################
+y,z state after test on operator += -= : 
+###########################
+Vector of dimension 4 is:
+3 2 -44 -16 
+###########################
+###########################
+Vector of dimension 4 is:
+-3 -2 20 6 
+###########################
+z state before dot y.z  : 
+###########################
+Vector of dimension 4 is:
+15 14 8 6 
+###########################
+y state before dot y.z  : 
+###########################
+Vector of dimension 4 is:
+1 2 8 10 
+###########################
+dot  : y.z  989
+z state after dot y.z  : 
+###########################
+Vector of dimension 4 is:
+30 14 24 6 
+###########################
+y state after dot y.z  : 
+###########################
+Vector of dimension 4 is:
+2 2 24 10 
+###########################
+z globale state before dot y.z  : 
+###########################
+Vector of dimension 4 is:
+30 14 24 6 
+###########################
+y local state before dot y.z  : 
+###########################
+Vector of dimension 4 is:
+1 2 8 10 
+###########################
+dot  : y.z  989
+z state after dot y.z  : 
+###########################
+Vector of dimension 4 is:
+30 14 24 6 
+###########################
+y state after dot y.z  : 
+###########################
+Vector of dimension 4 is:
+2 2 24 10 
+###########################
+global z x and y state before componentProduct z = x .*. y: 
+###########################
+Vector of dimension 4 is:
+30 14 24 6 
+###########################
+###########################
+Vector of dimension 4 is:
+3 2 1 1 
+###########################
+###########################
+Vector of dimension 4 is:
+2 2 24 10 
+###########################
+z state after componentProduct z = x .*. y: 
+###########################
+Vector of dimension 4 is:
+6 4 24 10 
+###########################
+ x global  y local before componentProduct z = x .*. y: 
+###########################
+Vector of dimension 4 is:
+3 2 1 1 
+###########################
+###########################
+Vector of dimension 4 is:
+2 2 24 10 
+###########################
+z state after componentProduct z = x .*. y: 
+###########################
+Vector of dimension 4 is:
+6 4 24 10 
+###########################
+ x local  y local before componentProduct z = x .*. y: 
+###########################
+Vector of dimension 4 is:
+3 2 1 1 
+###########################
+###########################
+Vector of dimension 4 is:
+2 2 24 10 
+###########################
+z state after componentProduct z = x .*. y: 
+###########################
+Vector of dimension 4 is:
+6 4 24 10 
+###########################
+x state after componentProduct z = x .*. y: 
+###########################
+Vector of dimension 4 is:
+3 2 1 1 
+###########################
+ x global  y reduced before componentProduct z = x .*. y: 
+###########################
+Vector of dimension 4 is:
+3 2 1 1 
+###########################
+###########################
+Vector of dimension 4 is:
+2 2 24 10 
+###########################
+z state after componentProduct z = x .*. y: 
+###########################
+Vector of dimension 4 is:
+6 4 24 10 
+###########################
+ x local not in reduced mode but with reduced values,  y reduced before componentProduct z = x .*. y: 
+###########################
+Vector of dimension 4 is:
+3 2 1 1 
+###########################
+###########################
+Vector of dimension 4 is:
+2 2 24 10 
+###########################
+z state after componentProduct z = x .*. y: 
+###########################
+Vector of dimension 4 is:
+6 4 24 10 
+###########################
+x state in global mode: 
+###########################
+Vector of dimension 4 is:
+3 2 1 1 
+###########################
+C state (must be the same as x) : 
+3 2 1 1 
+y state in insert mode on with global value from x via C: 
+###########################
+Vector of dimension 4 is:
+3 2 1 1 
+###########################
+y state in insert mode off and global value state (should be the same as above): 
+###########################
+Vector of dimension 4 is:
+3 2 1 1 
+###########################
+y state in insert mode off and local value (check global was set switchInsertModeOffFromUserGlobalSetting): 
+###########################
+Vector of dimension 4 is:
+3 2 1 1 
+###########################
+z copy of X when in insert mode on : 
+###########################
+Vector of dimension 4 is:
+1 2 8 10 
+###########################
+x state after being copied : 
+1 2 8 10 
+z state after being copied from x : 
+###########################
+Vector of dimension 4 is:
+1 2 8 10 
+###########################
+z state after being set to arbitrary value : 
+###########################
+Vector of dimension 4 is:
+1 1 1 1 
+###########################
+z in globale state after being set to arbitrary value : 
+###########################
+Vector of dimension 4 is:
+2 2 2 2 
+###########################
+throw with = with # xDistIndex ok
+throw with axpy and # xDistIndex ok
+throw with + and # xDistIndex ok
+throw with - and # xDistIndex ok
+throw with dot and # xDistIndex ok
+throw with componentProduct and # xDistIndex ok
+Test with real_double arithmetic
+Test retriving distIndex from x : 1
+Initial x state : 
+###########################
+Vector of dimension 4 is:
+0.5 1 0.333333 1 
+###########################
+dot  : x.x  9
+x state after dot : 
+###########################
+Vector of dimension 4 is:
+1 1 1 1 
+###########################
+x state after passing in global state : 
+###########################
+Vector of dimension 4 is:
+1 1 1 1 
+###########################
+z copy of X when in global state : 
+###########################
+Vector of dimension 4 is:
+1 1 1 1 
+###########################
+x state after being copied : 
+1 1 1 1 
+Initial y state : 
+###########################
+Vector of dimension 4 is:
+1 2 8 10 
+###########################
+y state after gather : 
+###########################
+Vector of dimension 4 is:
+2 2 24 10 
+###########################
+A state : 
+
+Initial w state : 
+###########################
+Vector of dimension 4 is:
+1 2 3 4 
+###########################
+w state after gather : 
+###########################
+Vector of dimension 4 is:
+2 2 9 4 
+###########################
+B state : 
+
+new B state : 
+
+w state after scatter in insert mode on : 
+###########################
+Vector of dimension 4 is:
+21 22 23 24 
+###########################
+w state after scatter in insert mode off (auto switching modes) : 
+###########################
+Vector of dimension 4 is:
+21 22 23 24 
+###########################
+w state after scatter in insert mode off and global value(auto switching modes) : 
+###########################
+Vector of dimension 4 is:
+21 22 23 24 
+###########################
+w state after scatter in insert mode off and not in reduced state (auto switching modes) : 
+###########################
+Vector of dimension 4 is:
+21 22 23 24 
+###########################
+y state after y=2*x+y  : 
+###########################
+Vector of dimension 4 is:
+4 4 26 12 
+###########################
+x state after passing in local state : 
+###########################
+Vector of dimension 4 is:
+1 1 1 1 
+###########################
+z state after modification  : 
+###########################
+Vector of dimension 4 is:
+1 2 8 10 
+###########################
+z state after y=-1*z+y  : 
+###########################
+Vector of dimension 4 is:
+1 2 8 10 
+###########################
+y state after y=-1*z+y  : 
+###########################
+Vector of dimension 4 is:
+2 2 2 2 
+###########################
+dot  : y.z  186
+z state after dot y.z  : 
+###########################
+Vector of dimension 4 is:
+2 2 24 10 
+###########################
+y state after dot y.z  : 
+###########################
+Vector of dimension 4 is:
+2 2 2 2 
+###########################
+z state after y=-1*z+y  : 
+###########################
+Vector of dimension 4 is:
+2 2 24 10 
+###########################
+y state after y=-1*z+y  : 
+###########################
+Vector of dimension 4 is:
+0 0 -22 -8 
+###########################
+x state after z=-1*x+z  : 
+###########################
+Vector of dimension 4 is:
+1 2 1 1 
+###########################
+z state after z=-1*x+z  : 
+###########################
+Vector of dimension 4 is:
+1 0 23 9 
+###########################
+nrm2  : z  34.7707
+z state after nrm2  : 
+###########################
+Vector of dimension 4 is:
+0 0 23 9 
+###########################
+z state after y=-1*z+y  : 
+###########################
+Vector of dimension 4 is:
+0 0 23 9 
+###########################
+y state after y=-1*z+y  : 
+###########################
+Vector of dimension 4 is:
+0 0 -45 -17 
+###########################
+x state after scaling by 3.5 and locally by 2.  : 
+###########################
+Vector of dimension 4 is:
+3.5 7 3.5 3.5 
+###########################
+x state after scaling by 2./7.  : 
+###########################
+Vector of dimension 4 is:
+3 2 1 1 
+###########################
+x,y,z state before test on operator + - *  : 
+###########################
+Vector of dimension 4 is:
+3 2 1 1 
+###########################
+###########################
+Vector of dimension 4 is:
+0 0 -45 -17 
+###########################
+###########################
+Vector of dimension 4 is:
+0 0 23 9 
+###########################
+x,y,z state after test on operator + - * : 
+###########################
+Vector of dimension 4 is:
+3 2 1 1 
+###########################
+###########################
+Vector of dimension 4 is:
+0 0 -45 -17 
+###########################
+###########################
+Vector of dimension 4 is:
+-3 -2 -25 -11 
+###########################
+y,z state after test on operator += -= : 
+###########################
+Vector of dimension 4 is:
+3 2 -44 -16 
+###########################
+###########################
+Vector of dimension 4 is:
+-3 -2 20 6 
+###########################
+z state before dot y.z  : 
+###########################
+Vector of dimension 4 is:
+15 14 8 6 
+###########################
+y state before dot y.z  : 
+###########################
+Vector of dimension 4 is:
+1 2 8 10 
+###########################
+dot  : y.z  989
+z state after dot y.z  : 
+###########################
+Vector of dimension 4 is:
+30 14 24 6 
+###########################
+y state after dot y.z  : 
+###########################
+Vector of dimension 4 is:
+2 2 24 10 
+###########################
+z globale state before dot y.z  : 
+###########################
+Vector of dimension 4 is:
+30 14 24 6 
+###########################
+y local state before dot y.z  : 
+###########################
+Vector of dimension 4 is:
+1 2 8 10 
+###########################
+dot  : y.z  989
+z state after dot y.z  : 
+###########################
+Vector of dimension 4 is:
+30 14 24 6 
+###########################
+y state after dot y.z  : 
+###########################
+Vector of dimension 4 is:
+2 2 24 10 
+###########################
+global z x and y state before componentProduct z = x .*. y: 
+###########################
+Vector of dimension 4 is:
+30 14 24 6 
+###########################
+###########################
+Vector of dimension 4 is:
+3 2 1 1 
+###########################
+###########################
+Vector of dimension 4 is:
+2 2 24 10 
+###########################
+z state after componentProduct z = x .*. y: 
+###########################
+Vector of dimension 4 is:
+6 4 24 10 
+###########################
+ x global  y local before componentProduct z = x .*. y: 
+###########################
+Vector of dimension 4 is:
+3 2 1 1 
+###########################
+###########################
+Vector of dimension 4 is:
+2 2 24 10 
+###########################
+z state after componentProduct z = x .*. y: 
+###########################
+Vector of dimension 4 is:
+6 4 24 10 
+###########################
+ x local  y local before componentProduct z = x .*. y: 
+###########################
+Vector of dimension 4 is:
+3 2 1 1 
+###########################
+###########################
+Vector of dimension 4 is:
+2 2 24 10 
+###########################
+z state after componentProduct z = x .*. y: 
+###########################
+Vector of dimension 4 is:
+6 4 24 10 
+###########################
+x state after componentProduct z = x .*. y: 
+###########################
+Vector of dimension 4 is:
+3 2 1 1 
+###########################
+ x global  y reduced before componentProduct z = x .*. y: 
+###########################
+Vector of dimension 4 is:
+3 2 1 1 
+###########################
+###########################
+Vector of dimension 4 is:
+2 2 24 10 
+###########################
+z state after componentProduct z = x .*. y: 
+###########################
+Vector of dimension 4 is:
+6 4 24 10 
+###########################
+ x local not in reduced mode but with reduced values,  y reduced before componentProduct z = x .*. y: 
+###########################
+Vector of dimension 4 is:
+3 2 1 1 
+###########################
+###########################
+Vector of dimension 4 is:
+2 2 24 10 
+###########################
+z state after componentProduct z = x .*. y: 
+###########################
+Vector of dimension 4 is:
+6 4 24 10 
+###########################
+x state in global mode: 
+###########################
+Vector of dimension 4 is:
+3 2 1 1 
+###########################
+C state (must be the same as x) : 
+3 2 1 1 
+y state in insert mode on with global value from x via C: 
+###########################
+Vector of dimension 4 is:
+3 2 1 1 
+###########################
+y state in insert mode off and global value state (should be the same as above): 
+###########################
+Vector of dimension 4 is:
+3 2 1 1 
+###########################
+y state in insert mode off and local value (check global was set switchInsertModeOffFromUserGlobalSetting): 
+###########################
+Vector of dimension 4 is:
+3 2 1 1 
+###########################
+z copy of X when in insert mode on : 
+###########################
+Vector of dimension 4 is:
+1 2 8 10 
+###########################
+x state after being copied : 
+1 2 8 10 
+z state after being copied from x : 
+###########################
+Vector of dimension 4 is:
+1 2 8 10 
+###########################
+z state after being set to arbitrary value : 
+###########################
+Vector of dimension 4 is:
+1 1 1 1 
+###########################
+z in globale state after being set to arbitrary value : 
+###########################
+Vector of dimension 4 is:
+2 2 2 2 
+###########################
+throw with = with # xDistIndex ok
+throw with axpy and # xDistIndex ok
+throw with + and # xDistIndex ok
+throw with - and # xDistIndex ok
+throw with dot and # xDistIndex ok
+throw with componentProduct and # xDistIndex ok
+Test with complex_double arithmetic
+Test retriving distIndex from x : 1
+Initial x state : 
+###########################
+Vector of dimension 4 is:
+(0.5,-0.5) (1,-1) (0.333333,-0.333333) (1,-1) 
+###########################
+dot  : x.x  (18,0)
+x state after dot : 
+###########################
+Vector of dimension 4 is:
+(1,-1) (1,-1) (1,-1) (1,-1) 
+###########################
+x state after passing in global state : 
+###########################
+Vector of dimension 4 is:
+(1,-1) (1,-1) (1,-1) (1,-1) 
+###########################
+z copy of X when in global state : 
+###########################
+Vector of dimension 4 is:
+(1,-1) (1,-1) (1,-1) (1,-1) 
+###########################
+x state after being copied : 
+(1,-1) (1,-1) (1,-1) (1,-1) 
+Initial y state : 
+###########################
+Vector of dimension 4 is:
+(1,-1) (2,-2) (8,-8) (10,-10) 
+###########################
+y state after gather : 
+###########################
+Vector of dimension 4 is:
+(2,-2) (2,-2) (24,-24) (10,-10) 
+###########################
+A state : 
+
+Initial w state : 
+###########################
+Vector of dimension 4 is:
+(1,-1) (2,-2) (3,-3) (4,-4) 
+###########################
+w state after gather : 
+###########################
+Vector of dimension 4 is:
+(2,-2) (2,-2) (9,-9) (4,-4) 
+###########################
+B state : 
+
+new B state : 
+
+w state after scatter in insert mode on : 
+###########################
+Vector of dimension 4 is:
+(21,-21) (22,-22) (23,-23) (24,-24) 
+###########################
+w state after scatter in insert mode off (auto switching modes) : 
+###########################
+Vector of dimension 4 is:
+(21,-21) (22,-22) (23,-23) (24,-24) 
+###########################
+w state after scatter in insert mode off and global value(auto switching modes) : 
+###########################
+Vector of dimension 4 is:
+(21,-21) (22,-22) (23,-23) (24,-24) 
+###########################
+w state after scatter in insert mode off and not in reduced state (auto switching modes) : 
+###########################
+Vector of dimension 4 is:
+(21,-21) (22,-22) (23,-23) (24,-24) 
+###########################
+y state after y=2*x+y  : 
+###########################
+Vector of dimension 4 is:
+(4,-4) (4,-4) (26,-26) (12,-12) 
+###########################
+x state after passing in local state : 
+###########################
+Vector of dimension 4 is:
+(1,-1) (1,-1) (1,-1) (1,-1) 
+###########################
+z state after modification  : 
+###########################
+Vector of dimension 4 is:
+(1,-1) (2,-2) (8,-8) (10,-10) 
+###########################
+z state after y=-1*z+y  : 
+###########################
+Vector of dimension 4 is:
+(1,-1) (2,-2) (8,-8) (10,-10) 
+###########################
+y state after y=-1*z+y  : 
+###########################
+Vector of dimension 4 is:
+(2,-2) (2,-2) (2,-2) (2,-2) 
+###########################
+dot  : y.z  (372,0)
+z state after dot y.z  : 
+###########################
+Vector of dimension 4 is:
+(2,-2) (2,-2) (24,-24) (10,-10) 
+###########################
+y state after dot y.z  : 
+###########################
+Vector of dimension 4 is:
+(2,-2) (2,-2) (2,-2) (2,-2) 
+###########################
+z state after y=-1*z+y  : 
+###########################
+Vector of dimension 4 is:
+(2,-2) (2,-2) (24,-24) (10,-10) 
+###########################
+y state after y=-1*z+y  : 
+###########################
+Vector of dimension 4 is:
+(0,0) (0,0) (-22,22) (-8,8) 
+###########################
+x state after z=-1*x+z  : 
+###########################
+Vector of dimension 4 is:
+(1,-1) (2,-2) (1,-1) (1,-1) 
+###########################
+z state after z=-1*x+z  : 
+###########################
+Vector of dimension 4 is:
+(1,-1) (0,0) (23,-23) (9,-9) 
+###########################
+nrm2  : z  49.1732
+z state after nrm2  : 
+###########################
+Vector of dimension 4 is:
+(0,0) (0,0) (23,-23) (9,-9) 
+###########################
+z state after y=-1*z+y  : 
+###########################
+Vector of dimension 4 is:
+(0,0) (0,0) (23,-23) (9,-9) 
+###########################
+y state after y=-1*z+y  : 
+###########################
+Vector of dimension 4 is:
+(0,0) (0,0) (-45,45) (-17,17) 
+###########################
+x state after scaling by 3.5 and locally by 2.  : 
+###########################
+Vector of dimension 4 is:
+(0,-7) (0,-14) (0,-7) (0,-7) 
+###########################
+x state after scaling by 2./7.  : 
+###########################
+Vector of dimension 4 is:
+(0,-6) (0,-4) (0,-2) (0,-2) 
+###########################
+x,y,z state before test on operator + - *  : 
+###########################
+Vector of dimension 4 is:
+(0,-6) (0,-4) (0,-2) (0,-2) 
+###########################
+###########################
+Vector of dimension 4 is:
+(0,0) (0,0) (-45,45) (-17,17) 
+###########################
+###########################
+Vector of dimension 4 is:
+(0,0) (0,0) (23,-23) (9,-9) 
+###########################
+x,y,z state after test on operator + - * : 
+###########################
+Vector of dimension 4 is:
+(0,-6) (0,-4) (0,-2) (0,-2) 
+###########################
+###########################
+Vector of dimension 4 is:
+(0,0) (0,0) (-45,45) (-17,17) 
+###########################
+###########################
+Vector of dimension 4 is:
+(0,12) (0,8) (21,-17) (7,-3) 
+###########################
+y,z state after test on operator += -= : 
+###########################
+Vector of dimension 4 is:
+(0,-6) (0,-4) (-45,43) (-17,15) 
+###########################
+###########################
+Vector of dimension 4 is:
+(0,12) (0,8) (66,-62) (24,-20) 
+###########################
+z state before dot y.z  : 
+###########################
+Vector of dimension 4 is:
+(15,-15) (14,-14) (8,-8) (6,-6) 
+###########################
+y state before dot y.z  : 
+###########################
+Vector of dimension 4 is:
+(1,-1) (2,-2) (8,-8) (10,-10) 
+###########################
+dot  : y.z  (1978,0)
+z state after dot y.z  : 
+###########################
+Vector of dimension 4 is:
+(30,-30) (14,-14) (24,-24) (6,-6) 
+###########################
+y state after dot y.z  : 
+###########################
+Vector of dimension 4 is:
+(2,-2) (2,-2) (24,-24) (10,-10) 
+###########################
+z globale state before dot y.z  : 
+###########################
+Vector of dimension 4 is:
+(30,-30) (14,-14) (24,-24) (6,-6) 
+###########################
+y local state before dot y.z  : 
+###########################
+Vector of dimension 4 is:
+(1,-1) (2,-2) (8,-8) (10,-10) 
+###########################
+dot  : y.z  (1978,0)
+z state after dot y.z  : 
+###########################
+Vector of dimension 4 is:
+(30,-30) (14,-14) (24,-24) (6,-6) 
+###########################
+y state after dot y.z  : 
+###########################
+Vector of dimension 4 is:
+(2,-2) (2,-2) (24,-24) (10,-10) 
+###########################
+global z x and y state before componentProduct z = x .*. y: 
+###########################
+Vector of dimension 4 is:
+(30,-30) (14,-14) (24,-24) (6,-6) 
+###########################
+###########################
+Vector of dimension 4 is:
+(0,-6) (0,-4) (0,-2) (0,-2) 
+###########################
+###########################
+Vector of dimension 4 is:
+(2,-2) (2,-2) (24,-24) (10,-10) 
+###########################
+z state after componentProduct z = x .*. y: 
+###########################
+Vector of dimension 4 is:
+(-12,-12) (-8,-8) (-48,-48) (-20,-20) 
+###########################
+ x global  y local before componentProduct z = x .*. y: 
+###########################
+Vector of dimension 4 is:
+(0,-6) (0,-4) (0,-2) (0,-2) 
+###########################
+###########################
+Vector of dimension 4 is:
+(2,-2) (2,-2) (24,-24) (10,-10) 
+###########################
+z state after componentProduct z = x .*. y: 
+###########################
+Vector of dimension 4 is:
+(-12,-12) (-8,-8) (-48,-48) (-20,-20) 
+###########################
+ x local  y local before componentProduct z = x .*. y: 
+###########################
+Vector of dimension 4 is:
+(0,-6) (0,-4) (0,-2) (0,-2) 
+###########################
+###########################
+Vector of dimension 4 is:
+(2,-2) (2,-2) (24,-24) (10,-10) 
+###########################
+z state after componentProduct z = x .*. y: 
+###########################
+Vector of dimension 4 is:
+(-12,-12) (-8,-8) (-48,-48) (-20,-20) 
+###########################
+x state after componentProduct z = x .*. y: 
+###########################
+Vector of dimension 4 is:
+(0,-6) (0,-4) (0,-2) (0,-2) 
+###########################
+ x global  y reduced before componentProduct z = x .*. y: 
+###########################
+Vector of dimension 4 is:
+(0,-6) (0,-4) (0,-2) (0,-2) 
+###########################
+###########################
+Vector of dimension 4 is:
+(2,-2) (2,-2) (24,-24) (10,-10) 
+###########################
+z state after componentProduct z = x .*. y: 
+###########################
+Vector of dimension 4 is:
+(-12,-12) (-8,-8) (-48,-48) (-20,-20) 
+###########################
+ x local not in reduced mode but with reduced values,  y reduced before componentProduct z = x .*. y: 
+###########################
+Vector of dimension 4 is:
+(0,-6) (0,-4) (0,-2) (0,-2) 
+###########################
+###########################
+Vector of dimension 4 is:
+(2,-2) (2,-2) (24,-24) (10,-10) 
+###########################
+z state after componentProduct z = x .*. y: 
+###########################
+Vector of dimension 4 is:
+(-12,-12) (-8,-8) (-48,-48) (-20,-20) 
+###########################
+x state in global mode: 
+###########################
+Vector of dimension 4 is:
+(0,-6) (0,-4) (0,-2) (0,-2) 
+###########################
+C state (must be the same as x) : 
+(0,-6) (0,-4) (0,-2) (0,-2) 
+y state in insert mode on with global value from x via C: 
+###########################
+Vector of dimension 4 is:
+(0,-6) (0,-4) (0,-2) (0,-2) 
+###########################
+y state in insert mode off and global value state (should be the same as above): 
+###########################
+Vector of dimension 4 is:
+(0,-6) (0,-4) (0,-2) (0,-2) 
+###########################
+y state in insert mode off and local value (check global was set switchInsertModeOffFromUserGlobalSetting): 
+###########################
+Vector of dimension 4 is:
+(0,-6) (0,-4) (0,-2) (0,-2) 
+###########################
+z copy of X when in insert mode on : 
+###########################
+Vector of dimension 4 is:
+(1,-1) (2,-2) (8,-8) (10,-10) 
+###########################
+x state after being copied : 
+(1,-1) (2,-2) (8,-8) (10,-10) 
+z state after being copied from x : 
+###########################
+Vector of dimension 4 is:
+(1,-1) (2,-2) (8,-8) (10,-10) 
+###########################
+z state after being set to arbitrary value : 
+###########################
+Vector of dimension 4 is:
+(1,-1) (1,-1) (1,-1) (1,-1) 
+###########################
+z in globale state after being set to arbitrary value : 
+###########################
+Vector of dimension 4 is:
+(2,-2) (2,-2) (2,-2) (2,-2) 
+###########################
+throw with = with # xDistIndex ok
+throw with axpy and # xDistIndex ok
+throw with + and # xDistIndex ok
+throw with - and # xDistIndex ok
+throw with dot and # xDistIndex ok
+throw with componentProduct and # xDistIndex ok

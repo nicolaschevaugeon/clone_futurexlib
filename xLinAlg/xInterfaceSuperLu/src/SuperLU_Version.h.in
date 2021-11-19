@@ -1,0 +1,4 @@
+#ifndef _SuperLU_Version_h_
+#define _SuperLU_Version_h_
+#define SUPERLU_VERSION @SuperLU_MAJOR_VERSION@
+#endif

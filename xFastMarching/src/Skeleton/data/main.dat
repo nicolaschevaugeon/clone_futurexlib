@@ -1,0 +1,20 @@
+# lines starting by a # are comment lines
+##########
+# COMPUTER INFORMATION
+MESH_FILE_TYPE   = msh
+MESH_FILE        = data/square.msh
+
+##2D case
+BC_LINE  111 = {  CUSTOM     FIX =   0. }
+BC_LINE  109 = {  CUSTOM     FIX =   0. }
+BC_LINE  112 = {  CUSTOM     FIX =   0. }
+
+
+
+
+
+
+
+
+
+

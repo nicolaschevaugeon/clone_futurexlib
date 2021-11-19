@@ -1,0 +1,267 @@
+
+\section{la notions de valeurs}
+
+\subsection{La classe \code{xValue}}
+
+\paragraph*{Motivation :}
+La m\'ethode des \'el\'ements finis repose sur une r\'eduction de certains
+champs physiques sur un domaine en une approximation \`a un ensemble
+fini de valeurs. La notions de \guil{valeurs} est donc une notions
+importante et une classe paticuli\'ere lui est consacr\'ee dans la
+librairie \code{xfem}. Il s'agit de la classe \doxygen{xValue}.
+
+\paragraph*{Impl\'ementation :}
+C'est une
+\webify{http://fr.wikipedia.org/wiki/Classe_abstraite}{classe
+abstraite} \index{Classe!abstraite} qui est, de plus
+  \textit{Templatis\'ee} (param\'etr\'ee par un type) et DOIT \^etre d\'eriv\'ee en classe concr\'ete pour \^etre utilis\'ee, en pr\'ecisant le type des valeurs que l'on souhaite utiliser (r\'eels, entiers, ...).
+La classe d\'eriv\'ee la plus utilis\'ee est la classe
+\doxygen{xValueDouble}  qui est une classe de \code{xValue} de r\'eels
+double pr\'ecision (\code{xValue<double>}). Il existe \'egalement la
+classes d\'eriv\'ee,  \code{xTensor}. Par ailleurs, \code{xValueDouble}
+est elle-m\'eme d\'eriv\'ee en \code{xValueLinearCombination} et
+\code{xValueOldAndCurrent} (d\'efini dans la librairie \code{Xext}).
+
+\inheritgraph{5cm}{xValueDouble}
+
+
+Consid\'erons l'approximation \'el\'ements\index{Approximation} finis
+Eq.~(\ref{eq:approx_ef2_2}) (voir la
+section~\ref{partition_de_l_unite})~:
+\begin{equation}
+  \label{eq:approx_ef2_2}
+  \bfu(\bfx) \mid_{\Ome_e} = \sum_{i \in N_n} \sum_{\alpha} a_i^\alpha
+  \bfphi_i^\alpha(\bfx)
+\end{equation}
+Les coefficients scalaires\index{Scalaire} $a_i^\alpha$ sont
+repr\'esent\'es par des objets de cette classe.
+
+
+
+
+
+De m\'eme, dans le cas d'\'el\'ements finis enrichis, l'approximation
+\'el\'ements finis enrichie
+ permettant de repr\'esenter une fonction d'enrichissement $F(\bfx) \bfe_x$ sur le
+domaine $\Ome_F$ s'\'ecrit~:
+\begin{equation}
+  \label{eq:approx_ef_enrichi_2}
+  \bfu(\bfx)  = \sum_{i \in N_n(\bfx)} \sum_{\alpha} \bfphi_i^\alpha a_i^\alpha   +
+  \sum_{i \in N_n(\bfx) \cap N_F}
+  \sum_{\alpha} b_i^\alpha \bfphi_i^\alpha(\bfx) F(\bfx)
+\end{equation}
+o\'e $N_F$ est l'ensemble des noeuds dont le support a une
+intersection avec le domaine $\Ome_F$. Les coefficients $b_i^\alpha$
+sont l\'e aussi repr\'esent\'es par des objets de classe
+\code{xValueDouble}.
+
+
+On peut sch\'ematiser en disant que ces objets sont les degr\'es de
+libert\'e du mod\'eles \'el\'ements finis avant la prise en compte des
+conditions aux limites.
+
+
+
+
+
+
+
+
+
+\subsection{Notions de valeurs li\'ees}
+
+\paragraph*{motivation : }
+Dans un mod\'ele \'el\'ements finis, il peut \^etre interessant de
+contraindre une valeur d'\'etre li\'ee \`a d'autres valeurs. C'est le cas,
+par exemple, lorsqu'on impose des conditions de periodicit\'e d'un
+bord \`a l'autre d'un Volume El\'ementaire Repr\'esentatif (voir exemple
+1), ou lorsqu'on impose au champ de d\'eplacement d'\'etre lin\'eaire sur
+le bord d'un domaine (voir exemple 2).
+
+De mani\'ere g\'en\'erale, on peut d\'efinir cette valeur comme \'etant une
+combinaison lin\'eaire d'autres valeurs. Ce n'est alors plus un degr\'e
+de libert\'e du mod\'ele final, puisque la valeur est fix\'ee par les
+valeurs dont elle d\'epend.
+
+
+
+\paragraph*{Impl\'ementation :}
+Pour imposer que cette combinaison lin\'eaire \index{combinaison
+lin\'eaire} soit vraie \`a tout moment dans le calcul, sans avoir \'e
+recalculer cette combinaison lin\'eaire,  une classe d\'eriv\'ee de la
+classe \code{xValue} a \'et\'e cr\'e\'ee. Il s'agit de la classe
+\doxygen{xValueLinearCombination}. Elle s'applique aux classes
+d\'eriv\'ees de \code{xValueDouble}.
+
+Quelques exemples d'utilisation de la classe
+\doxygen{xValueLinearCombination} sont visibles dans le programme
+\code{main.cc} du repertoire \code{Xfem/devel/value}. Ces exemples
+sont les suivants:
+
+\paragraph{Exemple 1:}
+
+L'exemple le plus simple est celui o\`u une valeur est impos\'ee \'egale \'e
+une autre. De fa\'eon formel, on \'ecrira, par exemple :
+\begin{equation}
+    v_2 =  v_1
+\end{equation}
+ceci se traduira en d\'eclarant $v_2$ de la mani\'ere suivante :
+\begin{verbatim}
+  xValueDouble v1;
+  xValueLinearCombination v2(1.0, &v1);
+\end{verbatim}
+On utilise ici le pointeur vers la variable \code{v1} et non pas sa
+valeur, qui peu \'evoluer au cours du calcul. On notera que
+l'utilisation d'une classe permet la d\'eclaration de \code{v2} en
+m\'eme temps que sa d\'efinition.
+
+\paragraph{Exemple 2:}
+
+Si on souhaite imposer une combinaison lin\'eaire de la forme :
+\begin{equation}
+    v_3 = 2~v_1 + 3
+\end{equation}
+alors, on \'ecrira :
+\begin{verbatim}
+  xValueLinearCombination v3(2.0, &v1, 3.);
+\end{verbatim}
+
+\paragraph{Exemple 3:}
+
+Si cette combinaison lin\'eaire fait intervenir plus de deux
+variables, on utilisera  un vecteur de coefficients (vecteur
+\code{coeffs} ci-dessous) ainsi qu'un vecteur de \code{xValue}
+(vecteur \code{vals} ci-dessous). La relation suivante :
+\begin{equation}
+    v_4 = v_1 + 2~v_2 + 3~v_3 + 5
+\end{equation}
+se d\'eclarera de la mani\'ere suivante :
+\begin{verbatim}
+  std::vector<double> coeffs;
+  coeffs.push_back(1.0);
+  coeffs.push_back(2.0);
+  coeffs.push_back(3.0);
+
+  std::vector<xValue<double>*> vals;
+  vals.push_back(&v1);
+  vals.push_back(&v2);
+  vals.push_back(&v3);
+
+  xValueLinearCombination v4(coeffs, vals, 5.0);
+\end{verbatim}
+\remarque{La fonction \code{push\_back()} est une fonction de la
+librairie \code{STL} permettant de remplir un vecteur \guil{par le
+bas} sans avoir \`a introduire les indices.}
+
+
+
+\section{La notion d'\'etat des valeurs}\label{section_xStateOfValue}
+
+\paragraph*{Motivation :}
+Les degr\'es de libert\'e du mod\'eles \'el\'ements finis peuvent intervenir
+dans le membre de gauche ou de droite du syst\'eme matricielle final.
+La distinction d\'epend de leur status. Pour pouvoir assembler
+correctement le syst\'eme matriciel, l'algorithme d'assemblage doit
+pouvoir acc\'eder aux informations sur l'\'etat des valeurs du probl\'eme
+m\'ecanique.
+
+\paragraph*{Impl\'ementation :}
+L'\'etat d'une valeur est d\'efini par un objet de  classe
+\doxygen{xStateOfValue}. Chaque membre de la classe  \code{xValue}
+contient un pointeur vers un membre de la classe
+\doxygen{xStateOfValue}. La classe \code{xStateOfValue} est
+elle-m\'eme une classe abstraite. Les trois classes d\'eriv\'ees utilis\'ees
+r\'eguli\'erement sont   \doxygen{xStateOfValueDof},
+\doxygen{xStateOfValueFixed},
+\doxygen{xStateOfValueLinearCombination}. Cette derni\'ere est l'\'etat
+d'une valeur combinaison lin\'eaire d'autres valeurs. L'\'etat d'une
+combinaison lin\'eaire n'est pas modifiable par l'utilisateur et est
+g\'en\'er\'e automatiquement lors de l'appel de la fonction
+\code{getState}.
+
+
+
+
+\section{Les cl\'es des valeurs : \code{xValkey}}\label{section_xValkey}
+
+\paragraph*{Motivation :}
+
+Dans un mod\'ele \'el\'ements finis, la notions de valeurs peut
+s'appliquer \`a diff\'erents grandeurs physiques. D'autres part, elles
+peuvent \^etre attach\'ees \`a des noeuds, des \'el\'ements ou d'autres
+entit\'es g\'eom\'etriques, enfin, elles peuvent \^etre des coefficients de
+fonctions d'enrichissement  ou de  fonctions d'interpolation
+classiques.\index{cl\'e de valeurs,xValkey}
+
+\paragraph*{Impl\'ementation :}
+Afin de retrouver les informations attach\'ees \`a une valeurs, la
+classe \doxygen{xValkey} \index{cl\'es} a \'et\'e cr\'e\'ee. Cette classe
+permet de g\'erer les informations sur~:
+\begin{center}
+% use packages: array
+\begin{tabular}{p{9cm}p{.25cm}p{5.25cm}}
+& & \\
+-- la signification physique de la valeur (temp\'erature, d\'eplacement suivant x, d\'eplacement suivant y, ...). Elle est
+d\'efinie par une cha\'ene de caract\'eres cod\'ee par un entier (short) &  & \code{getPhys , setPhys} (short)  \\
+& & \\
+-- la signification g\'eom\'etrique de la valeur (coefficients de fonctions nodales, de fonctions d'enrichissement, ...).
+ Elle est \'egalement d\'efinie par une cha\'ene de caract\'eres cod\'ee par un entier  &  & \code{getGeom, setGeom} (short)  \\
+& & \\
+-- un pointeur vers l'entit\'e g\'eom\'etrique associ\'ee &  & \code{getEnti, setEnti} (pointeur vers un \code{AOMD::mEntity})\\
+& & \\
+-- un label suppl\'ementaire pouvant servir \`a distinguer plusieurs enrichissement de m\'eme signification physique et g\'eom\'etrique,
+et s'appliquant sur une m\'eme entit\'e g\'eom\'etrique & &   \\
+& & \\
+\end{tabular}
+\end{center}
+
+\paragraph*{cr\'eation :}
+
+Les cl\'es de valeurs sont g\'en\'er\'e lors de l'utilisation de la fonction
+\code{DeclareInterpolation} (ATTENTION : contrairement \`a ce que sont
+nom indique, cette fonction d\'eclare une approximation, et non une
+interpolation)
+
+
+\section{Les cl\'es d'informations : \code{xKeyInfo}}\label{xKeyInfo}
+
+\paragraph*{Motivation :}
+
+La signification physique ou g\'eom\'etrique des valeurs est \'ecrite,
+pour l'utilisateur, sous forme de cha\'enes de caract\'ere \index{cl\'e
+d'information,xKeyInfo} , comme \guil{DEPLACEMENT\_X} ou
+\guil{TEMPERATURE}. Mais d'un point de vue informatique, il est plus
+simple de travailler avec des entiers (pour un probl\'eme de taille
+m\'emoire en particulier).
+
+\paragraph*{Impl\'ementation :}
+Ces cha\'enes de caract\'eres sont  cod\'es de mani\'ere automatique et
+\textit{\'e la vol\'ee} par la classe \doxygen{xKeyInfo}. Cette derni\'ere
+classe de fonction \code{static}\index{static} g\'ere la
+correspondance entre ces cha\'enes de caract\'ere et des  \textit{short}
+(entier), servant de codage tout le long du calcul. Par leur nature
+\code{static}, ce codage est utilisable \`a tout moment dans le
+programme.
+
+
+
+\section{Le gestionnaire de cl\'es et le valeurs: \code{xValManager}}\label{xValManager}
+
+\paragraph*{Motivation :}
+D'un c\'et\'e, les objets de classe \code{xValue} contiennent (stockent)
+les valeurs utiles aux calculs. De l'autre cot\'e, les classes
+\code{xValkey} contiennent (stockent) les cl\'es de ces valeurs. Il
+est n\'ecessaire de maintenir un lien entre les valeurs et leur cl\'es.
+
+
+\paragraph*{Impl\'ementation :}
+Ce lien se fait par l'interm\'ediaire d'une  classe de service appel\'ee
+\doxygen{xValManager}\index{xValManager}. Ce gestionnaire de cl\'es et
+de valeurs est g\'en\'eral (abstrait) et peut g\'erer des objets de
+classes d\'eriv\'ee de  \code{xValue<T>} au sens large (tenseur, r\'eel,
+entier, ...). Une classe d\'edi\'ee \`a la gestion des r\'eels
+(\code{double}) a \'et\'e d\'eriv\'ee sous le nom de
+\doxygen{xDoubleManager}.
+
+\remarque{Cette liste de relations bijectives entre objets de deux
+classes est appel\'ee \guil{map}.}

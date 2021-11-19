@@ -1,0 +1,181 @@
+  
+\section{Le principe de fonctionnement à  l'ECN}\label{CVS-principe}
+
+Cette partie d\'etaille les fonctionnalit\'es de l'utilitaire SVN.
+
+Pour l'utilisation de SVN lors de l'installation des librairies xfem, voir le chapitre~\ref{first_installation}
+
+\subsubsection{CVS et SVN}
+
+CVS\index{CVS} et SVN\index{SVN}  sont des  syst\`emes de contrôle de versions
+client-serveur permettant \`a  plusieurs personnes de travailler
+simultan\'ement sur un m\^eme ensemble de fichiers. Les gros projets de
+d\'eveloppement s'appuient g\'en\'eralement sur ce type de syst\`eme afin
+de permettre \`a  un grand nombre de d\'eveloppeurs de travailler sur un
+m\^eme projet. 
+
+CVS (Concurrent Versions System) permet, comme son nom l'indique, de g\'erer les acc\`es
+concurrents, c'est-\`a-dire qu'il est capable de d\'etecter les conflits
+de version lorsque deux personnes travaillent simultan\'ement sur le
+m\^eme fichier.
+
+Le fonctionnement de CVS  s'appuie sur une base centralis\'ee appel\'ee \guil{
+repository}\index{repository} (d\'epôt), h\'eberg\'ee sur un serveur (le
+serveur CVS), contenant l'historique de l'ensemble des versions
+successives de chaque fichier. Le repository stocke les diff\'erences
+entre les versions successives, les dates de mise \`a jour, le nom de
+l'auteur de la mise \`a  jour et un commentaire \'eventuel, ce qui permet
+un r\'eel suivi des modifications, tout en optimisant l'espace de
+stockage d\'edi\'e au projet.
+
+Chaque personne travaillant sur le projet poss\`ede un r\'epertoire de
+travail (en anglais \guil{working copy } ou \guil{ sandbox}, traduisez \guil{
+bac \`a  sable }), c'est-\`a-dire un r\'epertoire contenant une copie de la
+base CVS (repository). A l'ECN, il s'agit g\'en\'eralement des
+r\'epertoires de travail sur les disques
+\code{/scratch/<username>/develop}
+
+\subsection{SVN \emph{(Concurrent Versions System)}}
+
+Subversion (en abr\'eg\'e svn) est un syst\`eme de gestion de versions, distribu\'e sous licence Apache et BSD. Il a \'et\'e conçu pour remplacer CVS. Ses auteurs s'appuient volontairement sur les m\^emes concepts (notamment sur le principe du d\'epôt centralis\'e et unique) et consid\`erent que le mod\`ele de CVS est le bon, et que seule son impl\'ementation est en cause. Le projet a \'et\'e lanc\'e en f\'evrier 2000 par CollabNet, avec l'embauche par Jim Blandy de Karl Fogel, qui travaillait d\'ej\`a sur un nouveau gestionnaire de version.
+
+
+
+Subversion a \'et\'e \'ecrit afin de combler certains manques de CVS. Voici les principaux apports :
+\begin{itemize}
+\item[-] Les commits, ou publications des modifications sont atomiques. Un serveur Subversion utilise de façon sous-jacente une base de donn\'ees capable de g\'erer les transactions atomiques (le plus souvent Berkeley DB) ;
+\item[-] Subversion permet le renommage et le d\'eplacement de fichiers ou de r\'epertoires sans en perdre l'historique. ;
+\item[-] les m\'eta-donn\'ees sont versionn\'ees : on peut attacher des propri\'et\'es, comme les permissions, \`a  un fichier, par exemple.
+\end{itemize}
+
+Du point de vue du simple utilisateur, les principaux changements lors du passage \`a  Subversion, sont :
+\begin{itemize}
+\item[-] Les num\'eros de r\'evision sont d\'esormais globaux (pour l'ensemble du d\'epôt) et non plus par fichier : chaque patch a un num\'ero de r\'evision unique, quels que soient les fichiers touch\'es. Il devient simple de se souvenir d'une version particuli\`ere d'un projet, en ne retenant qu'un seul num\'ero ;
+\item[-] svn rename (ou svn move) permet de renommer (ou d\'eplacer) un fichier ;
+\item[-] Les r\'epertoires et m\'eta-donn\'ees sont versionn\'es.
+\end{itemize}
+ 
+Une des particularit\'es de Subversion est qu'il ne fait aucune distinction entre un label, une branche et un r\'epertoire. C'est une simple convention de nommage pour ses utilisateurs. Il devient ainsi tr\`es facile de comparer un label et une branche ou autre croisement.
+
+
+\section{Les principales commandes de Subversion}
+
+
+\subsection{Checkout \index{SVN!checkout}}\label{svn_checkout}
+
+A l'aide d'un client SVN, chaque utilisateur souhaitant travailler
+sur le projet (pour modifier des fichiers ou simplement pour voir la
+derni\`ere version des fichiers dans la base) r\'ecup\`ere une copie de
+travail grâce \`a  une op\'eration appel\'ee \guil{\code{checkout}} .
+
+Pour la premi\`ere installation des librairies xfem \`a l'ECN, ce r\'ef\'erer au 
+chapitre~\ref{first_installation}
+
+\subsection{Commit \index{SVN!commit}}
+
+Lorsque l'utilisateur a termin\'e de modifier les fichiers, il peut
+transmettre les modifications \`a  la base. Cette op\'eration est appel\'ee
+\guil{\code{commit}}. Ainsi plusieurs d\'eveloppeurs peuvent travailler
+simultan\'ement sur une copie du repository et transmettre leurs
+modifications.
+
+
+
+\subsection{Update \index{SVN!update} }
+
+Les modifications apport\'ees par les autres
+utilisateurs ne sont pas automatiquement r\'epercut\'ees par SVN sur la
+copie locale, il est donc n\'ecessaire, avant chaque modification de
+fichier, de mettre \`a  jour sa copie de travail gr âce \`a  une op\'eration
+appel\'ee  \guil{ \code{update}  }, afin de limiter les risques de conflits.
+
+
+S'il arrive qu'un utilisateur tente de transmettre ses modifications
+alors qu'un autre utilisateur a lui-m\^eme modifi\'e ce fichier
+pr\'ec\'edemment, SVN va d\'etecter une incompatibilit\'e. Si les
+modifications portent sur des parties diff\'erentes du fichier, le
+syst\`eme SVN peut proposer une fusion des modifications, grâce \`a  une
+op\'eration appel\'ee \code{diff}, sinon SVN va demander \`a  l'utilisateur
+de fusionner manuellement les modifications en signalant un conflit.
+
+Il conviendra de signaler que le conflit est r\'esolu avant de faire un nouveau \guil{ \code{commit} }, par la command : 
+
+\code{svn resolved} \code{<nom\_du\_fichier>} 
+
+Si la commande signale que le r\'epertoire est \guil{omis}, c'est que le d\'epos local ne correspond pas \`a un \guil{checkout} du serveur SVN (voir la section~\ref{svn_checkout}).
+
+\newpage
+
+\subsubsection{Tableaux des commandes usuels}
+
+\begin{center}
+\begin{longtable}{p{3.75cm} p{11.75cm}}
+\textbf{Commande} & \textbf{Signification} \\
+\hline\\
+\code{  add  }  &  D\'eclare l'ajout d'une nouvelle ressource pour le prochain commit. Lorsqu'un fichier est ajout\'e au d\'epos\code{NewApps} :
+
+\begin{verbatim}
+        cd NewApps
+        svn add MyNewFile
+        svn commit MyNewFile
+\end{verbatim} 
+ \\
+\code{  blame  }  & Permet de savoir quel contributeur a soumis les lignes d'un fichier.\\
+\code{  checkout (co)  }  & R\'ecup\`ere en local une r\'evision ainsi que ses m\'eta-donn\'ees depuis le d\'epôt.\\
+\code{  cleanup  }  & Nettoie la copie locale pour la remettre dans un \'etat stable.\\
+\code{  commit (ci)  }  & Enregistre les modifications locales dans le d\'epôt cr\'eant ainsi une nouvelle r\'evision.\\
+\code{  copy  }  & Copie des ressources \`a  un autre emplacement (localement ou dans le d\'epôt).\\
+\code{  delete }  & D\'eclare la suppression d'une ressource existante pour le prochain commit.\\
+\code{  diff  }  & Calcule la diff\'erence entre deux r\'evisions (permet de cr\'eer un patch \`a  appliquer sur une copie locale).\\
+\code{  export  }  & R\'ecup\`ere une version sans m\'eta-donn\'ees depuis le d\'epôt ou la copie locale.\\
+\code{  import  }  & Envoie une arborescence locale vers le d\'epôt.\\
+\code{  info  }  & Donne les informations sur l'origine de la copie locale.\\
+\code{  lock  }  & Verrouille un fichier.\\
+\code{  log  }  & Donne les messages de commit d'une ressource.\\
+\code{mkdir} &  Lors de la cr\'eation de nouvelle apllication dans le d\'epos Applis (\`a l'ECN), il convient de cr\'eer un r\'epertoire nouveau dans le d\'epos des applications. Ceci ce fait avec la commande \code{mkdir} :
+
+\begin{verbatim}
+        svn mkdir NewApps
+        svn commit NewApps
+\end{verbatim}    
+\\
+\code{  merge  }  & Calcule la diff\'erence entre deux versions et applique cette diff\'erence \`a  la copie locale.\\
+\code{  move  }  & D\'eclare le d\'eplacement d'une ressource.\\
+\code{  propdel  }  & Enl\`eve la propri\'et\'e du fichier.\\
+\code{  propedit  }  & \'edit la valeur d 'une propri\'et\'e.\\
+\code{  propget  }  & Retourne la valeur d'une propri\'et\'e.\\
+\code{  proplist  }  & Donne une liste des propri\'et\'es.\\
+\code{  propset  }  & Ajoute une propri\'et\'e.\\
+\code{  resolved  }  & Permet de d\'eclarer un conflit de modifications comme r\'esolu.\\
+\code{  revert }  & Revient \`a  une r\'evision donn\'ee d'une ressource. Les modifications locales sont \'ecras\'ees.\\
+\code{  status (st)  }  & Indique les changements qui ont \'et\'e effectu\'es:
+\begin{itemize}
+\item A : fichier Ajout\'e
+\item D :  fichier D\'etruit
+\item M :   fichier Modifi\'e
+\end{itemize}
+\\
+\code{  switch  }  & Met \`a  jour la copie du d\'epôt.\\
+\code{  update (up)  }  & Met \`a  jour la copie locale existante depuis la derni\`ere r\'evision disponible sur le d\'epôt.\\
+\code{  unlock  }  & Retire un verrou.
+\end{longtable}
+\end{center}
+
+
+
+
+For more d\'etails and information, see \web{http://svnbook.red-bean.com/}.
+
+
+
+
+\section{SVN en pratique}
+
+
+Le serveur subversion est visible \`a l'adresse suivante : \web{https://svn.ec-nantes.fr}. Il est accessible en lecture \`a partir d'un nagigateur web (ie, firefox, ...)
+
+Pour y acc\'eder, il faut accepter le certificat du serveur. Si vous acceptez ce certificat d\'efinitivement, la question ne sera plus pos\'ee.
+
+\section{english documentation}
+
+For an english documentation, refere to pdf book  \web{http://svnbook.red-bean.com/nightly/en/svn-book.pdf}.

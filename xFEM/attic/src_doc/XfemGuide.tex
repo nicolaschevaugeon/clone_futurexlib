@@ -1,0 +1,184 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Complete documentation
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+               
+\documentclass[a4paper,twoside,11pt]{XfemDoc}
+
+\usepackage[latin1]{inputenc}
+%\usepackage[french]{babel}
+\usepackage{epsfig,subfigure}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{longtable}
+\usepackage{color}
+
+\usepackage{subfigure}
+\graphicspath{{figures/}{:figures:}}
+\usepackage{chicago}
+\usepackage{graphpap}
+
+\input{XfemGuideConfiguration.tex}
+
+\usepackage[pagebackref, colorlinks=true, hyperindex=true,
+pdftitle={XfemGuide}, pdfauthor={Nicolas~Moes~et~Gilles~Marckmann}
+]{hyperref}
+
+\usepackage{makeidx}
+\makeindex
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%           The   XFEM Guide
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\title{The \texttt{xfem} User Guide}
+
+\author{\Large{Nicolas M\"oes et Gilles Marckmann} \\   \\
+ avec les contributions de Yosra Guetari et Eric Bechet \\ \\
+    \emph{Institut de Recherche en G\'enie Civil et M\'ecanique}
+    \\ \emph{Ecole Central de Nantes }
+    }
+
+\date{\today}
+\makeindex
+\setcounter{tocdepth}{3}
+
+\usepackage[francais]{babel}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%           Begin Document
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+%\DeclareGraphicsExtensions{.eps,.pdf,.png,.jpg,.mps}
+
+\maketitle
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% une page de d\'edicace en commentaire
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\clearpage
+%
+%
+%  \clearpage
+%  \begin{minipage}[t][10cm][b]{.8\textwidth}
+%  \large
+% \textbf{LOI n° 94-665 du 4 août 1994 relative \`a l'emploi de la langue française }
+% Art. 7. -\emph{Les publications, revues et communications diffus\'ees en France et qui \'emanent d'une personne morale de droit public, d'une personne priv\'ee exerçant une mission de service public ou d'une personne priv\'ee b\'en\'eficiant d'une subvention publique doivent, lorsqu'elles sont r\'edig\'ees en langue \'etrangère, comporter au moins un r\'esum\'e en français.}
+%  \normalsize
+%  \end{minipage}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Insert Table of Contents; List of Figures and Tables
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\small
+\tableofcontents
+\normalsize
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   PARTIES ET CHAPITRES
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\part*{}
+    \addcontentsline{toc}{chapter}{Introduction G\'en\'erale}
+    \markboth{Introduction G\'en\'erale}{Introduction G\'en\'erale}
+    \chapter*{Introduction G\'en\'erale}
+        \input{Introduction.tex}
+
+\part{Installation et compilation \texttt{xfem}\label{GettingStarted}}
+   \markboth{Installation et compilation}{Installation et compilation}
+    \chapter{Installation  \\ \textnormal{(contribution de Y. Guetari)}}\label{InstallationXfem}
+        \input{XfemForBeginners.tex}  \markboth{Installation}{Installation}
+%    \chapter{CVS \\ \textnormal{(contribution de E. Bechet et Y. Guetari)}}\label{CVS}
+%        \input{cvs.tex}
+    \chapter{SVN }\label{CVS}
+        \input{svn.tex}
+    \chapter{Compilation }\label{Compilation}
+        \input{Compilation.tex}
+
+	
+	
+\part{Les utilitaires et librairies de d\'eveloppement}\label{tools_and_lib}
+    \markboth{Utilitaires et librairies}{Utilitaires et librairies}
+    \chapter{Emacs et Gmsh  }\label{utilities}
+        \input{emacs.tex}
+    \chapter{Associated tools and libraries \\ \textnormal{(contribution de Y. Guetari)}}\label{DevTools}
+        \input{DevTools.tex}
+
+
+\part{Manuel Th\'eorique\label{TheoryManual}}
+    \markboth{Manuel Th\'eorique}{Manuel Th\'eorique}
+    \chapter{L'approche X-FEM}\label{elements_finis_etendus}
+        \input{Theory.tex}
+    \chapter{Quelques exemples d'application}\label{Applications_de_XFEM}
+        \input{ApplicationsDeXfem.tex}
+
+	
+\part{Guide du d\'eveloppeur\label{UserManual}}
+    \markboth{Guide du d\'eveloppeur}{Guide du d\'eveloppeur}
+   % \chapter{La lecture des donn\'ees}
+       % \input{xDataManual.tex}
+    \chapter{Les notions de bases de la librairie \code{xfem}}
+        \input{xValueManual.tex}
+        \input{xInterpolationManual.tex}
+        \input{xFormBilinearManual.tex}
+    \chapter{Organisations g\'en\'erale de la librairie}
+        \input{OrganisationGenerale.tex}
+    \chapter{Exemple Xfem}
+        \input{./test/mechanics2d/square.tex}
+
+
+
+
+
+\part{Annexes}   \label{annexes}
+   \markboth{Annexes}{Annexes}
+   \chapter{Annexe A :Documenter \texttt{xfem}}\label{DocGene}
+        \input{GenerationDocument.tex}
+   \chapter{Annexe B : Le langage C++}
+        \input{UserDevelopments.tex}
+  % \chapter{Annexe C :  Compl\'ements d'informations \\ \textnormal{(contribution de E. Bechet)}}
+  %       \input{Annexes.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  Insert the bibliography using BibTeX
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\part*{Ref\'erences}
+\markboth{R\'ef\'erences Bibliographiques}{R\'ef\'erences Bibliographiques}
+\addcontentsline{toc}{chapter}{R\'ef\'erences}
+%\bibliographystyle{chicago}
+\bibliographystyle{bibsty}
+\bibliography{biblio}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  Insert the Index file
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\part*{Index}
+\addcontentsline{toc}{chapter}{Index}
+\markboth{Index}{Index}
+\printindex
+%\InputIfFileExists{XfemGuide.idx}
+
+
+\end{document}

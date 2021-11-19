@@ -1,0 +1,20 @@
+****************************************************
+****************************************************
+Jan 19 2008 Nicolas MOËS nicolas.moes@ec-nantes.fr
+****************************************************
+****************************************************
+in xLinearSystemSolverDiagonal
+int solve( xCSRMatrix* Mat, xCSRVector& RHS, xCSRVector& SOL );
+changed into
+int solve( xCSRMatrix& Mat, xCSRVector& RHS, xCSRVector& SOL );
+to follow the interface of the other solvers
+
+****************************************************
+****************************************************
+Aug 29 2008 Nicolas Chevaugeon nicolas.chevaugeon@ec-nantes.fr
+****************************************************
+****************************************************
+modified files :
+File: xCSRVector.h
+member
+double GetVal(const int i) is now a const member function.

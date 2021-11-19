@@ -1,0 +1,447 @@
+
+\section{External Installation of \code{xfem} with CVS}
+
+\subsection{Installation on a linux machine}
+
+Remote access to ECN's CVS server is possible using ssh. To get
+\code{xfem} library installed and functional on an external machine,
+some other (\guil{downloadable}) tools are needed:
+\begin{itemize}
+    \item \code{boost} (\web{www.boost.org})
+    \item \code{mtl} (\web{www.osl.iu.edu/research/mtl})
+    \item \code{Trellis} (\web{www.scorec.rpi.edu/Trellis})
+\end{itemize}
+\begin{enumerate}
+\item  Create your development directory (exp. \code{develop/} ). Then set your environment variables:
+\begin{itemize}
+\item  For versions sh, bash,.. :
+\begin{verbatim}
+export CVS_RSH=ssh export CVSROOT=:ext:public@cvs.ec-nantes.fr:/cvs
+\end{verbatim}
+\index{CVS!CVS RSH}\index{CVS!CVSROOT} In your \code{.bashrc},
+define path to your development directory (exp:  \code{export
+DEVROOT /scratch/user/develop} )
+
+\item For versions csh, tcsh,.. :
+\begin{verbatim}
+setenv CVS_RSH ssh setenv CVSROOT :ext:$public@cvs.ec-nantes.fr:/cvs
+\end{verbatim}
+
+
+In your \code{.bashrc}, define path to your development directory
+(exp:  \code{setenv DEVROOT /scratch/user/develop} )
+\end{itemize}
+\item Check out the needed tools:  (see \code{Tools} for description)
+
+\begin{verbatim}
+cd $DEVROOT cvs checkout Util
+\end{verbatim}
+
+
+
+\item Check out the library \code{xfem}:
+
+\begin{verbatim}
+cd $DEVROOT cvs checkout Xfem
+\end{verbatim}
+
+\item You need now to get the tools required for pre-compilation. Start by \code{Util} (which you've just installed)
+
+\begin{verbatim}
+cd $DEVROOT cd Util/buildUtil/buildUtil
+\end{verbatim}
+
+\begin{verbatim}
+make setup NODEP=1 make
+\end{verbatim}
+
+\item Compile Loki:
+
+\begin{verbatim}
+cd $DEVROOT cd Util/Loki/Loki
+\end{verbatim}
+
+\begin{verbatim}
+make setup NODEP=1 make
+\end{verbatim}
+
+\item Download boost and \guil{unzip} it in \code{/usr/local/include/} :
+\begin{verbatim}
+cp your-boost-version.tar.gz /usr/local/include/ cd
+/usr/local/include/ tar -xzvf your-boost-version.tar.gz
+\end{verbatim}
+
+
+Create the link that will allow xfem find boost's includes (\code{in
+/usr/local/include/}):
+
+\begin{verbatim}
+ln -s your-boost-version/boost boost
+\end{verbatim}
+
+\item Download mtl and install it in a repository \code{Solver/} :
+
+\begin{verbatim}
+cd $DEVROOT mkdir Solver
+\end{verbatim}
+
+\begin{verbatim}
+cd Solver/ tar -xzvf your-mtl-version.tar.gz
+\end{verbatim}
+Then compile it:
+
+\begin{verbatim}
+cd your-mtl-version ./configure make make install
+\end{verbatim}
+
+As for boost, create a link to the repository where mtl is
+installed:
+\begin{verbatim}
+cd $DEVROOT/Solver ln -s your-mtl-version mtl
+\end{verbatim}
+
+\item  \code{C++} includes \code{hash\_fct}, \code{hash\_map} and \code{hash\_set} are available as \code{RPM} or \code{tar}
+archives. Copy them in \code{/usr/local/include}
+
+\item Download and unzip Trellis:
+
+\begin{verbatim}
+cd $DEVROOT tar -xzvf your-Trellis-version.tar.gz
+\end{verbatim}
+
+Compile the needed libraries (AOMD and Model)
+
+\begin{verbatim}
+cd Trellis/Trellis/model/model make setup NODEP=1 make
+\end{verbatim}
+
+\begin{verbatim}
+cd Trellis/Trellis/AOMD/AOMD make setup NODEP=1 make
+\end{verbatim}
+\end{enumerate}
+
+
+
+\subsection{Installation on a Windows machine:}
+\begin{enumerate}
+\item Install cygwin (www.redhat.com )
+\item  In a cygwin shell, follow the previous commands
+\end{enumerate}
+
+
+
+
+
+
+
+
+\section{Le serveur CVS de l'ECN (pour administrateur)}
+
+Le serveur CVS est situ\'e \`a l'adresse : \code{cvs.ec-nantes.fr}. Il
+s'agit d'une machine d'architecture Intel avec un syst\`eme
+d'exploitation standard Red Hat linux 9.
+
+\subsection{Syst\`eme CVS}
+Le syst\`eme CVS est utilis\'e pour le d\'eveloppement de code. Il est un
+outil de collaboration pour les d\'eveloppeurs travaillant sur des
+projets communs. De plus, il permet de garder une trace de toutes
+les modifications effectu\'ees (stockage incr\'emental). Du point de vue
+utilisateur, son interface est standard \`a partir du moment ou
+l'authentification est faite, nous ne nous attarderons pas sur ce
+point dans la suite. Un manuel d'utilisation est disponible \`a
+l'adresse suivante :
+
+\web{ http://www.cvshome.org/}.
+
+L'authentification est faite par un acc\`es ssh, du point de vue
+utilisateur (sur linux ou unix) il faut simplement d\'efinir les
+variables d'environnement suivantes :
+
+\begin{verbatim}
+CVSROOT = :ext:<point d'acc\`es au serveur CVS>
+\end{verbatim}
+
+
+\begin{verbatim}
+CVS_RSH=ssh
+\end{verbatim}
+
+
+Le point d'acc\`es au serveur CVS est d\'ependant du mode d'acc\`es et
+sera d\'etermin\'e dans la suite. Lors de l'acc\`es au serveur, un mot de
+passe sera \'eventuellement demand\'e pour toute commande, par exemple
+\code{cvs checkout} ou encore \code{cvs commit} . Pour \'eviter la
+demande syst\'ematique d'un mot de passe il faut implanter dans le
+serveur CVS les clef de la machine locale. Ceci peut \^etre fait \`a
+l'aide d'une commande sp\'eciale.
+
+\subsection{Implantation du serveur CVS \`a l'ECN}
+
+Le serveur CVS est dot\'e d'un certain nombre de scripts  (voir le
+fichier \code{/usr/local/cvs/doc/README} sur le serveur CVS). Il
+s'agit d'un serveur s\'ecuris\'e permettant un acc\`es anonyme sur
+certains projets, et un acc\`es contrôl\'e sur d'autres. La protection
+des donn\'ees et de l'int\'egrit\'e du serveur sont assur\'es de deux façons
+: d'une part par une authentification et des \'echanges de donn\'ees
+crypt\'es (seul le protocole ssh est utilis\'e lors des requ\^etes
+r\'eseau), et d'autre part par un masquage du syst\`eme de fichiers
+racine de la machine ( commande \code{chroot} ). Les scripts d\'ecrits
+dans la suite sont invoqu\'es pour les actions suivantes : cr\'eation
+d'un nouveau projet, l'ajout d'utilisateurs aux droits restreints \`a
+un seul projet, la cr\'eation d'un module dans un projet
+(sous-projet). Cette derni\`ere action peut aussi \^etre effectu\'ee
+directement par un utilisateur ayant des droits d'\'ecriture dans un
+projet. Des utilisateurs privil\'egi\'es peuvent avoir un acc\`es \`a
+plusieurs modules \`a la condition de ne pas faire de \code{chroot}.
+Ceci sera explicit\'e dans la suite.
+
+\subsection{Installation}
+
+Dans le cas d'une r\'einstallation, il faut utiliser l'archive
+(version 1.5) des scripts d'administration:
+\code{chrooted-ssh-cvs.1.5.tar.gz} et le d\'ecompresser dans le
+r\'epertoire \code{/usr/local} :
+\begin{verbatim}
+cd /usr/local tar -zxf <chemin>/chrooted-ssh-cvs.1.5.tar.gz
+\end{verbatim}
+
+Une documentation est fournie avec (\'equivalente \`a
+\code{/usr/local/cvs/doc/README} sur le serveur CVS) :
+\code{chrooted-ssh-cvs.1.5.README}
+
+
+\subsection{Modes d'acc\`es}
+Il existe 2 modes d'acc\`es, chacun permettant un acc\`es en lecture
+uniquement ou en lecture et \'ecriture. Le choix est d\'etermin\'e \`a la
+cr\'eation de l'utilisateur mais peut \^etre modifi\'e ult\'erieurement.
+\begin{enumerate}
+\item  \underline{mode restreint :}
+Ce mode est destin\'e aux utilisateurs d'un seul projet et disposant
+de droits de lecture (\'eventuellement d'\'ecriture) dans ce projet. La
+connexion est accord\'ee apr\`es authentification par \code{ssh} sous
+forme d'un acc\`es \`a certains outils dans un environnement restreint
+(apr\`es \code{chroot}) : \code{cvs} (commande serveur), et quelques
+outils de modification de mot de passe (\code{password}) et d'import
+de clef cryptographique pour acc\`es sans mot de passe
+(\code{authorize}). Il n'y a pas de shell accessible. Dans ce mode
+d'acc\`es, le \code{<point d'acc\`es au serveur CVS>} prend la forme
+suivante:
+
+\begin{verbatim}
+CVSROOT=:ext:<user>@cvs.ec-nantes.fr:/cvs
+\end{verbatim}
+
+
+
+Le projet est d\'etermin\'e par \code{<user>} (dans ce mode, l'usager
+n'a acc\`es qu'a un seul projet). C'est le mode d'acc\`es le plus
+s\'ecuritaire, il est en particulier possible de l'utiliser en lecture
+seule pour un acc\`es anonyme aux projets de nature libre (au sens
+logiciel libre)
+
+\item \underline{mode \'etendu :}
+Ce mode permet \`a un utilisateur d'acc\'eder \`a un ou plusieurs projets,
+en lecture ou lecture et \'ecriture. De ce fait, cet utilisateur ne
+passera pas par une \'etape de\code{chroot} mais sera tout de m\^eme
+authentifi\'e par \code{ssh}. Cet acc\`es ne devrait jamais \^etre utilis\'e
+pour les acc\`es anonymes. Si possible (et en particulier si un usager
+ne d\'esire travailler que sur un projet), il est pr\'ef\'erable
+d'utiliser le mode restreint. Dans le mode d'acc\`es \'etendu, le
+\code{<point d'acc\`es au serveur CVS>} prend la forme suivante:
+
+
+\begin{verbatim}
+CVSROOT=:ext:<user>@cvs.ec-nantes.fr:/usr/local/cvs/<proj>/chrooted-cvs/cvs
+\end{verbatim}
+
+
+Ici l'usager \code{<user>} ne d\'etermine pas le projet, c'est la
+variable \code{<proj>} qui permet de s\'electionner le projet dans
+lequel il d\'esire travailler. Selon la configuration du serveur, les
+usagers \'etendus peuvent avoir acc\`es \`a un shell et donc \`a toutes les
+commandes unix. Les projets sont en principe accessibles en lecture,
+mais l'acc\`es en \'ecriture n\'ecessite d'appartenir au groupe du projet
+en question.
+\end{enumerate}
+
+
+
+\subsection{Administration}
+Toutes les actions d'administration se font en tant que \code{root}
+sur la machine cvs :
+
+\begin{verbatim}
+ssh -X root@cvs.ec-nantes.fr
+\end{verbatim}
+
+
+
+\subsubsection{Cr\'eation d'un nouveau projet}
+
+La cr\'eation d'un nouveau projet se fait \`a l'aide du script
+\code{make-project}, celui-ci se chargeant de faire toutes les
+actions n\'ecessaires : cr\'eation de groupes, de r\'epertoires, et mise
+en place de l'espaces restreint (pour \code{chroot}). La syntaxe de
+la commande est la suivante pour la cr\'eation du projet \code{<proj>}
+:
+\begin{verbatim}
+/usr/local/cvs/sbin/make-project [-a] <proj>
+\end{verbatim}
+
+L'option \code{-a} permet l'acc\`es anonyme sur ce projet. Il est
+possible de modifier cela par la suite (droits de lecture des
+fichiers par tout utilisateur). Il est pr\'ef\'erable de mettre cette
+option par d\'efaut puisque l'authentification est faite
+syst\'ematiquement. Pour une aide en ligne sur cette commande :
+
+\begin{verbatim}
+/usr/local/cvs/sbin/make-project -h
+\end{verbatim}
+
+Note : Certains noms de projet sont interdits pour des raisons de
+conflits possibles avec des r\'epertoires existants, il s'agit de :
+
+\begin{verbatim}
+chrooted-cvs home sbin doc src
+\end{verbatim}
+
+\subsubsection{Destruction d'un projet existant}
+
+La destruction du projet \code{<proj>} se fait en deux temps
+\begin{enumerate}
+\item  Destruction de tous les usager \`a acc\`es restreint sur ce projet (la liste est disponible en faisant la
+commande : \code{cat /etc/passwd $\vert$ grep \guil{Project <proj>}}
+) voir commande de destruction plus bas
+\item  Destruction du projet
+\begin{verbatim}
+rm -rf /usr/local/cvs/<proj> groupdel <proj>
+\end{verbatim}
+
+\end{enumerate}
+
+\subsubsection{Cr\'eation d'usagers \`a acc\`es restreint}
+La cr\'eation d'un usager \`a acc\`es restreint se fait grâce au script
+\code{make-user}. Un usager \`a acc\`es restreint ne peut acc\'eder que \`a
+un projet \`a la fois. La syntaxe est la suivante:
+\begin{verbatim}
+/usr/local/cvs/sbin/make-user <proj> [-ro|-rw] <user>
+\end{verbatim}
+La variable \code{<proj>} est \`a remplacer par le nom du projet
+(existant) et la variable \code{<user>} par le nom d'usager
+(inexistant). Les options \code{-ro} et \code{-rw} servent
+respectivement \`a sp\'ecifier un acc\`es en lecture seule ou en lecture
+et \'ecriture. Ceci peut \^etre modifi\'e \`a la main par la suite en
+plaçant l'usager dans le groupe du projet ou non (commande
+\code{usermod}), mais il est pr\'ef\'erable de d\'etruire le compte et de
+le recr\'eer.
+
+
+\subsubsection{Modification d'usagers \`a acc\`es restreint}
+La façon la plus simple de modifier un usager \`a acc\`es restreint
+(pour changer le projet sur lequel il a des droits par exemple)
+consiste \`a le d\'etruire et \`a le recr\'eer avec les bons arguments. La
+destruction d'un usager restreint est identique \`a la destruction
+d'un usager \`a acc\`es \'etendu :
+\begin{verbatim}
+userdel -r <user>
+\end{verbatim}
+
+\subsubsection{Cr\'eation ou modification d'usagers \`a acc\`es \'etendu}
+Ces usagers ne sont pas cr\'e\'es ou modifi\'es par un script mais doivent
+l'\^etre « \`a la main » par des commandes unix standard. Le fait
+d'appartenir \`a certains groupes conditionne l'acc\`es en lecture ou en
+lecture et \'ecriture aux projets. La cr\'eation est faite avec la
+commande \code{useradd}, et la modification avec \code{usermod}. Un
+exemple vaut mieux que mille mots : Cr\'eation de l'usager \code{toto}
+avec acc\`es en \'ecriture aux projets \code{public} et \code{fissure} :
+\begin{verbatim}
+useradd -G cvsdev,public,fissure toto
+\end{verbatim}
+
+
+Modification : toto a de plus acc\`es en \'ecriture au projet ecn :
+\begin{verbatim}
+usermod -G cvsdev,public,fissure,ecn toto
+\end{verbatim}
+
+Maintenant, toto n'a plus acc\`es a rien (mais on veut garder
+l'usager):
+\begin{verbatim}
+usermod -G "" toto
+\end{verbatim}
+
+On redonne de nouveau l'acc\`es en lecture \`a tous les projets :
+\begin{verbatim}
+usermod -G cvsdev toto
+\end{verbatim}
+
+On d\'esire d\'etruire l'usager toto :
+\begin{verbatim}
+userdel -r toto
+\end{verbatim}
+
+% \subsubsection{Configuration des usagers}
+% Ces actions se font en dehors du serveur cvs, par l'usager, mais elles sont sp\'ecifiques au serveur cvs
+% de l'ECN.
+
+\subsubsection{Acc\`es sans mot de passe}\label{acces_sans_passwd}
+Il est parfois fastidieux de rentrer un mot de passe pour tout acc\`es
+au serveur CVS. Il existe un moyen de mettre \`a jour le fichier de
+clefs permettant une authentification sans mot de passe. Il faut
+d'abord cr\'eer la clef sur la machine cliente; ceci se fait par la
+commande suivante :
+
+\begin{verbatim}
+ssh-keygen -t -dsa
+\end{verbatim}
+
+
+Par l'interm\'ediaire de l'utilitaire authorize, il est donc possible
+de transmettre cette clef, ceci se fait de la mani\`ere suivante:
+\begin{verbatim}
+ssh <user>@cvs.ec-nantes.fr authorize < ~/.ssh/id_dsa.pub
+\end{verbatim}
+
+Une fois cette action effectu\'ee, plus aucun mot de passe ne sera
+demand\'e (en fait, uniquement pour les clients sur lesquels l'action
+a \'et\'e faite). Pour les usagers \'etendus, il faudra en plus mettre les
+bons droits d'acc\`es du fichier
+\code{$\thicksim$/.ssh/authorized\_keys2} :
+
+\begin{verbatim}
+ssh <user>@cvs.ec-nantes.fr "chmod 600 ~/.ssh/authorized_keys2"
+\end{verbatim}
+
+Pour effacer les clefs d\'ej\`a entr\'ees (et revenir \`a une
+authentification par mot de passe pour tous les clients), il suffit
+de faire :
+\begin{verbatim}
+ssh <user>@cvs.ec-nantes.fr authorize delete
+\end{verbatim}
+
+Modification de mot de passe La modification de mot de passe se fait
+avec la commande password :
+\begin{verbatim}
+ssh <user>@cvs.ec-nantes.fr password
+\end{verbatim}
+
+Attention, le mot de passe entr\'e s'affiche en clair (il est
+toutefois transmis sous forme crypt\'ee) Quelques commandes usager
+utiles pour initialiser un projet Ces commandes se font cot\'e usager
+et permettent de manipuler un projet. Ce sont des commandes standard
+que toute installation cvs reconnaît. Pour plus d'information, voir
+le site : \web{http://www.cvshome.org/} Charger le contenu du
+r\'epertoire courant dans le projet en cours, dans le sous-projet
+nomm\'e \code{<sproj>} :
+\begin{verbatim}
+cvs import <sproj> vendor_tag release_tag
+\end{verbatim}
+
+R\'ecup\'erer le sous-projet \code{<sproj>} (pour un nouvel usager par
+exemple) :
+\begin{verbatim}
+cvs checkout <sproj>
+\end{verbatim}
+
+
+

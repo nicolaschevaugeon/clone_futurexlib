@@ -1,0 +1,10 @@
+Tag for world proc 3 is 1
+Tag for dubworld proc 3 is 1
+Tag for colworld proc 1 is 1
+new serie
+Tag for dubworld proc 3 is 2
+Tag for colworld proc 1 is 2
+Tag for selfworld proc 1 is 1
+Tag for nullworld proc 1 is 1
+Tag for colworld after loop  proc 1 is 5
+Tag for dubworld proc 3 is 3

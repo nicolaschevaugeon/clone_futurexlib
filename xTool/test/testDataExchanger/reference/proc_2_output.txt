@@ -1,0 +1,70 @@
+PROC2 :
+ has c number of remote copies : 2 on procs :  0 3 Owner is 0
+ Am I Owner ? 0
+ has d number of remote copies : 2 on procs :  0 1 Owner is 0
+ Am I Owner ? 0
+ has e number of remote copies : 1 on procs :  3 Owner is 2
+ Am I Owner ? 1
+ has f number of remote copies : 1 on procs :  1 Owner is 1
+ Am I Owner ? 0
+Testing exchange OwnerGather for int data
+P2 Send for c info 303 to 0
+P2 Send for d info 304 to 0
+P2 Send for f info 316 to 1
+P2 Receive for e info 425 from 3
+OwnerGather Done
+Testing exchange OwnerScatter for int data
+P2 Send for e info 335 to 3
+P2 Receive for c info 123 from 0
+P2 Receive for d info 124 from 0
+P2 Receive for f info 226 from 1
+OwnerScatter Done
+Testing exchange AllGather for int data
+P2 Send for c info 303 to 0
+P2 Send for c info 333 to 3
+P2 Send for d info 304 to 0
+P2 Send for d info 314 to 1
+P2 Send for e info 335 to 3
+P2 Send for f info 316 to 1
+P2 Receive for c info 123 from 0
+P2 Receive for c info 423 from 3
+P2 Receive for d info 124 from 0
+P2 Receive for d info 224 from 1
+P2 Receive for e info 425 from 3
+P2 Receive for f info 226 from 1
+AllGather Done
+Testing exchange OwnerGather for pseudo-random size vector of pseudo-random double data
+P2 Send for c info 1 2963.109185 to 0
+P2 Send for d info 3 3259.420103 465.902417 8.433097 to 0
+P2 Send for f info 2 7704.083880 1101.223894 to 1
+P2 Receive for e info 0 from 3
+OwnerGather Done
+Testing exchange OwnerScatter for pseudo-random size vector of pseudo-random double data
+P2 Send for e info 0 to 3
+P2 Receive for c info 1 8889.327554 from 0
+P2 Receive for d info 3 9778.260309 1397.707250 25.299290 from 0
+P2 Receive for f info 2 11556.125820 1651.835841 from 1
+OwnerScatter Done
+Testing exchange Sender Only Keys for int to pseudo-random targets
+Proc 2 Will send/receive data associated to object d to/from procs  0
+Proc 2 Will send/receive data associated to object e to/from procs  1 3
+P2 Send for d info 308 to 0
+P2 Send for e info 310 to 1
+P2 Send for e info 330 to 3
+P2 Receive  1 infos from P 0: 124 For each recieved info a int is computed with rank an will be sent back: 122
+P2 Receive  1 infos from P 1: 224 For each recieved info a int is computed with rank an will be sent back: 221
+P2 Receive  1 infos from P 3: 420 For each recieved info a int is computed with rank an will be sent back: 415
+ exchange Sender Only Keys for int to pseudo-random targets Done
+Testing exchange Receive Only Keys for int from sources defined above
+P2 Receive for d info 306 from 0
+P2 Receive for e info 307 from 1
+P2 Receive for e info 325 from 3
+ exchange Receive Only Keys for int from pseudo-random sources Done
+Testing exchange Sender Only Keys for  pseudo-random size vector of pseudo-random double data to pseudo-random targets
+P2 Send for d info 2 11681.125178 10295.755354 to 0
+P2 Send for e info 0 to 1
+P2 Send for e info 0 to 3
+P2 Receive from P 0  a block of 1 infos : 28034.700428 For each vector values a double is computed with rank and will be sent back when implemented: 28014.700428
+P2 Receive from P 1  a block of 1 infos : 28034.700428 For each vector values a double is computed with rank and will be sent back when implemented: 27014.700428
+P2 Receive from P 3  a block of 0 infos :
+ exchange Sender Only Keys for double vect to pseudo-random targets Done

@@ -1,0 +1,35 @@
+# lines starting by a # are comment lines
+##########
+# COMPUTER INFORMATION
+MESH_FILE_TYPE   = msh
+MESH_FILE        = data/cube6.msh
+#MESH_FILE        = data/cube10.msh
+
+
+###################################################
+#ZONE 121  = {MAT_CLASS = elastic MAT_PARAM = data/law.mat}
+ZONE_NAME matrix     = {MAT_CLASS = elastic MAT_PARAM = data/matrix.mat}
+ZONE_NAME inclusion  = {MAT_CLASS = elastic MAT_PARAM = data/inclusion.mat}
+####################################################
+####################################################
+
+
+
+##3D case
+BC_POINT 101 ={  DISPLACEMENT_X             FIX = 0.0 
+                 DISPLACEMENT_Y             FIX = 0.0               
+                 DISPLACEMENT_Z             FIX = 0.0 }              
+BC_POINT 102 ={  DISPLACEMENT_Y             FIX = 0.0 
+                 DISPLACEMENT_Z             FIX = 0.0 } 
+BC_POINT 103 ={  DISPLACEMENT_Z             FIX = 0.0 } 
+
+BC_SURFACE  111 ={  TRACTION_Y    FIX =   1.0 }
+BC_SURFACE  109 ={  TRACTION_Y    FIX =  -1.0 }
+
+
+
+
+
+
+
+

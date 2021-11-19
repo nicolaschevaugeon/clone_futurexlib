@@ -1,0 +1,1078 @@
+In proc 1 Starting
+Test with real_single arithmetic
+Test retriving distIndex from x : 1
+Initial x state : 
+###########################
+Vector of dimension 5 is:
+0.5 1 1 1 0.333333 
+###########################
+dot  : x.x  9
+x state after dot : 
+###########################
+Vector of dimension 5 is:
+1 1 1 1 0 
+###########################
+x state after passing in global state : 
+###########################
+Vector of dimension 5 is:
+1 1 1 1 1 
+###########################
+z copy of X when in global state : 
+###########################
+Vector of dimension 5 is:
+1 1 1 1 1 
+###########################
+x state after being copied : 
+1 1 1 1 1 
+Initial y state : 
+###########################
+Vector of dimension 5 is:
+3 5 13 15 8 
+###########################
+y state after gather : 
+###########################
+Vector of dimension 5 is:
+6 5 13 15 0 
+###########################
+A state : 
+
+Initial w state : 
+###########################
+Vector of dimension 5 is:
+5 6 7 8 3 
+###########################
+w state after gather : 
+###########################
+Vector of dimension 5 is:
+10 6 7 8 0 
+###########################
+B state : 
+2 2 9 4 10 6 7 8 9 
+new B state : 
+21 22 23 24 25 26 27 28 29 
+w state after scatter in insert mode on : 
+###########################
+Vector of dimension 5 is:
+25 26 27 28 0 
+###########################
+w state after scatter in insert mode off (auto switching modes) : 
+###########################
+Vector of dimension 5 is:
+25 26 27 28 0 
+###########################
+w state after scatter in insert mode off and global value(auto switching modes) : 
+###########################
+Vector of dimension 5 is:
+25 26 27 28 23 
+###########################
+w state after scatter in insert mode off and not in reduced state (auto switching modes) : 
+###########################
+Vector of dimension 5 is:
+25 26 27 28 0 
+###########################
+y state after y=2*x+y  : 
+###########################
+Vector of dimension 5 is:
+8 7 15 17 0 
+###########################
+x state after passing in local state : 
+###########################
+Vector of dimension 5 is:
+1 1 1 1 0 
+###########################
+z state after modification  : 
+###########################
+Vector of dimension 5 is:
+3 5 13 15 8 
+###########################
+z state after y=-1*z+y  : 
+###########################
+Vector of dimension 5 is:
+3 5 13 15 8 
+###########################
+y state after y=-1*z+y  : 
+###########################
+Vector of dimension 5 is:
+2 2 2 2 2 
+###########################
+dot  : y.z  186
+z state after dot y.z  : 
+###########################
+Vector of dimension 5 is:
+6 5 13 15 0 
+###########################
+y state after dot y.z  : 
+###########################
+Vector of dimension 5 is:
+2 2 2 2 2 
+###########################
+z state after y=-1*z+y  : 
+###########################
+Vector of dimension 5 is:
+6 5 13 15 0 
+###########################
+y state after y=-1*z+y  : 
+###########################
+Vector of dimension 5 is:
+-4 -3 -11 -13 -22 
+###########################
+x state after z=-1*x+z  : 
+###########################
+Vector of dimension 5 is:
+1 2 1 1 0 
+###########################
+z state after z=-1*x+z  : 
+###########################
+Vector of dimension 5 is:
+5 3 12 14 0 
+###########################
+nrm2  : z  34.7707
+z state after nrm2  : 
+###########################
+Vector of dimension 5 is:
+5 3 12 14 0 
+###########################
+z state after y=-1*z+y  : 
+###########################
+Vector of dimension 5 is:
+5 3 12 14 23 
+###########################
+y state after y=-1*z+y  : 
+###########################
+Vector of dimension 5 is:
+-9 -6 -23 -27 -45 
+###########################
+x state after scaling by 3.5 and locally by 2.  : 
+###########################
+Vector of dimension 5 is:
+7 14 7 7 0 
+###########################
+x state after scaling by 2./7.  : 
+###########################
+Vector of dimension 5 is:
+2 4 2 2 1 
+###########################
+x,y,z state before test on operator + - *  : 
+###########################
+Vector of dimension 5 is:
+2 4 2 2 0 
+###########################
+###########################
+Vector of dimension 5 is:
+-9 -6 -23 -27 0 
+###########################
+###########################
+Vector of dimension 5 is:
+5 3 12 14 0 
+###########################
+x,y,z state after test on operator + - * : 
+###########################
+Vector of dimension 5 is:
+2 4 2 2 0 
+###########################
+###########################
+Vector of dimension 5 is:
+-9 -6 -23 -27 0 
+###########################
+###########################
+Vector of dimension 5 is:
+-8 -7 -15 -17 -0 
+###########################
+y,z state after test on operator += -= : 
+###########################
+Vector of dimension 5 is:
+-7 -2 -21 -25 0 
+###########################
+###########################
+Vector of dimension 5 is:
+1 -1 8 10 -0 
+###########################
+z state before dot y.z  : 
+###########################
+Vector of dimension 5 is:
+13 11 3 1 8 
+###########################
+y state before dot y.z  : 
+###########################
+Vector of dimension 5 is:
+3 5 13 15 8 
+###########################
+dot  : y.z  989
+z state after dot y.z  : 
+###########################
+Vector of dimension 5 is:
+26 11 3 1 0 
+###########################
+y state after dot y.z  : 
+###########################
+Vector of dimension 5 is:
+6 5 13 15 0 
+###########################
+z globale state before dot y.z  : 
+###########################
+Vector of dimension 5 is:
+26 11 3 1 24 
+###########################
+y local state before dot y.z  : 
+###########################
+Vector of dimension 5 is:
+3 5 13 15 8 
+###########################
+dot  : y.z  989
+z state after dot y.z  : 
+###########################
+Vector of dimension 5 is:
+26 11 3 1 24 
+###########################
+y state after dot y.z  : 
+###########################
+Vector of dimension 5 is:
+6 5 13 15 0 
+###########################
+global z x and y state before componentProduct z = x .*. y: 
+###########################
+Vector of dimension 5 is:
+26 11 3 1 24 
+###########################
+###########################
+Vector of dimension 5 is:
+2 4 2 2 1 
+###########################
+###########################
+Vector of dimension 5 is:
+6 5 13 15 24 
+###########################
+z state after componentProduct z = x .*. y: 
+###########################
+Vector of dimension 5 is:
+12 20 26 30 24 
+###########################
+ x global  y local before componentProduct z = x .*. y: 
+###########################
+Vector of dimension 5 is:
+2 4 2 2 1 
+###########################
+###########################
+Vector of dimension 5 is:
+6 5 13 15 0 
+###########################
+z state after componentProduct z = x .*. y: 
+###########################
+Vector of dimension 5 is:
+12 20 26 30 0 
+###########################
+ x local  y local before componentProduct z = x .*. y: 
+###########################
+Vector of dimension 5 is:
+2 4 2 2 0 
+###########################
+###########################
+Vector of dimension 5 is:
+6 5 13 15 0 
+###########################
+z state after componentProduct z = x .*. y: 
+###########################
+Vector of dimension 5 is:
+12 20 26 30 0 
+###########################
+x state after componentProduct z = x .*. y: 
+###########################
+Vector of dimension 5 is:
+2 4 2 2 1 
+###########################
+ x global  y reduced before componentProduct z = x .*. y: 
+###########################
+Vector of dimension 5 is:
+2 4 2 2 1 
+###########################
+###########################
+Vector of dimension 5 is:
+6 5 13 15 0 
+###########################
+z state after componentProduct z = x .*. y: 
+###########################
+Vector of dimension 5 is:
+12 20 26 30 0 
+###########################
+ x local not in reduced mode but with reduced values,  y reduced before componentProduct z = x .*. y: 
+###########################
+Vector of dimension 5 is:
+2 4 2 2 0 
+###########################
+###########################
+Vector of dimension 5 is:
+6 5 13 15 0 
+###########################
+z state after componentProduct z = x .*. y: 
+###########################
+Vector of dimension 5 is:
+12 20 26 30 0 
+###########################
+x state in global mode: 
+###########################
+Vector of dimension 5 is:
+2 4 2 2 1 
+###########################
+C state (must be the same as x) : 
+2 4 2 2 1 
+y state in insert mode on with global value from x via C: 
+###########################
+Vector of dimension 5 is:
+2 4 2 2 1 
+###########################
+y state in insert mode off and global value state (should be the same as above): 
+###########################
+Vector of dimension 5 is:
+2 4 2 2 1 
+###########################
+y state in insert mode off and local value (check global was set switchInsertModeOffFromUserGlobalSetting): 
+###########################
+Vector of dimension 5 is:
+2 4 2 2 0 
+###########################
+z copy of X when in insert mode on : 
+###########################
+Vector of dimension 5 is:
+3 5 13 15 8 
+###########################
+x state after being copied : 
+3 5 13 15 8 
+z state after being copied from x : 
+###########################
+Vector of dimension 5 is:
+3 5 13 15 8 
+###########################
+z state after being set to arbitrary value : 
+###########################
+Vector of dimension 5 is:
+1 1 1 1 0 
+###########################
+z in globale state after being set to arbitrary value : 
+###########################
+Vector of dimension 5 is:
+2 2 2 2 2 
+###########################
+throw with = with # xDistIndex ok
+throw with axpy and # xDistIndex ok
+throw with + and # xDistIndex ok
+throw with - and # xDistIndex ok
+throw with dot and # xDistIndex ok
+throw with componentProduct and # xDistIndex ok
+Test with real_double arithmetic
+Test retriving distIndex from x : 1
+Initial x state : 
+###########################
+Vector of dimension 5 is:
+0.5 1 1 1 0.333333 
+###########################
+dot  : x.x  9
+x state after dot : 
+###########################
+Vector of dimension 5 is:
+1 1 1 1 0 
+###########################
+x state after passing in global state : 
+###########################
+Vector of dimension 5 is:
+1 1 1 1 1 
+###########################
+z copy of X when in global state : 
+###########################
+Vector of dimension 5 is:
+1 1 1 1 1 
+###########################
+x state after being copied : 
+1 1 1 1 1 
+Initial y state : 
+###########################
+Vector of dimension 5 is:
+3 5 13 15 8 
+###########################
+y state after gather : 
+###########################
+Vector of dimension 5 is:
+6 5 13 15 0 
+###########################
+A state : 
+
+Initial w state : 
+###########################
+Vector of dimension 5 is:
+5 6 7 8 3 
+###########################
+w state after gather : 
+###########################
+Vector of dimension 5 is:
+10 6 7 8 0 
+###########################
+B state : 
+2 2 9 4 10 6 7 8 9 
+new B state : 
+21 22 23 24 25 26 27 28 29 
+w state after scatter in insert mode on : 
+###########################
+Vector of dimension 5 is:
+25 26 27 28 0 
+###########################
+w state after scatter in insert mode off (auto switching modes) : 
+###########################
+Vector of dimension 5 is:
+25 26 27 28 0 
+###########################
+w state after scatter in insert mode off and global value(auto switching modes) : 
+###########################
+Vector of dimension 5 is:
+25 26 27 28 23 
+###########################
+w state after scatter in insert mode off and not in reduced state (auto switching modes) : 
+###########################
+Vector of dimension 5 is:
+25 26 27 28 0 
+###########################
+y state after y=2*x+y  : 
+###########################
+Vector of dimension 5 is:
+8 7 15 17 0 
+###########################
+x state after passing in local state : 
+###########################
+Vector of dimension 5 is:
+1 1 1 1 0 
+###########################
+z state after modification  : 
+###########################
+Vector of dimension 5 is:
+3 5 13 15 8 
+###########################
+z state after y=-1*z+y  : 
+###########################
+Vector of dimension 5 is:
+3 5 13 15 8 
+###########################
+y state after y=-1*z+y  : 
+###########################
+Vector of dimension 5 is:
+2 2 2 2 2 
+###########################
+dot  : y.z  186
+z state after dot y.z  : 
+###########################
+Vector of dimension 5 is:
+6 5 13 15 0 
+###########################
+y state after dot y.z  : 
+###########################
+Vector of dimension 5 is:
+2 2 2 2 2 
+###########################
+z state after y=-1*z+y  : 
+###########################
+Vector of dimension 5 is:
+6 5 13 15 0 
+###########################
+y state after y=-1*z+y  : 
+###########################
+Vector of dimension 5 is:
+-4 -3 -11 -13 -22 
+###########################
+x state after z=-1*x+z  : 
+###########################
+Vector of dimension 5 is:
+1 2 1 1 0 
+###########################
+z state after z=-1*x+z  : 
+###########################
+Vector of dimension 5 is:
+5 3 12 14 0 
+###########################
+nrm2  : z  34.7707
+z state after nrm2  : 
+###########################
+Vector of dimension 5 is:
+5 3 12 14 0 
+###########################
+z state after y=-1*z+y  : 
+###########################
+Vector of dimension 5 is:
+5 3 12 14 23 
+###########################
+y state after y=-1*z+y  : 
+###########################
+Vector of dimension 5 is:
+-9 -6 -23 -27 -45 
+###########################
+x state after scaling by 3.5 and locally by 2.  : 
+###########################
+Vector of dimension 5 is:
+7 14 7 7 0 
+###########################
+x state after scaling by 2./7.  : 
+###########################
+Vector of dimension 5 is:
+2 4 2 2 1 
+###########################
+x,y,z state before test on operator + - *  : 
+###########################
+Vector of dimension 5 is:
+2 4 2 2 0 
+###########################
+###########################
+Vector of dimension 5 is:
+-9 -6 -23 -27 0 
+###########################
+###########################
+Vector of dimension 5 is:
+5 3 12 14 0 
+###########################
+x,y,z state after test on operator + - * : 
+###########################
+Vector of dimension 5 is:
+2 4 2 2 0 
+###########################
+###########################
+Vector of dimension 5 is:
+-9 -6 -23 -27 0 
+###########################
+###########################
+Vector of dimension 5 is:
+-8 -7 -15 -17 -0 
+###########################
+y,z state after test on operator += -= : 
+###########################
+Vector of dimension 5 is:
+-7 -2 -21 -25 0 
+###########################
+###########################
+Vector of dimension 5 is:
+1 -1 8 10 -0 
+###########################
+z state before dot y.z  : 
+###########################
+Vector of dimension 5 is:
+13 11 3 1 8 
+###########################
+y state before dot y.z  : 
+###########################
+Vector of dimension 5 is:
+3 5 13 15 8 
+###########################
+dot  : y.z  989
+z state after dot y.z  : 
+###########################
+Vector of dimension 5 is:
+26 11 3 1 0 
+###########################
+y state after dot y.z  : 
+###########################
+Vector of dimension 5 is:
+6 5 13 15 0 
+###########################
+z globale state before dot y.z  : 
+###########################
+Vector of dimension 5 is:
+26 11 3 1 24 
+###########################
+y local state before dot y.z  : 
+###########################
+Vector of dimension 5 is:
+3 5 13 15 8 
+###########################
+dot  : y.z  989
+z state after dot y.z  : 
+###########################
+Vector of dimension 5 is:
+26 11 3 1 24 
+###########################
+y state after dot y.z  : 
+###########################
+Vector of dimension 5 is:
+6 5 13 15 0 
+###########################
+global z x and y state before componentProduct z = x .*. y: 
+###########################
+Vector of dimension 5 is:
+26 11 3 1 24 
+###########################
+###########################
+Vector of dimension 5 is:
+2 4 2 2 1 
+###########################
+###########################
+Vector of dimension 5 is:
+6 5 13 15 24 
+###########################
+z state after componentProduct z = x .*. y: 
+###########################
+Vector of dimension 5 is:
+12 20 26 30 24 
+###########################
+ x global  y local before componentProduct z = x .*. y: 
+###########################
+Vector of dimension 5 is:
+2 4 2 2 1 
+###########################
+###########################
+Vector of dimension 5 is:
+6 5 13 15 0 
+###########################
+z state after componentProduct z = x .*. y: 
+###########################
+Vector of dimension 5 is:
+12 20 26 30 0 
+###########################
+ x local  y local before componentProduct z = x .*. y: 
+###########################
+Vector of dimension 5 is:
+2 4 2 2 0 
+###########################
+###########################
+Vector of dimension 5 is:
+6 5 13 15 0 
+###########################
+z state after componentProduct z = x .*. y: 
+###########################
+Vector of dimension 5 is:
+12 20 26 30 0 
+###########################
+x state after componentProduct z = x .*. y: 
+###########################
+Vector of dimension 5 is:
+2 4 2 2 1 
+###########################
+ x global  y reduced before componentProduct z = x .*. y: 
+###########################
+Vector of dimension 5 is:
+2 4 2 2 1 
+###########################
+###########################
+Vector of dimension 5 is:
+6 5 13 15 0 
+###########################
+z state after componentProduct z = x .*. y: 
+###########################
+Vector of dimension 5 is:
+12 20 26 30 0 
+###########################
+ x local not in reduced mode but with reduced values,  y reduced before componentProduct z = x .*. y: 
+###########################
+Vector of dimension 5 is:
+2 4 2 2 0 
+###########################
+###########################
+Vector of dimension 5 is:
+6 5 13 15 0 
+###########################
+z state after componentProduct z = x .*. y: 
+###########################
+Vector of dimension 5 is:
+12 20 26 30 0 
+###########################
+x state in global mode: 
+###########################
+Vector of dimension 5 is:
+2 4 2 2 1 
+###########################
+C state (must be the same as x) : 
+2 4 2 2 1 
+y state in insert mode on with global value from x via C: 
+###########################
+Vector of dimension 5 is:
+2 4 2 2 1 
+###########################
+y state in insert mode off and global value state (should be the same as above): 
+###########################
+Vector of dimension 5 is:
+2 4 2 2 1 
+###########################
+y state in insert mode off and local value (check global was set switchInsertModeOffFromUserGlobalSetting): 
+###########################
+Vector of dimension 5 is:
+2 4 2 2 0 
+###########################
+z copy of X when in insert mode on : 
+###########################
+Vector of dimension 5 is:
+3 5 13 15 8 
+###########################
+x state after being copied : 
+3 5 13 15 8 
+z state after being copied from x : 
+###########################
+Vector of dimension 5 is:
+3 5 13 15 8 
+###########################
+z state after being set to arbitrary value : 
+###########################
+Vector of dimension 5 is:
+1 1 1 1 0 
+###########################
+z in globale state after being set to arbitrary value : 
+###########################
+Vector of dimension 5 is:
+2 2 2 2 2 
+###########################
+throw with = with # xDistIndex ok
+throw with axpy and # xDistIndex ok
+throw with + and # xDistIndex ok
+throw with - and # xDistIndex ok
+throw with dot and # xDistIndex ok
+throw with componentProduct and # xDistIndex ok
+Test with complex_double arithmetic
+Test retriving distIndex from x : 1
+Initial x state : 
+###########################
+Vector of dimension 5 is:
+(0.5,-0.5) (1,-1) (1,-1) (1,-1) (0.333333,-0.333333) 
+###########################
+dot  : x.x  (18,0)
+x state after dot : 
+###########################
+Vector of dimension 5 is:
+(1,-1) (1,-1) (1,-1) (1,-1) (0,0) 
+###########################
+x state after passing in global state : 
+###########################
+Vector of dimension 5 is:
+(1,-1) (1,-1) (1,-1) (1,-1) (1,-1) 
+###########################
+z copy of X when in global state : 
+###########################
+Vector of dimension 5 is:
+(1,-1) (1,-1) (1,-1) (1,-1) (1,-1) 
+###########################
+x state after being copied : 
+(1,-1) (1,-1) (1,-1) (1,-1) (1,-1) 
+Initial y state : 
+###########################
+Vector of dimension 5 is:
+(3,-3) (5,-5) (13,-13) (15,-15) (8,-8) 
+###########################
+y state after gather : 
+###########################
+Vector of dimension 5 is:
+(6,-6) (5,-5) (13,-13) (15,-15) (0,0) 
+###########################
+A state : 
+
+Initial w state : 
+###########################
+Vector of dimension 5 is:
+(5,-5) (6,-6) (7,-7) (8,-8) (3,-3) 
+###########################
+w state after gather : 
+###########################
+Vector of dimension 5 is:
+(10,-10) (6,-6) (7,-7) (8,-8) (0,0) 
+###########################
+B state : 
+(2,-2) (2,-2) (9,-9) (4,-4) (10,-10) (6,-6) (7,-7) (8,-8) (9,-9) 
+new B state : 
+(21,-21) (22,-22) (23,-23) (24,-24) (25,-25) (26,-26) (27,-27) (28,-28) (29,-29) 
+w state after scatter in insert mode on : 
+###########################
+Vector of dimension 5 is:
+(25,-25) (26,-26) (27,-27) (28,-28) (0,0) 
+###########################
+w state after scatter in insert mode off (auto switching modes) : 
+###########################
+Vector of dimension 5 is:
+(25,-25) (26,-26) (27,-27) (28,-28) (0,0) 
+###########################
+w state after scatter in insert mode off and global value(auto switching modes) : 
+###########################
+Vector of dimension 5 is:
+(25,-25) (26,-26) (27,-27) (28,-28) (23,-23) 
+###########################
+w state after scatter in insert mode off and not in reduced state (auto switching modes) : 
+###########################
+Vector of dimension 5 is:
+(25,-25) (26,-26) (27,-27) (28,-28) (0,0) 
+###########################
+y state after y=2*x+y  : 
+###########################
+Vector of dimension 5 is:
+(8,-8) (7,-7) (15,-15) (17,-17) (0,0) 
+###########################
+x state after passing in local state : 
+###########################
+Vector of dimension 5 is:
+(1,-1) (1,-1) (1,-1) (1,-1) (0,0) 
+###########################
+z state after modification  : 
+###########################
+Vector of dimension 5 is:
+(3,-3) (5,-5) (13,-13) (15,-15) (8,-8) 
+###########################
+z state after y=-1*z+y  : 
+###########################
+Vector of dimension 5 is:
+(3,-3) (5,-5) (13,-13) (15,-15) (8,-8) 
+###########################
+y state after y=-1*z+y  : 
+###########################
+Vector of dimension 5 is:
+(2,-2) (2,-2) (2,-2) (2,-2) (2,-2) 
+###########################
+dot  : y.z  (372,0)
+z state after dot y.z  : 
+###########################
+Vector of dimension 5 is:
+(6,-6) (5,-5) (13,-13) (15,-15) (0,0) 
+###########################
+y state after dot y.z  : 
+###########################
+Vector of dimension 5 is:
+(2,-2) (2,-2) (2,-2) (2,-2) (2,-2) 
+###########################
+z state after y=-1*z+y  : 
+###########################
+Vector of dimension 5 is:
+(6,-6) (5,-5) (13,-13) (15,-15) (0,0) 
+###########################
+y state after y=-1*z+y  : 
+###########################
+Vector of dimension 5 is:
+(-4,4) (-3,3) (-11,11) (-13,13) (-22,22) 
+###########################
+x state after z=-1*x+z  : 
+###########################
+Vector of dimension 5 is:
+(1,-1) (2,-2) (1,-1) (1,-1) (0,0) 
+###########################
+z state after z=-1*x+z  : 
+###########################
+Vector of dimension 5 is:
+(5,-5) (3,-3) (12,-12) (14,-14) (0,0) 
+###########################
+nrm2  : z  49.1732
+z state after nrm2  : 
+###########################
+Vector of dimension 5 is:
+(5,-5) (3,-3) (12,-12) (14,-14) (0,0) 
+###########################
+z state after y=-1*z+y  : 
+###########################
+Vector of dimension 5 is:
+(5,-5) (3,-3) (12,-12) (14,-14) (23,-23) 
+###########################
+y state after y=-1*z+y  : 
+###########################
+Vector of dimension 5 is:
+(-9,9) (-6,6) (-23,23) (-27,27) (-45,45) 
+###########################
+x state after scaling by 3.5 and locally by 2.  : 
+###########################
+Vector of dimension 5 is:
+(0,-14) (0,-28) (0,-14) (0,-14) (0,0) 
+###########################
+x state after scaling by 2./7.  : 
+###########################
+Vector of dimension 5 is:
+(0,-4) (0,-8) (0,-4) (0,-4) (0,-2) 
+###########################
+x,y,z state before test on operator + - *  : 
+###########################
+Vector of dimension 5 is:
+(0,-4) (0,-8) (0,-4) (0,-4) (0,0) 
+###########################
+###########################
+Vector of dimension 5 is:
+(-9,9) (-6,6) (-23,23) (-27,27) (0,0) 
+###########################
+###########################
+Vector of dimension 5 is:
+(5,-5) (3,-3) (12,-12) (14,-14) (0,0) 
+###########################
+x,y,z state after test on operator + - * : 
+###########################
+Vector of dimension 5 is:
+(0,-4) (0,-8) (0,-4) (0,-4) (0,0) 
+###########################
+###########################
+Vector of dimension 5 is:
+(-9,9) (-6,6) (-23,23) (-27,27) (0,0) 
+###########################
+###########################
+Vector of dimension 5 is:
+(3,5) (3,13) (10,-2) (12,-4) (0,0) 
+###########################
+y,z state after test on operator += -= : 
+###########################
+Vector of dimension 5 is:
+(-9,5) (-6,-2) (-23,19) (-27,23) (0,0) 
+###########################
+###########################
+Vector of dimension 5 is:
+(12,-4) (9,7) (33,-25) (39,-31) (0,0) 
+###########################
+z state before dot y.z  : 
+###########################
+Vector of dimension 5 is:
+(13,-13) (11,-11) (3,-3) (1,-1) (8,-8) 
+###########################
+y state before dot y.z  : 
+###########################
+Vector of dimension 5 is:
+(3,-3) (5,-5) (13,-13) (15,-15) (8,-8) 
+###########################
+dot  : y.z  (1978,0)
+z state after dot y.z  : 
+###########################
+Vector of dimension 5 is:
+(26,-26) (11,-11) (3,-3) (1,-1) (0,0) 
+###########################
+y state after dot y.z  : 
+###########################
+Vector of dimension 5 is:
+(6,-6) (5,-5) (13,-13) (15,-15) (0,0) 
+###########################
+z globale state before dot y.z  : 
+###########################
+Vector of dimension 5 is:
+(26,-26) (11,-11) (3,-3) (1,-1) (24,-24) 
+###########################
+y local state before dot y.z  : 
+###########################
+Vector of dimension 5 is:
+(3,-3) (5,-5) (13,-13) (15,-15) (8,-8) 
+###########################
+dot  : y.z  (1978,0)
+z state after dot y.z  : 
+###########################
+Vector of dimension 5 is:
+(26,-26) (11,-11) (3,-3) (1,-1) (24,-24) 
+###########################
+y state after dot y.z  : 
+###########################
+Vector of dimension 5 is:
+(6,-6) (5,-5) (13,-13) (15,-15) (0,0) 
+###########################
+global z x and y state before componentProduct z = x .*. y: 
+###########################
+Vector of dimension 5 is:
+(26,-26) (11,-11) (3,-3) (1,-1) (24,-24) 
+###########################
+###########################
+Vector of dimension 5 is:
+(0,-4) (0,-8) (0,-4) (0,-4) (0,-2) 
+###########################
+###########################
+Vector of dimension 5 is:
+(6,-6) (5,-5) (13,-13) (15,-15) (24,-24) 
+###########################
+z state after componentProduct z = x .*. y: 
+###########################
+Vector of dimension 5 is:
+(-24,-24) (-40,-40) (-52,-52) (-60,-60) (-48,-48) 
+###########################
+ x global  y local before componentProduct z = x .*. y: 
+###########################
+Vector of dimension 5 is:
+(0,-4) (0,-8) (0,-4) (0,-4) (0,-2) 
+###########################
+###########################
+Vector of dimension 5 is:
+(6,-6) (5,-5) (13,-13) (15,-15) (0,0) 
+###########################
+z state after componentProduct z = x .*. y: 
+###########################
+Vector of dimension 5 is:
+(-24,-24) (-40,-40) (-52,-52) (-60,-60) (0,0) 
+###########################
+ x local  y local before componentProduct z = x .*. y: 
+###########################
+Vector of dimension 5 is:
+(0,-4) (0,-8) (0,-4) (0,-4) (0,0) 
+###########################
+###########################
+Vector of dimension 5 is:
+(6,-6) (5,-5) (13,-13) (15,-15) (0,0) 
+###########################
+z state after componentProduct z = x .*. y: 
+###########################
+Vector of dimension 5 is:
+(-24,-24) (-40,-40) (-52,-52) (-60,-60) (0,0) 
+###########################
+x state after componentProduct z = x .*. y: 
+###########################
+Vector of dimension 5 is:
+(0,-4) (0,-8) (0,-4) (0,-4) (0,-2) 
+###########################
+ x global  y reduced before componentProduct z = x .*. y: 
+###########################
+Vector of dimension 5 is:
+(0,-4) (0,-8) (0,-4) (0,-4) (0,-2) 
+###########################
+###########################
+Vector of dimension 5 is:
+(6,-6) (5,-5) (13,-13) (15,-15) (0,0) 
+###########################
+z state after componentProduct z = x .*. y: 
+###########################
+Vector of dimension 5 is:
+(-24,-24) (-40,-40) (-52,-52) (-60,-60) (0,0) 
+###########################
+ x local not in reduced mode but with reduced values,  y reduced before componentProduct z = x .*. y: 
+###########################
+Vector of dimension 5 is:
+(0,-4) (0,-8) (0,-4) (0,-4) (0,0) 
+###########################
+###########################
+Vector of dimension 5 is:
+(6,-6) (5,-5) (13,-13) (15,-15) (0,0) 
+###########################
+z state after componentProduct z = x .*. y: 
+###########################
+Vector of dimension 5 is:
+(-24,-24) (-40,-40) (-52,-52) (-60,-60) (0,0) 
+###########################
+x state in global mode: 
+###########################
+Vector of dimension 5 is:
+(0,-4) (0,-8) (0,-4) (0,-4) (0,-2) 
+###########################
+C state (must be the same as x) : 
+(0,-4) (0,-8) (0,-4) (0,-4) (0,-2) 
+y state in insert mode on with global value from x via C: 
+###########################
+Vector of dimension 5 is:
+(0,-4) (0,-8) (0,-4) (0,-4) (0,-2) 
+###########################
+y state in insert mode off and global value state (should be the same as above): 
+###########################
+Vector of dimension 5 is:
+(0,-4) (0,-8) (0,-4) (0,-4) (0,-2) 
+###########################
+y state in insert mode off and local value (check global was set switchInsertModeOffFromUserGlobalSetting): 
+###########################
+Vector of dimension 5 is:
+(0,-4) (0,-8) (0,-4) (0,-4) (0,0) 
+###########################
+z copy of X when in insert mode on : 
+###########################
+Vector of dimension 5 is:
+(3,-3) (5,-5) (13,-13) (15,-15) (8,-8) 
+###########################
+x state after being copied : 
+(3,-3) (5,-5) (13,-13) (15,-15) (8,-8) 
+z state after being copied from x : 
+###########################
+Vector of dimension 5 is:
+(3,-3) (5,-5) (13,-13) (15,-15) (8,-8) 
+###########################
+z state after being set to arbitrary value : 
+###########################
+Vector of dimension 5 is:
+(1,-1) (1,-1) (1,-1) (1,-1) (0,0) 
+###########################
+z in globale state after being set to arbitrary value : 
+###########################
+Vector of dimension 5 is:
+(2,-2) (2,-2) (2,-2) (2,-2) (2,-2) 
+###########################
+throw with = with # xDistIndex ok
+throw with axpy and # xDistIndex ok
+throw with + and # xDistIndex ok
+throw with - and # xDistIndex ok
+throw with dot and # xDistIndex ok
+throw with componentProduct and # xDistIndex ok

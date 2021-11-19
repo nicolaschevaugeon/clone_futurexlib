@@ -1,0 +1,115 @@
+With 2 process
+double
+Gemv product with global vector
+GEMV UNSYM CSC C notranspose nosparseX alpha=1 beta=0: 1
+GEMV UNSYM CSR C notranspose nosparseX alpha=1 beta=0: 1
+GEMV SYM COO F notranspose nosparseX alpha=1 beta=0: 1
+GEMV SYM CSC F notranspose nosparseX alpha=1 beta=0: 1
+GEMV SYM CSC C notranspose nosparseX alpha=1 beta=0: 1
+GEMV UNSYM CSC C transpose nosparseX alpha=1 beta=0: 1
+GEMV UNSYM CSR C transpose nosparseX alpha=1 beta=0: 1
+GEMV SYM COO F transpose nosparseX alpha=1 beta=0: 1
+GEMV SYM CSC F transpose nosparseX alpha=1 beta=0: 1
+GEMV SYM CSC C transpose nosparseX alpha=1 beta=0: 1
+GEMV UNSYM CSC C notranspose nosparseX alpha#1 beta=0: 1
+GEMV UNSYM CSR C notranspose nosparseX alpha#1 beta=0: 1
+GEMV SYM COO F notranspose nosparseX alpha#1 beta=0: 1
+GEMV SYM CSC F notranspose nosparseX alpha#1 beta=0: 1
+GEMV SYM CSC C notranspose nosparseX alpha#1 beta=0: 1
+GEMV UNSYM CSC C transpose nosparseX alpha#1 beta=0: 1
+GEMV UNSYM CSR C transpose nosparseX alpha#1 beta=0: 1
+GEMV UNSYM CSC C notranspose nosparseX alpha#1 beta=1: 1
+GEMV UNSYM CSC C notranspose sparseX alpha=1 beta=0: 1
+GEMV UNSYM CSC C transpose sparseX alpha=1 beta=0: 1
+GEMV UNSYM CSC C notranspose sparseX alpha#1 beta=0: 1
+GEMV UNSYM CSC C transpose sparseX alpha#1 beta=0: 1
+GEMV SYM COO F notranspose sparseX alpha=1 beta=0: 1
+GEMV SYM CSC F notranspose sparseX alpha=1 beta=0: 1
+GEMV SYM CSC C notranspose sparseX alpha=1 beta=0: 1
+GEMV test dim: 1
+GEMV test dim transpose: 1
+Gemv product with distributed vector
+GEMV UNSYM CSC C notranspose nosparseX alpha=1 beta=0: 1
+GEMV UNSYM CSR C notranspose nosparseX alpha=1 beta=0: 1
+GEMV SYM COO F notranspose nosparseX alpha=1 beta=0: 1
+GEMV SYM CSC F notranspose nosparseX alpha=1 beta=0: 1
+GEMV SYM CSC C notranspose nosparseX alpha=1 beta=0: 1
+GEMV UNSYM CSC C transpose nosparseX alpha=1 beta=0: 1
+GEMV UNSYM CSR C transpose nosparseX alpha=1 beta=0: 1
+GEMV SYM COO F transpose nosparseX alpha=1 beta=0: 1
+GEMV SYM CSC F transpose nosparseX alpha=1 beta=0: 1
+GEMV SYM CSC C transpose nosparseX alpha=1 beta=0: 1
+GEMV UNSYM CSC C notranspose nosparseX alpha#1 beta=0: 1
+GEMV UNSYM CSR C notranspose nosparseX alpha#1 beta=0: 1
+GEMV SYM COO F notranspose nosparseX alpha#1 beta=0: 1
+GEMV SYM CSC F notranspose nosparseX alpha#1 beta=0: 1
+GEMV SYM CSC C notranspose nosparseX alpha#1 beta=0: 1
+GEMV UNSYM CSC C transpose nosparseX alpha#1 beta=0: 1
+GEMV UNSYM CSR C transpose nosparseX alpha#1 beta=0: 1
+GEMV UNSYM CSC C notranspose nosparseX alpha#1 beta=1: 1
+GEMV UNSYM CSC C notranspose sparseX alpha=1 beta=0: 1
+GEMV UNSYM CSC C transpose sparseX alpha=1 beta=0: 1
+GEMV UNSYM CSC C notranspose sparseX alpha#1 beta=0: 1
+GEMV UNSYM CSC C transpose sparseX alpha#1 beta=0: 1
+GEMV SYM COO F notranspose sparseX alpha=1 beta=0: 1
+GEMV SYM CSC F notranspose sparseX alpha=1 beta=0: 1
+GEMV SYM CSC C notranspose sparseX alpha=1 beta=0: 1
+GEMV test dim: 1
+GEMV test dim transpose: 1
+complex
+Gemv product with global vector
+GEMV UNSYM CSC C notranspose nosparseX alpha=1 beta=0: 1
+GEMV UNSYM CSR C notranspose nosparseX alpha=1 beta=0: 1
+GEMV SYM COO F notranspose nosparseX alpha=1 beta=0: 1
+GEMV SYM CSC F notranspose nosparseX alpha=1 beta=0: 1
+GEMV SYM CSC C notranspose nosparseX alpha=1 beta=0: 1
+GEMV UNSYM CSC C transpose nosparseX alpha=1 beta=0: 1
+GEMV UNSYM CSR C transpose nosparseX alpha=1 beta=0: 1
+GEMV SYM COO F transpose nosparseX alpha=1 beta=0: 1
+GEMV SYM CSC F transpose nosparseX alpha=1 beta=0: 1
+GEMV SYM CSC C transpose nosparseX alpha=1 beta=0: 1
+GEMV UNSYM CSC C notranspose nosparseX alpha#1 beta=0: 1
+GEMV UNSYM CSR C notranspose nosparseX alpha#1 beta=0: 1
+GEMV SYM COO F notranspose nosparseX alpha#1 beta=0: 1
+GEMV SYM CSC F notranspose nosparseX alpha#1 beta=0: 1
+GEMV SYM CSC C notranspose nosparseX alpha#1 beta=0: 1
+GEMV UNSYM CSC C transpose nosparseX alpha#1 beta=0: 1
+GEMV UNSYM CSR C transpose nosparseX alpha#1 beta=0: 1
+GEMV UNSYM CSC C notranspose nosparseX alpha#1 beta=1: 1
+GEMV UNSYM CSC C notranspose sparseX alpha=1 beta=0: 1
+GEMV UNSYM CSC C transpose sparseX alpha=1 beta=0: 1
+GEMV UNSYM CSC C notranspose sparseX alpha#1 beta=0: 1
+GEMV UNSYM CSC C transpose sparseX alpha#1 beta=0: 1
+GEMV SYM COO F notranspose sparseX alpha=1 beta=0: 1
+GEMV SYM CSC F notranspose sparseX alpha=1 beta=0: 1
+GEMV SYM CSC C notranspose sparseX alpha=1 beta=0: 1
+GEMV test dim: 1
+GEMV test dim transpose: 1
+Gemv product with distributed vector
+GEMV UNSYM CSC C notranspose nosparseX alpha=1 beta=0: 1
+GEMV UNSYM CSR C notranspose nosparseX alpha=1 beta=0: 1
+GEMV SYM COO F notranspose nosparseX alpha=1 beta=0: 1
+GEMV SYM CSC F notranspose nosparseX alpha=1 beta=0: 1
+GEMV SYM CSC C notranspose nosparseX alpha=1 beta=0: 1
+GEMV UNSYM CSC C transpose nosparseX alpha=1 beta=0: 1
+GEMV UNSYM CSR C transpose nosparseX alpha=1 beta=0: 1
+GEMV SYM COO F transpose nosparseX alpha=1 beta=0: 1
+GEMV SYM CSC F transpose nosparseX alpha=1 beta=0: 1
+GEMV SYM CSC C transpose nosparseX alpha=1 beta=0: 1
+GEMV UNSYM CSC C notranspose nosparseX alpha#1 beta=0: 1
+GEMV UNSYM CSR C notranspose nosparseX alpha#1 beta=0: 1
+GEMV SYM COO F notranspose nosparseX alpha#1 beta=0: 1
+GEMV SYM CSC F notranspose nosparseX alpha#1 beta=0: 1
+GEMV SYM CSC C notranspose nosparseX alpha#1 beta=0: 1
+GEMV UNSYM CSC C transpose nosparseX alpha#1 beta=0: 1
+GEMV UNSYM CSR C transpose nosparseX alpha#1 beta=0: 1
+GEMV UNSYM CSC C notranspose nosparseX alpha#1 beta=1: 1
+GEMV UNSYM CSC C notranspose sparseX alpha=1 beta=0: 1
+GEMV UNSYM CSC C transpose sparseX alpha=1 beta=0: 1
+GEMV UNSYM CSC C notranspose sparseX alpha#1 beta=0: 1
+GEMV UNSYM CSC C transpose sparseX alpha#1 beta=0: 1
+GEMV SYM COO F notranspose sparseX alpha=1 beta=0: 1
+GEMV SYM CSC F notranspose sparseX alpha=1 beta=0: 1
+GEMV SYM CSC C notranspose sparseX alpha=1 beta=0: 1
+GEMV test dim: 1
+GEMV test dim transpose: 1

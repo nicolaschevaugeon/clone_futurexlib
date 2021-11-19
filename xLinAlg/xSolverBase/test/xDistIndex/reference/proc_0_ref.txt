@@ -1,0 +1,23 @@
+In proc 0 Starting
+getGlobalIndexSize : 16
+getPackedIndexSize : 4
+getPackedLocalIndexSize : 4
+Does 3 index present in this proc : 0
+check getComm : 1
+All local size :  0,4 1,4 2,1
+All dist size :  0,0 1,4 2,8
+All index :  1 2 8 10
+All index location in packed index container:  0 1 2 3
+All offset from adress of 8 index:  -2 -1 0 1
+All owner  :  1,1 2,1 8,1 10,1
+All id remote  : 
+for index 1
+ in remote proc 2 offset from address of 8 index is -1
+for index 2
+ no remote equivalent index
+for index 8
+ in remote proc 1 offset from address of 8 index is 0
+ in remote proc 2 offset from address of 8 index is 0
+for index 10
+ no remote equivalent index
+All index location in packed index container for copy:  0 1 2 3

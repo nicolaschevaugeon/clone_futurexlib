@@ -1,0 +1,248 @@
+
+\section{Le principe de fonctionnement \`a l'ECN}\label{CVS-principe}
+
+Cette partie d\'etaille les fonctionnalit\'es de l'utilitaire CVS.
+
+\subsection{CVS \emph{(Concurrent Versions System)}}
+
+
+CVS \index{CVS}  est un syst\`eme de contrôle de versions
+client-serveur permettant \`a plusieurs personnes de travailler
+simultan\'ement sur un même ensemble de fichiers. Les gros projets de
+d\'eveloppement  s'appuient g\'en\'eralement sur ce type de syst\`eme afin
+de permettre \`a un grand nombre de d\'eveloppeurs de travailler sur un
+même projet. CVS permet, comme son nom l'indique, de g\'erer les acc\`es
+concurrents, c'est-\`a-dire qu'il est capable de d\'etecter les conflits
+de version lorsque deux personnes travaillent simultan\'ement sur le
+même fichier.
+
+Le fonctionnement de CVS s'appuie sur une base centralis\'ee appel\'ee «
+repository »\index{repository} (d\'epôt), h\'eberg\'ee sur un serveur (le
+serveur CVS), contenant l'historique de l'ensemble des versions
+successives de chaque fichier. Le repository stocke les diff\'erences
+entre les versions successives, les dates de mise \`a jour, le nom de
+l'auteur de la mise \`a jour et un commentaire \'eventuel, ce qui permet
+un r\'eel suivi des modifications, tout en optimisant l'espace de
+stockage d\'edi\'e au projet.
+
+Chaque personne travaillant sur le projet poss\`ede un « r\'epertoire de
+travail » (en anglais « working copy » ou « sandbox », traduisez «
+bac \`a sable »), c'est-\`a-dire un r\'epertoire contenant une copie de la
+base CVS (repository). A l'ECN, il s'agit g\'en\'eralement des
+repertoires de travail sur les disques
+\code{/scratch/<username>/develop}
+
+\subsection{Checkout \index{checkout}}
+
+A l'aide d'un client CVS, chaque utilisateur souhaitant travailler
+sur le projet (pour modifier des fichiers ou simplement pour voir la
+derni\`ere version des fichiers dans la base) r\'ecup\`ere une copie de
+travail grâce \`a une op\'eration appel\'ee « \code{checkout} ».
+
+
+
+\subsection{Commit \index{commit}}
+
+Lorsque l'utilisateur a termin\'e de modifier les fichiers, il peut
+transmettre les modifications \`a la base. Cette op\'eration est appel\'ee
+« \code{commit} ». Ainsi plusieurs d\'eveloppeurs peuvent travailler
+simultan\'ement sur une copie du repository et transmettre leurs
+modifications.
+
+
+
+\subsection{Update \index{update}}
+
+S'il arrive qu'un utilisateur tente de transmettre ses modifications
+alors qu'un autre utilisateur a lui-même modifi\'e ce fichier
+pr\'ec\'edemment, CVS va d\'etecter une incompatibilit\'e. Si les
+modifications portent sur des parties diff\'erentes du fichier, le
+syst\`eme CVS peut proposer une fusion des modifications, grâce \`a une
+op\'eration appel\'ee \code{diff}, sinon CVS va demander \`a l'utilisateur
+de fusionner manuellement les modifications. Il est \`a noter que les
+fusions ne peuvent s'appliquer qu'aux fichiers textes. CVS peut
+toutefois g\'erer des fichiers binaires dans sa base, mais il n'a pas
+\'et\'e pr\'evu dans ce but. Les modifications apport\'ees par les autres
+utilisateurs ne sont pas automatiquement r\'epercut\'ees par CVS sur la
+copie locale, il est donc n\'ecessaire, avant chaque modification de
+fichier, de mettre \`a jour sa copie de travail grâce \`a une op\'eration
+appel\'ee « \code{update} », afin de limiter les risques de conflits.
+
+
+
+
+\section{Using CVS (\emph{in english})}
+
+For more d\'etails and information, see
+\web{http://ximbiot.com/cvs/manual/}.
+
+CVS (Concurrent Versions System), is the tool used to manage the
+sources and to operate on them without creating conflictual problems
+between versions. CVS allows every developer to (commonly used
+operations):
+
+\begin{itemize}
+\item add, remove and modify files or directories (irreversible)
+\item get repercuted on his local versions the pertinent modifications made on the common ones
+\item get repercuted on the common versions the pertinent modifications made on the local ones
+\item create a history of modifications, allowing access to an old version of source (...)
+\end{itemize}
+
+A more exhaustive list of possibilities can be found in CVS web
+page. Access to almost all cvs commands is available on the
+\code{emacs} interface (\code{menu Tools, tab PCL-CVS}). It is also
+possible to do them directly from a terminal.
+
+\subsection{Changing password to ECN's cvs server:}
+
+A  password is given to all users, use this command  to change it:
+\begin{verbatim}
+ssh <user>@cvs.ec-nantes.fr password
+\end{verbatim}
+
+
+
+\subsubsection{Acc\`es sans mot de passe}\label{acces_sans_passwd}
+Il est parfois fastidieux de rentrer un mot de passe pour tout acc\`es
+au serveur CVS. Il existe un moyen de mettre \`a jour le fichier de
+clefs permettant une authentification sans mot de passe. Il faut
+d'abord cr\'eer la clef sur la machine cliente; ceci se fait par la
+commande suivante :
+
+\begin{verbatim}
+ssh-keygen -t dsa
+\end{verbatim}
+
+
+Par l'interm\'ediaire de l'utilitaire authorize, il est donc possible
+de transmettre cette clef, ceci se fait de la mani\`ere suivante:
+\begin{verbatim}
+ssh <user>@cvs.ec-nantes.fr authorize < ~/.ssh/id_dsa.pub
+\end{verbatim}
+
+Une fois cette action effectu\'ee, plus aucun mot de passe ne sera
+demand\'e (en fait, uniquement pour les clients sur lesquels l'action
+a \'et\'e faite). Pour les usagers \'etendus, il faudra en plus mettre les
+bons droits d'acc\`es du fichier
+\code{$\thicksim$/.ssh/authorized\_keys2} :
+
+\begin{verbatim}
+ssh <user>@cvs.ec-nantes.fr "chmod 600 ~/.ssh/authorized_keys2"
+\end{verbatim}
+
+Pour effacer les clefs d\'ej\`a entr\'ees (et revenir \`a une
+authentification par mot de passe pour tous les clients), il suffit
+de faire :
+\begin{verbatim}
+ssh <user>@cvs.ec-nantes.fr authorize delete
+\end{verbatim}
+
+Modification de mot de passe La modification de mot de passe se fait
+avec la commande password :
+\begin{verbatim}
+ssh <user>@cvs.ec-nantes.fr password
+\end{verbatim}
+
+Attention, le mot de passe entr\'e s'affiche en clair (il est
+toutefois transmis sous forme crypt\'ee) Quelques commandes usager
+utiles pour initialiser un projet Ces commandes se font cot\'e usager
+et permettent de manipuler un projet. Ce sont des commandes standard
+que toute installation cvs reconnaît. Pour plus d'information, voir
+le site : \web{http://www.cvshome.org/}.
+
+
+
+
+
+
+\subsection{Commonly used cvs commands}
+
+\begin{center}
+\begin{tabular}{p{6cm} p{9.5cm}}
+\code{cvs checkout MODULE\_NAME}\index{CVS!checkout} &  Imports the module into the local account. \\
+\code{cvs update -d REPOSITORY\_NAME}\index{CVS!update} &   Checks whether the local version is up-to-date with the CVS-server version \\
+\code{cvs add FILE\_NAME} &     Declare a new file to the cvs repository. \\
+\code{cvs commit REPOSITORY\_NAME}\index{CVS!commit}  or \code{cvs
+commit FILE\_NAME}& Commits the local modifications (on the
+repository or the file) into the repository.
+\end{tabular}
+\end{center}
+
+Details on the recommended use of these commands can be read in
+section~\ref{common_commit}.
+
+
+\subsection{Syntax of the CVS commands \index{CVS!commands}}
+
+Usage:
+\begin{verbatim}
+          cvs [cvs-options] command [command-options] [files...]
+\end{verbatim}
+where \code{cvs-options} are:
+\begin{center}
+\begin{longtable}{p{3.75cm} p{11.75cm}}
+     \code{   -H          }  &   Displays Usage information for CVS command \\
+     \code{   -Q          }  &   Cause CVS to be really quiet. \\
+     \code{   -q          }  &   Cause CVS to be somewhat quiet. \\
+     \code{   -r          }  &   Make checked-out files read-only \\
+     \code{   -w          }  &   Make checked-out files read-write (default) \\
+     \code{   -l          }  &   Turn History logging off \\
+     \code{   -n          }  &   Do not execute anything that will change the disk \\
+    \code{    -t          }  &   Show trace of program execution -- Try with -n \\
+    \code{    -v          }  &   CVS version and copyright \\
+    \code{    -b bindir   }  &   Find RCS programs in \code{bindir} \\
+    \code{    -e editor   }  &   Use \code{editor} for editing log information \\
+    \code{    -d CVS\_root }  &   Overrides \code{\$CVSROOT} as the root of the CVS tree
+\end{longtable}
+\end{center}
+and where \code{command} is:
+\begin{center}
+\begin{longtable}{p{3.75cm} p{11.75cm}}
+        \code{add  }  &        Adds a new file/directory to the repository \\
+        \code{admin }    &  Administration front end for rcs \\
+        \code{annotate}  &   Show last revision where each line was modified  \\
+        \code{checkout }  &    Checkout sources for editing (download from CVS server)\\
+    \code{commit }  &   Check changes into the repository. \\
+        \code{diff    }  &   Show differences between revisions (or local version and CVS server version)\\
+        \code{edit     } &   Get ready to edit a watched file \\
+        \code{editors  } &   See who is editing a watched file \\
+        \code{export  }  &   Export sources from CVS, similar to checkout \\
+        \code{history  } &   Show repository access history \\
+        \code{import  }  &   Import sources into CVS, using vendor branches \\
+        \code{init    }  &   Create a CVS repository if it doesn't exist \\
+        \code{kserver }  &   Kerberos server mode \\
+        \code{log    }   &   Print out history information for files \\
+        \code{login  }   &   Prompt for password for authenticating server \\
+        \code{logout }   &   Removes entry in .cvspass for remote repository \\
+        \code{pserver}   &   Password server mode \\
+        \code{rannotate} &   Show last revision where each line of module was modified \\
+        \code{rdiff  }   &   Create 'patch' format diffs between releases \\
+        \code{release }  &   Indicate that a Module is no longer in use (check the difference and delete local repository)\\
+        \code{remove }   &   Remove an file from the repository (definitively remove for further revision)\\
+        \code{rlog   }   &   Print out history information for a module \\
+        \code{rtag  }    &   Add a symbolic tag to a module \\
+        \code{server}    &   Server mode \\
+        \code{status }   &   Display status information on checked out files \\
+        \code{tag    }   &   Add a symbolic tag to checked out version of files \\
+        \code{unedit }   &   Undo an edit command \\
+        \code{update     }  &  Brings work tree in sync with repository (download from CVS server the last modification by including the differences or let the use choose which lines must be kept)\\
+        \code{version}   &   Show current CVS version(s) \\
+        \code{watch  }   &   Set watches \\
+        \code{watchers}  &    See who is watching a file
+\end{longtable}
+\end{center}
+
+
+
+
+
+
+
+
+\subsection{Other sources of information}
+
+
+\web{http://www.nongnu.org/cvs/}
+
+
+\web{http://ximbiot.com/cvs/cvshome/}

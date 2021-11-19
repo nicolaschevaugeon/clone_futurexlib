@@ -1,0 +1,208 @@
+
+\section{La plaque carré en traction}
+
+Nous décrivons ici le problème traité par l'application \code{Xfem/test/mechanics2d/main.cc}.
+
+Nous nous interessons à une plaque carré en déformation plane soumise à de la tration suivant l'axe y.
+
+\subsection{La géométrie}
+
+La géométrie considérée est donnée par la figure ci-dessous.
+\onefigure{5cm}{./test/mechanics2d/square2D}{géométrie}
+
+Cette géométrie est définie dans le fichier "square.geo" (ci-dessous) déstiné à Gmsh permettant de générer un maillage \code{square.msh}:
+
+\begin{verbatim}
+     nbele = 10;
+     nbpt = nbele+1;
+     ta = 2/nbele;
+     /* Point      1 */
+     Point(newp) = {-1.0,-1.0,0.0,ta};
+     Point(newp) = {1.0,-1.0,0.0,ta};
+     Point(newp) = {1.0,1.0,0.0,ta};
+     Point(newp) = {-1.0,1.0,0.0,ta};
+     Line(9)  = {1,2};
+     Line(10) = {2,3};
+     Line(11) = {4,3};
+     Line(12) = {1,4};
+     Line Loop(18) = {-12,9,10,-11};
+     Ruled Surface(21) = {18};    
+     Transfinite Line {9,11,10,12} = nbpt Using Power 1.0; 
+     Transfinite Surface {21} = {1,2,3,4};
+\end{verbatim}
+
+La définition de la géométrie est faite par la definition :
+\begin{itemize}
+\item[-] de certaines variables : \code{nelem, nbpt} et \code{ta} ;
+\item[-] des points avec les coordonnées et la taille des éléments ;
+\item[-] des lignes (line) reliant les points ;
+\item[-] d'un contours (line loop) ;
+\item[-] des surfaces : ici,  une surface réglée (Ruled Surface) s'appuyant sur un countour ; 
+\item[-] le type de maillage : ici, un maillage transfini. 
+\end{itemize}
+
+Le maillage généré par ce fichier est le suivant :
+\onefigure{5cm}{./test/mechanics2d/square2D-mesh}{maillage correspondant}
+
+Remarquons que, meme si un maillage transfini a été demandé, Gmsh génère un maillage composé de triangles. Pour obtenir effectivement des quadrangles, il faudrait ajouter la commande \code{Recombine Surface {21};} à la fin du fichier ".geo".
+
+Afin de pouvoir attribuer des conditions aux limites  des étiquettes Gmsh sont  attachées à certaines entités géométriques. Pour les distingués, elles sont  qualifiées de physiques (point, lignes,...) car elles seront utilisées pour définir la physique du problème traité :
+\begin{verbatim}
+     Physical Point   (101)  = {1} ;
+     Physical Point   (102)  = {2} ;
+
+     Physical Line    (109)  = {9};
+     Physical Line    (110)  = {10};
+     Physical Line    (111)  = {11};
+     Physical Line    (112)  = {12};
+
+     Physical Surface (121)  = {21} ;
+\end{verbatim}
+Ces étiquettes seront utilisées par la suite dans le fichier "main.dat" pour définir les données du problème. Ainsi, la ligne \code{BC\_LINE  111} sur laquelle est définie une condition de Neumann correspond à la ligne physique déclarée pas \code{Physical Line    (111)  = {11};}, c'est à dire la ligne géométrique initialement numérotée 11.
+
+
+
+
+\subsection{Le jeu de donnée "main.dat"}
+
+La géométrie et le maillage ayant été construits par Gmsh, il convient désormais de transmettre ce maillage et de définir le problème mécanique dans une application xfem. Ceci se fait par la classe \code{xData} et par l'intermédiaire d'un fichier "main.dat". 
+
+Le fichier \code{main.dat} se présente sous la forme d'une liste de mots clé (\code{MESH\_FILE\_TYPE}, \code{BC\_POINT}, \code{MAT\_CLASS}, ...) permettant de définir les paramètres du problème. 
+
+\begin{verbatim}
+     # lines starting by a # are comment lines
+     ##########
+     # COMPUTER INFORMATION
+     MESH_FILE_TYPE   = msh
+     MESH_FILE        = data/square.msh
+     ###################################################
+     ZONE 121  = {MAT_CLASS = elastic MAT_PARAM = data/law.mat}
+     ####################################################
+     ##2D case
+     BC_LINE  111 ={  TRACTION_Y      FIX =   1.0 }
+     BC_LINE  109 ={  TRACTION_Y      FIX =  -1.0 }
+     BC_POINT 101 ={  DISPLACEMENT_X  FIX = 0.0 
+                      DISPLACEMENT_Y  FIX = 0.0 }              
+     BC_POINT 102 ={  DISPLACEMENT_Y  FIX = 0.0 }
+\end{verbatim}
+
+Ces mots clés seront relus par la classe  \code{xData} qui stockera alors les informations dans différents attributs membres  de classe \code{xMesh}, \code{xPhysicalEnv}, \code{xZoneContainer}, \code{xMaterialManager}, \code{xBoundaryContainer}, \code{xBoundary} ou encore \code{string}.
+
+
+En particulier, l'objet de classe \code{xPhysicalEnv} contenu dans \code{xData} est un conteneur d'objet \code{xEnv}. Chaque objet \code{xEnv} est construit à la lecture du fichier "main.dat" (par la commande \code{xData.ReadInfo}). Il contient les informations concernant la condition limite lue : 
+
+\begin{center}
+\begin{tabular}{p{3cm}|p{2cm}|p{10cm}}
+\hline
+std::string & Phys & chaîne de caractères définssant le type de condition limite (par exemple, ici "\code{DISPLACEMENT\_X}"). C'est le nom de l'espace d'approximation concerné par la condition limite.\\
+\hline
+int & Geom & un entier déterminant la dimension de l'élément géométrique. Il est déterminé automatiquement :
+\begin{itemize}
+\item[-] 0 pour un point (\code{BC\_POINT}) ;
+\item[-] 1 pour une ligne (\code{BC\_LINE}),
+\item[-] 2 pour une surface (\code{BC\_SURFACE})
+\item[-] 3 pour un volume (\code{BC\_VOLUME}) 
+\end{itemize} \\
+\hline
+int & Entity & est le numéro de l'entité physique défini par \code{Physical Point}, \code{Physical Line}, ... \\
+\hline
+double &  Val\_fix & la valeur à fixer comme condition limite\\
+\hline
+\end{tabular}
+\end{center}
+
+Une fois stockées ces objets pourront être interprétés par le programme principal ("main.cc"). C'est ce que font les fonctions membres \code{TreatmentOfEssEnv()} et \code{TreatmentOfNatEnv()}.
+   
+   
+   
+
+
+
+\subsection{La définition du modèle EF}
+
+Le programme principal commence par la lecture des données. Ceci se fait à l'aide des fonctions  \code{ReadInfo()}, \code{ReadMesh()} et \code{ReadZones()}  de l'objet \code{data} (classe \code{xData}) :
+\begin{verbatim}
+int main(int argc, char *argv[])  
+{  
+   xData data;
+   ...
+   data.ReadInfo(pname);
+   ...
+}
+   void Mechanics_c :: TreatmentOfFormulation (xData *data) {
+
+       data->ReadMesh();
+       data->ReadZones();
+       ... 
+     }
+\end{verbatim}
+
+
+Deux espaces d'approximation sont alors définis : il s'agit des espaces d'approximation  "DISPLACEMENT\_X",  "DISPLACEMENT\_Y" défini sur la base des fonctions d'approximation de Lagrange (\code{xSpaceLagrange})
+
+Il sont construits de manière similaire et se distinguent par le type tensoriel défini par les paramètres \code{xSpace::VECTOR\_X}  et \code{xSpace::VECTOR\_Y}. Ce paramètre permet de donner la direction des champs définis sur ces espaces respectifs (\code{SCALAR, VECTOR\_X, VECTOR\_Y, VECTOR\_Z }).
+
+Le degré d'approximation est fixé ici à 1 (paramètre \code{xSpaceLagrange::DEGREE\_ONE}.
+
+Les deux espaces sont alors unis pour former l'espace des déplacement suivant les deux directions:
+\begin{verbatim}
+     xSpaceLagrange lagx("DISPLACEMENT_X", xSpace::VECTOR_X, xSpaceLagrange::DEGREE_ONE);
+     xSpaceLagrange lagy("DISPLACEMENT_Y", xSpace::VECTOR_Y, xSpaceLagrange::DEGREE_ONE);
+     xSpaceComposite  lagrange(lagx, lagy);
+\end{verbatim}
+
+Cet espace de fonction étant défini, le champ de déplacement recherché est un éléments de cet espace. Il est définit par les
+
+
+
+\begin{verbatim}
+
+  xRegion all(data->mesh);
+
+
+  xField disp_l(&double_manager, lagrange);
+
+  xValueCreator<xValueDouble>  creator;
+  DeclareInterpolation(disp_l, creator, all.begin(), all.end());
+
+  TreatmentOfEssEnv(disp_l, data);
+ 
+  xStateDofCreator<> snh(double_manager, "dofs");
+  DeclareState(disp_l, snh, all.begin(), all.end());
+
+  xCSRVector b(double_manager.size("dofs"));
+  xCSRVector sol(double_manager.size("dofs"));
+  xCSRMatrix A(double_manager.size("dofs"));
+
+  xLinearSystemSolverLU solver;
+  xLinearSystem system(&A, &solver);
+  xAssemblerBasic<> assembler(A, b);
+  xIntegrationRuleBasic integration_rule_env(3);
+  xIntegrationRuleBasic integration_rule(3); //2 is the degree to integrate
+
+  TreatmentOfNatEnv(disp_l, assembler, integration_rule_env, data, data->allGroups);
+
+  xUniformMaterialSensitivity<xTensor4> hooke("strain");
+  xFormBilinearWithLaw<xGradOperator<xIdentity<xTensor2> >, 
+                         xUniformMaterialSensitivity<xTensor4>,
+                         xGradOperator<xIdentity<xTensor2> > > diffusive(hooke);
+  Assemble(diffusive, assembler, integration_rule, disp_l, disp_l, all.begin(), all.end()); 
+
+  system.Solve(b, sol);
+  Visit(xWriteSolutionVisitor(sol.begin()), double_manager.begin("dofs"), double_manager.end("dofs"));
+
+
+  xExportGmshAscii  pexport;
+  xExportGmshBinary  pbinexport;
+
+  xEvalField<xIdentity<xVector> > eval_disp(disp_l);
+  Export(eval_disp, pexport, "DISPLACEMENT", integration_rule, all.begin(), all.end());
+ 
+  xEvalGradField<xSymmetrize> eval_strain(disp_l);
+  xEvalBinary< xMult<xTensor4, xTensor2, xTensor2> > stress(hooke, eval_strain);
+  Export(stress, pbinexport, "STRESS", integration_rule, all.begin(), all.end());
+
+\end{verbatim}
+
+\onefigure{5cm}{./test/mechanics2d/stresses}{géométrie}
+\onefigure{8cm}{./test/mechanics2d/displacements}{géométrie}

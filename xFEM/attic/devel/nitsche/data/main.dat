@@ -1,0 +1,24 @@
+# lines starting by a # are comment lines
+##########
+# COMPUTER INFORMATION
+MESH_FILE_TYPE   = msh
+MESH_FILE        = data/square_40.msh
+
+
+###################################################
+ZONE_NAME matrix     = {MAT_CLASS = thermic MAT_PARAM = data/matrix.mat}
+ZONE_NAME inclusion  = {MAT_CLASS = thermic MAT_PARAM = data/inclusion.mat}
+####################################################
+####################################################
+
+
+##2D case
+#BC_LINE  110 ={  TEMPERATURE  FIX =   0.0 }
+#BC_LINE  111 ={  TEMPERATURE  FIX =   0.0 }
+
+
+
+
+
+
+

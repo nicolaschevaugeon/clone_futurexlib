@@ -1,0 +1,97 @@
+/* 
+    This file is a part of eXlibris C++ Library
+    under the GNU Lesser General Public License.
+    See the NOTICE.md & LICENSE.md files for terms 
+    and conditions.
+*/
+#ifndef _xAttachedDataManagerAOMD_
+#define _xAttachedDataManagerAOMD_
+#include <iostream>
+#include <sstream>
+#include <list>
+#include "mAOMD.h"
+#include "mAttachableDataContainer.h"
+
+namespace xfem
+{
+
+class xAttachablePnt : public AOMD::mAttachableData
+{
+ public : 
+    void *pnt = nullptr;
+};
+
+template < class DATATYPE >
+class xAttachedDataManagerAOMD{
+public :
+  inline xAttachedDataManagerAOMD():tag( 0){ 
+    std::stringstream tagname;
+    tagname << "xAttachedDataManagerAOMD" << this;
+    tag = AOMD::AOMD_Util::Instance()->newMeshDataId(tagname.str().c_str());
+  }
+  
+  inline xAttachedDataManagerAOMD(const xAttachedDataManagerAOMD & in):tag(0){
+    std::stringstream tagname;
+    tagname << "xAttachedDataManagerAOMD" << this;
+    tag = AOMD::AOMD_Util::Instance()->newMeshDataId(tagname.str().c_str());
+    for(auto e : in.garbage){
+      auto data = in.getData(  (*e));
+      if (data) { 
+	setData(*e) =  *data;
+      }
+    }
+  }
+  
+  inline const DATATYPE * getData( const AOMD::mAttachableDataContainer &e) const{
+    const DATATYPE *data = nullptr;
+    auto attachable_pnt = static_cast< xAttachablePnt *>(e.getData(tag));
+    if (attachable_pnt) data = static_cast < const DATATYPE * >(attachable_pnt->pnt);
+    return data;
+  }
+  
+  inline DATATYPE * getData(AOMD::mAttachableDataContainer &e) {
+    DATATYPE *data = nullptr;
+    auto attachable_pnt = static_cast< xAttachablePnt *>(e.getData(tag));
+    if (attachable_pnt) data = static_cast < DATATYPE * >(attachable_pnt->pnt);
+    return data;
+  }
+  
+  inline DATATYPE & setData (AOMD::mAttachableDataContainer &e){
+    DATATYPE * data =  getData(e);
+    if (!data) { 
+      data = new DATATYPE;
+      xAttachablePnt *adata = new  xAttachablePnt;
+      adata->pnt = data;
+      e.attachData(tag, adata);
+      garbage.push_back( &e );
+    }
+    return *data;
+  }
+
+  inline void   deleteData( AOMD::mAttachableDataContainer &e ){
+      DATATYPE * data = getData(e);
+      if (data) delete(data);
+      e.deleteData(tag);
+  }
+  
+  inline void clear(){
+    for(auto e: garbage){
+      deleteData(*e);
+    }
+    garbage.clear();
+  }
+  
+  inline ~xAttachedDataManagerAOMD(){
+    clear();
+    AOMD::AOMD_Util::Instance()->deleteMeshDataId(tag);
+    // tagmanager::instance().releasetag(tag);
+  }
+  
+private: 
+  std::list< AOMD::mAttachableDataContainer *  > garbage;
+  size_t tag;
+};
+
+} // end namespace
+
+#endif

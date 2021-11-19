@@ -1,0 +1,122 @@
+digraph X {
+    xGeomTools -> xTool [color=green]
+    xGeomTools -> xTensor [color=green]
+    xDistanceNearest -> xTool [color=green]
+    xDistanceNearest -> xInterfaceAOMDGeneral [color=green]
+    xDistanceNearest -> Trellis [color=green]
+    xDistanceNearest -> xFEM [color=green]
+    xDistanceNearest -> xQuadrature [color=green]
+    xDistanceNearest -> xGeomTools [color=green]
+    xDistanceNearest -> xLegacySimpleCut [color=green]
+    xScanElement -> Trellis
+    xScanElement -> xTensor
+    xFEM -> Trellis [color=yellow]
+    xFEM -> xMapping  [color=yellow]
+    xFEM -> xQuadrature  [color=yellow]
+    xFEM -> xTool [color=yellow]
+    xFEM -> xGeomTools [color=yellow]
+    xFEM -> xTensor [color=yellow]
+    xFEM -> xInterfaceAOMDGeneral [color=yellow]
+    xFEM -> xSolverBase [color=yellow]
+    xFEM -> xInterfaceLapack [color=yellow]
+    xFEM -> xReader [color=yellow]
+    xExport -> xTool[color=dodgerblue4]
+    xExport -> xInterfaceAOMDGeneral [color=yellow]
+    xExport -> xTensor [color=dodgerblue4]
+    xExport -> xGeomTools [color=dodgerblue4]
+    xExport -> xFEM [color=dodgerblue4]
+    xExport -> Trellis [color=dodgerblue4]
+    xInterfaceAOMDGeneral -> Trellis
+    xInterfaceAOMDGeneral -> xTool
+    xInterfaceAOMDGeneral -> xGeomTools
+    xInterfaceAOMDGeneral -> xFEM
+    xInterfaceAOMDGeneral -> xReader
+    xInterfaceMumps -> xSolverBase
+    xInterfaceMumps -> xTool
+    xInterfaceLapack -> xSolverBase
+    xInterfaceLapack -> xTool
+    xInterfacePastix -> xSolverBase
+    xInterfacePastix -> xTool
+    xInterfaceSuperLU -> xSolverBase
+    xInterfaceTaucs -> xSolverBase
+    xSolverBase -> xTool
+    xOctree -> xInterfacexOctree [color=red]
+    xInterfacexOctree -> xOctree
+    xInterfacexOctree -> xFEM
+    xInterfacexOctree -> xGeom
+    xInterfacexOctree -> Trellis
+    xMeshTool -> Trellis [color=darkolivegreen3]
+    xMeshTool -> xTool [color=darkolivegreen3]
+    xMeshTool -> xGeomTools
+    xMeshTool -> xDistanceNearest
+    xMeshTool -> xInterfaceParMetis [color=darkolivegreen3]
+    xMeshTool -> xInterfaceAOMDGeneral [color=darkolivegreen3]
+    xInterfacexTemplateRefineMesh->xTool
+    xInterfacexTemplateRefineMesh->xTemplateRefineMesh
+    xInterfacexTemplateRefineMesh->xInterfaceAOMDGeneral
+    xInterfacexTemplateRefineMesh->Trellis
+    xDoubleCut->xTool [color=brown]
+    xDoubleCut->xGeomTools [color=brown]
+    xDoubleCut->xInterfaceAOMDGeneral [color=brown]
+    xDoubleCut->Trellis [color=brown]
+    xDoubleCut->xFEM [color=brown]
+    xDoubleCut->xQuadrature [color=brown]
+    xLegacySimpleCut->xTool [color=cyan]
+    xLegacySimpleCut->xInterfaceAOMDGeneral[color=cyan]
+    xLegacySimpleCut->Trellis [color=cyan]
+    xLegacySimpleCut->xGeomTools [color=cyan]
+    xLegacySimpleCut->xFEM [color=cyan]
+    xLegacySimpleCut->xQuadrature [color=cyan]
+    xCrack->xTool [color=aquamarine]
+    xCrack->xGeomTools [color=aquamarine]
+    xCrack->xInterfaceAOMDGeneral [color=aquamarine]
+    xCrack->xFEM [color=aquamarine]
+    xCrack->xLegacySimpleCut [color=aquamarine]    
+    xCrack->Trellis [color=aquamarine]
+    xCrack->xSolverBase [color=aquamarine]
+    xCrack->xInterfaceSuperLu [color=aquamarine]
+    xCrack->xInterfaceLapack [color=aquamarine]
+    xCrack->xQuadrature [color=aquamarine]
+    xTLS->xTool [color=darkgreen]
+    xTLS->xGeomTools [color=darkgreen]
+    xTLS->xMapping [color=darkgreen]
+    xTLS->xInterfaceAOMDGeneral  [color=darkgreen]
+    xTLS->Trellis [color=darkgreen]
+    xTLS->xFEM [color=darkgreen]
+    xTLS->xQuadrature [color=darkgreen]
+    xTLS->xDistanceNearest [color=darkgreen]
+    xTLS->xLegacySimpleCut [color=darkgreen]
+    xTLS->xDoubleCut [color=darkgreen]
+    xTLS->xFastMarching [color=darkgreen]
+    xTLS->xGraph [color=darkgreen]
+    xTLS->xGeom [color=darkgreen]
+    xFastMarching->xGraph [color=darkslategray arrowhead=icurve]
+    xFastMarching->Trellis [color=darkslategray]
+    xFastMarching->xTool [color=darkslategray]
+    xGraph->xTool [color=firebrick]
+    xDomainDecomp->Trellis [color=darkorchid1]
+    xDomainDecomp->xTool [color=darkorchid1]
+    xDomainDecomp->xGeomTools [color=darkorchid1]
+    xDomainDecomp->xFEM [color=darkorchid1]
+    xDomainDecomp->xQuadrature [color=darkorchid1]
+    xDomainDecomp->xSolverBase [color=darkorchid1]
+    xDomainDecomp->xInterfaceAOMDGeneral [color=darkorchid1]
+    xDomainDecomp->xSolverBase [color=darkorchid1]
+    xDomainDecomp->xInterfaceParMetis [color=darkorchid1]
+    //  xDomainDecomp->xInterfaceBasicIterSolver [color=darkorchid1]
+    //  xDomainDecomp->xInterfaceLapack [color=darkorchid1]
+    //  xDomainDecomp->xInterfaceMumps [color=darkorchid1]
+    xPhysics->xTool [color=gold]
+    xPhysics->xInterfaceAOMDGeneral [color=gold]
+    xPhysics->Trellis [color=gold]
+    xPhysics->xQuadrature [color=gold]
+    xPhysics->xFEM [color=gold]
+    xPhysics->xExt [color=gold]
+    xPhysics->xSolverBase [color=gold]
+    xPhysics->xInterfaceSuperLu [color=gold]
+    xPhysics->xLegacySimpleCut [color=gold]
+    xTensor->xTool
+    xMapping->xTensor
+    xQuadrature->Trellis
+    xQuadrature->xInterfaceAOMDGeneral
+}

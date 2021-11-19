@@ -1,0 +1,1218 @@
+
+%%%%%%%%%%%%%%%%%%%%
+\section{Introduction}
+Ce chapitre se veut une introduction
+\'e la m\'ethode des \'el\'ements finis \'etendu \index{m\'ethode des \'el\'ements finis \'etendus}(commun\'ement appel\'e X-FEM pour \guil{eXtended Finite Element Method}).
+                             
+Cette extension \'e la M\'ethode des El\'ements Finis est partie du constat que beaucoup
+d'applications industrielles restent encore aujourd'hui
+hors de port\'ee de la
+m\'ethode des \'el\'ements finis classiques pour des raisons
+de gestion de maillage, ou plus pr\'ecis\'ement par le fait
+que le maillage doive respecter toutes
+les surfaces physiques du probl\'eme
+(fissures, fronts de solidification, interfaces entre
+mat\'eriaux, ...). Ces surfaces peuvent \^etre de forme
+complexe et/ou \'evoluer dans le temps.
+
+Les surfaces physiques doivent \^etre  maill\'ees  car
+l'interpolation \'el\'ements finis est classiquement
+tr\'es (trop) r\'eguli\'ere.
+L'approche X-FEM permet d'enrichir les \'el\'ements finis avec des modes
+moins r\'eguliers (discontinus ou \'e d\'eriv\'ees discontinues)
+pour qu'ils puissent \^etre travers\'es par des discontinuit\'es.
+Ainsi, les surfaces physiques peuvent \^etre positionn\'ees de mani\'ere
+quelconque par rapport au maillage et ce dernier peut \^etre conserv\'e
+lors de leur \'evolution. La technique centrale dans cet
+enrichissement est la partition de l'unit\'e \index{partition de l'unit\'e} \cite{Babuska:PUFEM}.
+
+Les surfaces ne sont donc plus maill\'ees et, pour les localiser sur le
+maillage, la notion de fonction de niveau est tr\'es appropri\'ee.
+A chaque noeud dans le voisinage de la surface on associe la distance
+sign\'ee \'e cette surface (compt\'ee positivement d'un c\'et\'e et
+n\'egativement de l'autre).
+Cette fonction distance peut \^etre interpol\'ee sur chaque \'el\'ement
+avec les fonctions \'el\'ements finis classique de premier ordre.
+L'iso-z\'ero de la fonction localise compl\'etement l'interface.
+En clair, dans le contexte X-FEM, les surfaces sont stock\'ees par
+un champ \'el\'ements finis d\'efini dans le voisinage de la surface.
+Ces champs ``g\'eom\'etriques'' participent au calcul au m\'eme
+titre que les champs physiques (d\'eplacement, temp\'erature, ...).
+Il se peut que ces surfaces \'evoluent dans le temps sous
+un champ de vitesse.
+Pour prendre en compte cette \'evolution, la m\'ethode des
+\guil{level sets}\index{level sets} \cite{Sethian:book} est particuli\'erement
+adapt\'ee. Nous utiliserons aussi bien l'expression
+\guil{fonction de niveau} que \guil{level set}.
+
+
+Dans la prochaine section, la partition de l'unit\'e sera d\'etaill\'ee et
+l'on s'int\'eressera \'e l'historique de son av\'enement et ses relations
+avec les m\'ethodes sans maillage. Dans la section
+\ref{sec:model-de-disc}, cette technique sera utilis\'ee pour
+introduire des surfaces de discontinuit\'e dans un maillage. Dans
+cette section, on ne s'inqui\'etera pas de l'\'evolution possible de ces
+surfaces ni de leur repr\'esentation ``informatique''. Ces deux
+questions seront \'etudi\'ees dans la section \ref{sec:local-et-evol}.
+
+La section \ref{sec:applications-et-mise}
+discute certains points de la mise
+en oeuvre de l'approche X-FEM et d\'ecrit deux
+domaines d'applications~:
+la m\'ecanique de la rupture et l'homog\'en\'eisation.
+
+Ce document se veut une introduction de la m\'ethode X-FEM
+et un condens\'e des outils de base.
+Dans les applications (chapitre~\ref{Applications_de_XFEM}), nous nous sommes pench\'es sur des
+mod\'eles \'elastiques lin\'eaires en statique.
+D'autres travaux r\'ecents ou en cours, \'etendent l'approche
+au non lin\'eaire ou \'e la dynamique.
+Ces travaux sont cit\'es \'e la section~\ref{sec:conclusion-et-autres}.
+
+
+
+
+
+\section{De Rayleigh-Ritz \'e la partition de l'unit\'e}
+\label{sec:la-partition-de}
+
+La m\'ethode X-FEM se distingue de la m\'ethode des \'el\'ements finis
+classique par le rajout dans l'approximation \index{approximation} de fonctions
+suppl\'ementaires \'e l'aide d'une technique appel\'ee \index{partition de l'unit\'e} partition de
+l'unit\'e~\cite{Babuska:PUFEM}.  Avant de d\'ecrire cette technique
+et l'usage qui en est fait dans X-FEM, nous discutons diff\'erentes
+m\'ethodes classiques d'approximation du principe variationnel en
+d\'eplacement pour l'\'elasticit\'e~:
+l'approximation de Rayleigh-Ritz, la
+m\'ethode des \'el\'ements finis et les m\'ethodes sans maillage
+(\guil{meshfree methods}).
+
+\subsection{Formulation \index{formulation du probl\'eme} du probl\'eme de r\'ef\'erence et notations}\label{probleme_de_reference}
+
+Le milieu solide \'etudi\'e occupe un domaine $\Ome$ de fronti\'ere
+$\Gam$. Cette fronti\'ere se compose des l\'evres de la fissure $\Gam_{c^+}$ et $\Gam_{c^-}$  suppos\'ees libres
+ de tractions, d'une partie $\Gam_u$ \'e d\'eplacements impos\'es not\'es   $\overline{\bfu}$ et
+d'une partie $\Gam_t$ \'e tractions impos\'ees not\'ees   $\overline{\bft}$.
+Les contraintes, d\'eformations et d\'eplacements sont not\'es
+respectivement $\bfsig$, $\bfeps$ et $\bfu$. L'hypoth\'ese des petites
+perturbations est utilis\'ee.
+En l'absence de forces de volume, les \'equations d'\'equilibre sont~:
+\begin{eqnarray}
+\label{eq:equil}
+\bfnabla \cdot \bfsig & = & \bfzer \text{\;sur\;} \Ome  \\
+\bfsig \cdot \bfn & = & \overline{\bft} \text{\;sur\;} \Gam_t            \\
+\bfsig \cdot \bfn & = &  0  \text{\;sur\;} \Gam_{c^+}        \\
+\bfsig \cdot \bfn & = & 0  \text{\;sur\;} \Gam_{c^-}
+\end{eqnarray}
+o\'e $\bfn$ est la normale ext\'erieure \'e la fronti\'ere consid\'er\'ee. Les
+\'equations cin\'ematiques s'\'ecrivent~:
+\begin{eqnarray}
+    \bfeps & = & \bfeps(\bfu) = \bfnabla_{\rms} \bfu  \quad\mbox\;sur\;\quad
+    \Ome \\
+    \bfu   & = & \overline{\bfu}  \quad\mbox\;sur\;\quad \Gam_u
+\end{eqnarray}
+o\'e $\bfnabla_{\rms}$ est la partie sym\'etrique de l'op\'erateur
+gradient\index{Op\'erateur!gradient}.  Finalement, la loi de comportement consid\'er\'ee est
+\'elastique~:
+\begin{equation}
+    \bfsig = \bfC:\bfeps
+\end{equation}
+o\'e $\bfC$ est le tenseur de Hooke.
+Les espaces des champs de d\'eplacement admissibles, $\cu$, et
+admissibles \'e z\'ero, $\cu_0$, sont d\'efinis par~:
+\begin{eqnarray}
+    \cu & = & \{ \bfv \in \cv: \bfv = \overline{\bfu} \text\;sur\; \Gam_u \} \\
+    \cu_0 & = & \{ \bfv \in \cv: \bfv = \bfzer \text\;sur\; \Gam_u \}
+\end{eqnarray}
+o\'e l'espace $\cv$ est reli\'e \'e la r\'egularit\'e de la solution
+et est d\'etaill\'e par exemple dans \cite{Babuska:Corners} et \cite{Grisvard:ellip}.  Cet espace
+contient des champs de d\'eplacement discontinus au passage de la fronti\'ere $\Gam_c$.
+La forme faible des \'equations d'\'equilibre s'\'ecrit~:
+\begin{equation}
+    \int_{\Ome}    \bfsig:\bfeps(\bfv) \dint \Ome =
+    \int_{\Gam_t} \ov{\bft}\cdot\bfv  \dint \Gam
+    \quad \forall \bfv \in \cu_0
+    \label{eq:equil2}
+\end{equation}
+Notons que la fronti\'ere $\Gam_c$ ne contribue pas \'e la forme
+faible car libre de traction.
+En combinant~(\ref{eq:equil2}) avec la loi constitutive\index{loi constitutive}
+et les \'equations cin\'ematiques, le
+probl\'eme en d\'eplacement est obtenu~:
+\begin{equation}
+    \label{eq:varia}
+    \text{trouver} \; \bfu\in\cu  \; \vert \;
+    \int_{\Ome}   \bfeps(\bfu):\bfC:\bfeps(\bfv) \dint \Ome =
+    \int_{\Gam_t} \ov{\bft}\cdot\bfv  \dint \Gam
+    \quad \forall \bfv \in \cu_0
+\end{equation}
+
+\subsection{L'approximation \index{Approximation} de Rayleigh-Ritz}
+
+
+Dans la m\'ethode de Rayleigh-Ritz, l'approximation s'\'ecrit comme
+une combinaison lin\'eaire de modes de d\'eplacement $\bfphi_i(\bfx), i = 1,
+\dots, N$ d\'efinis sur l'ensemble du domaine~:
+\begin{equation}
+    \bfu(\bfx) = \sum_i^N a_i \bfphi_i(\bfx)
+\end{equation}
+Ces modes doivent satisfaire \emph{a priori} les conditions
+aux limites
+essentielles (les d\'eplacements impos\'es sont consid\'er\'es nuls
+pour simplifier la pr\'esentation).
+
+
+
+
+
+L'introduction de cette
+approximation dans le principe variationnel\index{principe variationnel} (\ref{eq:varia}) conduit au
+syst\'eme d'\'equations
+\begin{equation}
+\label{eq:global_systeme}
+K_{ij} a_j = f_i, \quad i = 1, \ldots, N
+\end{equation}
+o\'e la sommation sur l'indice $j$ est d'application et o\'e
+\begin{eqnarray}
+K_{ij} & = & \int_{\Ome}   \bfeps(\bfphi_i):\bfC:\bfeps(\bfphi_j) \dint
+\Ome \\
+f_i & = & \int_{\Gam_t} \ov{\bft}\cdot\bfphi_i  \dint \Gam
+\end{eqnarray}
+
+La m\'ethode de Rayleigh-Ritz offre une grande
+libert\'e dans le choix des modes.  Ces modes peuvent par exemple
+\^etre choisis de mani\'ere \'e satisfaire les \'equations
+int\'erieures du domaine.  Cette m\'ethode a cependant
+l'inconv\'enient de conduire \'e un syst\'eme lin\'eaire \'e matrice
+dense.
+
+
+
+\subsection{La m\'ethode des \'el\'ements finis\index{m\'ethode des \'el\'ements finis}}
+
+Dans la m\'ethode des \'el\'ements finis, le domaine \'etudi\'e,
+$\Ome$, est d\'ecompos\'e en sous-domaines g\'eom\'etriques de forme
+simple $\Ome_e, e = 1, \ldots, N_e$ appel\'es \'el\'ements~:
+\begin{equation}
+    \Ome = \cup_{e=1}^{N_e} \Ome_e
+\end{equation}
+L'ensemble des \'el\'ements constituent le maillage\index{Maillage}. Sur
+chaque \'el\'ement, le champ inconnu est \guil{approxim\'e} \'e l'aide de
+fonctions de base simples, de type polyn\'emial, appel\'ees fonctions
+d'approximation et de coefficients inconnus appel\'es degr\'es de
+libert\'e. Les degr\'es de libert\'e\index{degr\'es de libert\'e} ont en
+g\'en\'eral une signification m\'ecanique simple. Pour des \'el\'ements de
+premier degr\'e, il s'agit de la valeur du d\'eplacement selon $x$, $y$
+ou $z$ aux sommets (noeuds) de chaque \'el\'ement. D\'esignons par
+$u_i^\alpha$ le d\'eplacement au noeud $i$ dans la direction $\alpha$
+($\alpha$ d\'esigne la direction $x$,   $y$  ou $z$) et par
+$\bfphi_i^\alpha$ la fonction d'approximation correspondante.
+
+
+Dans le plan $xy$, l'approximation \'el\'ements finis sur l'\'el\'ement $\Ome_e$
+s'\'ecrit~:
+\begin{equation}
+  \label{eq:approx_ef}
+  \bfu(\bfx) \mid_{\Ome_e} = \sum_{i \in N_n} \sum_{\alpha}
+  a_i^\alpha \bfphi_i^\alpha(\bfx)
+\end{equation}
+o\'e $N_n$ est l'ensemble  des noeuds de l'\'el\'ement $\Ome_e$.
+Par exemple pour un triangle, les six fonctions
+d'approximation sont donn\'ees par~:
+\begin{equation}
+  \{ \bfphi_i^\alpha \} = \{ \phi_1 \bfe_x, \phi_2 \bfe_x,
+  \phi_3 \bfe_x, \phi_1 \bfe_y, \phi_2 \bfe_y, \phi_3 \bfe_y \}
+\end{equation}
+o\'e les fonctions de forme\index{Fonction!fonctions de forme} scalaires $\phi_1$, $\phi_2$ et $\phi_3$
+sont lin\'eaires sur l'\'el\'ement et valent 0 ou 1 aux noeuds du triangle.
+L'approximation~(\ref{eq:approx_ef}) permet
+de repr\'esenter tous
+les modes rigides ou de d\'eformations constantes sur l'\'el\'ement.
+Cette condition doit \^etre remplie par l'approximation
+pour tous les types d'\'el\'ements.
+La continuit\'e du champ d'approximation sur le domaine
+est obtenue en imposant que
+les degr\'es de libert\'e d\'efinis en un noeud ont la m\^eme
+valeur pour tous les \'el\'ements connect\'es en ce noeud.
+La matrice de raideur, $K^e_{ij}$,
+et le vecteur force, $f^e_i$, sont donn\'es pour un \'el\'ement fini par~:
+\begin{eqnarray}
+  \label{eq:local_raideur}
+  K^e_{i\alpha, j\beta} & = & \int_{\Ome^e}
+          \bfeps(\bfphi_i^\alpha):\bfC:\bfeps(\bfphi_j^\beta)
+  \dint \Ome \\
+  \label{eq:local_force}
+  f^e_{i\alpha} & = & \int_{\Gam_t \cap \partial \Ome^e}   \ov{\bft}\cdot\bfphi_i^\alpha  \dint \Gam
+\end{eqnarray}
+
+Le syst\'eme global d'\'equations est obtenu en assemblant les
+matrices\index{Matrice} et forces \'el\'ementaires dans une matrice de
+raideur globale et un vecteur de force global. Dans la phase
+d'assemblage, les \'equations associ\'ees aux degr\'es de libert\'e fix\'es
+par des conditions aux limites de type Dirichlet ne sont pas
+construites.
+
+Contrairement \'e l'approximation de Rayleigh-Ritz,
+le caract\'ere local de l'approximation\index{Approximation} \'el\'ement fini
+conduit \'e des matrices creuses.
+De plus, l'\'el\'ement fini a une interpr\'etation m\'ecanique
+forte~: la cin\'ematique est d\'ecrite par des d\'eplacements
+nodaux auxquels sont associ\'ees par dualit\'e\index{Dualit\'e} des forces nodales.
+Le comportement de l'\'el\'ement est caract\'eris\'e par
+la matrice de raideur \'el\'ementaire
+qui relie les forces et d\'eplacements nodaux.
+Le syst\'eme global \'e r\'esoudre impose
+l'\'equilibre de la structure~:
+la somme des forces nodales en chaque noeud doit
+\^etre nulle.
+Enfin, la m\'ethode des \'el\'ements finis s'est r\'ev\'el\'ee
+tr\'es robuste pour de nombreuses applications dans l'industrie
+ce qui en fait un outil de choix pour la simulation
+num\'erique.
+Cependant, l'utilisation de la m\'ethode des \'el\'ements finis
+pour des probl\'emes \'e g\'eom\'etrie complexe
+ou \'e \'evolution de surfaces internes
+est actuellement g\^en\'ee  par l'aspect maillage.
+Une de motivations derri\'ere les m\'ethodes sans maillage
+est de s'affranchir des
+difficult\'es.
+
+\subsection{Les m\'ethodes sans maillage}\label{methode_sans_maillage}\index{m\'ethodes sans maillage}
+
+De nombreuses recherches ont \'et\'e conduites
+ces dix derni\'eres ann\'ees pour d\'evelopper
+des m\'ethodes o\`u l'approximation ne repose pas
+sur un maillage mais plut\'et sur un ensemble de points.
+Diff\'erentes m\'ethodes existent \'e ce jour~:
+\'el\'ements diffus~\cite{Touzot:diffus},
+Element Free Galerkin method (EFG)~\cite{TB:EFG},
+Reproducing Kernel Particle Method (RKPM)~\cite{Liu:RKPM93},
+$h-p$ cloud method~\cite{DuarteOdenCloud96}.
+Chaque point a un domaine d'influence
+de forme simple (cercle ou rectangle par exemple en 2D) sur lequel
+des fonctions d'approximation sont construites.
+Ces fonctions sont nulles sur le bord et en dehors
+du domaine d'influence. En clair, ces fonctions sont
+ \'e support compact.
+Par abus de langage, nous parlerons
+du support $i$ pour le support associ\'e au point $i$.
+Les fonctions d'interpolation d\'efinies sur le support $i$ sont
+not\'ees $\bfphi_i^\alpha$, $\alpha = 1, \ldots, N_f(i)$
+o\'e  $N_f(i)$ est le nombre de fonctions d'approximation
+d\'efinies sur le support $i$.
+Les degr\'es de libert\'e correspondants  sont not\'es
+$a_i^\alpha$. L'approximation en un point quelconque
+$\bfx$ s'\'ecrit~:
+\begin{equation}
+  \label{eq:approx_efg}
+  \bfu(\bfx) = \sum_{i \in N_s(\bfx)} \sum_{\alpha = 1}^{N_f(i)} a_i^\alpha \bfphi_i^\alpha(\bfx)
+\end{equation}
+o\'e $N_s(\bfx)$ est l'ensemble des points $i$ dont le support
+contient le point $\bfx$. La figure~\ref{fig:efg_support} montre par exemple un point
+$\bfx$ couvert par trois supports\index{Support}.
+
+\onefigure{4cm}{efg_support}{Trois supports couvrant un point $\bfx$.}
+
+
+Les fonctions d'approximation sont construites de
+mani\'ere \'e ce que l'approximation~(\ref{eq:approx_efg})
+puisse repr\'esenter tous les modes rigides
+et de d\'eformation constante sur le domaine.
+Ces conditions sont n\'ecessaires pour prouver la convergence
+de la m\'ethode. Les diff\'erentes approches
+(\'el\'ement diffus, EFG, RKPM, \ldots)
+se distinguent, entre autres, par les techniques
+utilis\'ees pour la construction de ces fonctions d'interpolation.
+
+
+Une fois les fonctions d'interpolation
+construites, il est possible d'en rajouter
+par enrichissement\index{Enrichissement}.
+Diverses mani\'eres d'enrichir existent et nous d\'ecrirons
+un  enrichissement qualifi\'e d'externe
+par Belytschko et Fleming (1999)~\cite{Fleming:enrichment}.
+L'enrichissement de l'approximation permet
+de repr\'esenter
+un mode de d\'eplacement donn\'e, par exemple
+$F(\bfx)\bfe_x$ sur un sous-domaine donn\'e
+$\Ome_F\subset\Ome$.
+Notons $N_F$ l'ensemble des supports qui ont une intersection
+avec le sous-domaine $\Ome_F$. L'approximation enrichie s'\'ecrit~:
+\begin{equation}
+  \label{eq:approx_efg_enrichi}
+  \bfu(\bfx) = \sum_{i \in N_s(\bfx)}  \sum_{\alpha = 1}^{N_f(i)}
+                                 a_i^\alpha \bfphi_i^\alpha(\bfx) +
+               \sum_{i \in N_s(\bfx) \cap N_F}
+                                 \sum_{\alpha = 1}^{N_f(i)}
+                                 b_i^\alpha \bfphi_i^\alpha(\bfx) F(\bfx)
+\end{equation}
+o\'e les nouveaux degr\'es de libert\'e\index{degr\'es de libert\'e}, $b_i^\alpha$, multiplient les
+fonctions d'interpolation enrichies $\bfphi_i^\alpha(\bfx) F(\bfx)$.
+Montrons maintenant que la fonction $F(\bfx)\bfe_x$
+peut-\^etre repr\'esent\'ee sur le sous-domaine $\Ome_F$.
+En fixant \'e z\'ero tous les degr\'e de libert\'e $a_i^\alpha$
+et en sortant la fonction $F(\bfx)$ du signe somme,
+l'approximation en un point $\bfx \in \Ome_F$
+s'\'ecrit~:
+\begin{equation}
+  \bfu(\bfx) =    \left( \sum_{i \in N_s(\bfx) \cap N_F}
+                   \sum_{\alpha = 1}^{N_f(i)}
+                   b_i^\alpha \bfphi_i^\alpha(\bfx) \right)
+                   F(\bfx)
+\end{equation}
+
+Les degr\'es de libert\'e $b_i^\alpha$ peuvent \^etre
+choisis de mani\'ere \'e ce que le facteur devant $F(\bfx)$
+soit le mode rigide $\bfe_x$. Cela est possible
+puisque les fonctions d'approximation $\bfphi_i^\alpha$
+sont capables de repr\'esenter
+n'importe quel mode rigide. En conclusion,
+l'approximation~(\ref{eq:approx_efg_enrichi}) peut repr\'esenter
+le d\'eplacement $F(\bfx)\bfe_x$ sur le sous-domaine $\Ome_F$.
+
+L'enrichissement a permis
+dans le cadre de l'Element Free Galerkin Method
+de r\'esoudre des probl\'emes de propagation de
+fissures en deux et trois dimensions sans remaillage~\cite{Krysl:3D}:
+la fissure se propage a travers un nuage de points et
+est mod\'elis\'ee par enrichissement de l'approximation
+avec des fonctions $F(\bfx)$ discontinues sur la fissure
+ou repr\'esentant la singularit\'e en fond de fissure.
+
+La grande flexibilit\'e dans l'\'ecriture de l'approximation et
+de son enrichissement ainsi que la possibilit\'e de cr\'eer des champs
+d'approximation tr\'es r\'eguliers sont deux atouts importants des
+m\'ethodes sans maillage et de l'approche EFG en particulier.
+L'utilisation des m\'ethodes sans maillage pr\'esente cependant un
+certain nombre de difficult\'es par rapport \'e la m\'ethode des
+\'el\'ements finis~:
+\begin{itemize}
+\item Dans la m\'ethode des \'el\'ements finis l'assemblage de la
+  matrice de raideur globale peut se faire en assemblant les
+  contributions de chaque \'el\'ement. Dans les m\'ethodes sans
+  maillage, l'assemblage se fait plut\'et en couvrant le domaine de
+  points d'int\'egration et en ajoutant la contribution de chacun
+  d'eux.  Le choix de la position et du nombre des points
+  d'int\'egration n'est pas trivial pour un nuage arbitraire de points
+  d'approximation ;
+\item Les conditions aux limites de type Dirichlet sont d\'elicates \'e
+  imposer ;
+\item Les fonctions de forme sont \'e construire et ne sont pas
+  explicites ;
+\item La taille des domaines d'influence est un param\'etre dans la
+  m\'ethode que l'utilisateur doit choisir avec soin.
+\end{itemize}
+
+
+
+
+\subsection{La partition de l'unit\'e}\label{partition_de_l_unite}\index{partition de l'unit\'e}
+
+Melenk et Babu\v{s}ka (1996)~\nocite{Babuska:PUFEM} ont montr\'e
+que la base \'el\'ement fini classique pouvait \^etre enrichie
+(et donc qu'il n'\'etait pas n\'ecessaire de recourir
+\'e des m\'ethodes sans maillage)
+de mani\'ere \'e repr\'esenter une fonction donn\'ee sur un domaine
+donn\'e. Leur point de vue peut \^etre r\'esum\'e comme suit.
+Rappelons que l'approximation \'el\'ements finis s'\'ecrit sur un \'el\'ement $e$ d\'ecrivant le domaine $\Ome_e$~:
+\begin{equation}
+  \label{eq:approx_ef2}
+  \bfu(\bfx) \mid_{\Ome_e} = \sum_{i \in N_n} \sum_{\alpha} a_i^\alpha
+  \bfphi_i^\alpha(\bfx)
+\end{equation}
+o\'e $N_n$ est le nombre de noeuds de l'\'el\'ement $e$.
+Comme les degr\'es de libert\'e\index{degr\'es de libert\'e} d\'efinis en un noeud ont la m\^eme
+valeur pour tous les \'el\'ements connect\'es en ce noeud.
+Les approximations sur chaque \'el\'ement
+peuvent \^etre ``assembl\'ees''
+pour donner
+une approximation\index{Approximation} valable en tout point $\bfx$ du domaine~:
+\begin{equation}
+  \label{eq:approx_ef_glo}
+  \bfu(\bfx)  = \sum_{i \in N_n(\bfx)} \sum_{\alpha} a_i^\alpha \bfphi_i^\alpha(\bfx)
+\end{equation}
+o\'e $N_n(\bfx)$ est l'ensemble des noeuds de l'\'el\'ement contenant
+le point $\bfx$. Le domaine d'influence (support) de la fonction
+d'interpolation
+ $\bfphi_i^\alpha$ est l'ensemble des \'el\'ements connect\'es
+au noeud $i$. L'ensemble $N_n(\bfx)$ est donc \'egalement l'ensemble
+des noeuds dont le support couvre le point $\bfx$.
+L'approximation \'el\'ements finis~(\ref{eq:approx_ef_glo}) peut ainsi \^etre
+interpr\'et\'ee comme une particularisation
+de l'approximation~(\ref{eq:approx_efg}) utilis\'ee dans les m\'ethodes
+sans maillage~:
+\begin{itemize}
+\item le nuage de points est l'ensemble des noeuds du maillage;
+\item le domaine d'influence de chaque noeud est
+l'ensemble des \'el\'ements connect\'es \'e ce noeud.
+\end{itemize}
+Il est donc possible d'enrichir l'approximation \'el\'ements
+finis par les m\^emes techniques que celles utilis\'ees dans les m\'ethodes
+sans maillage. Voici l'approximation \'el\'ements finis enrichie
+qui permet de repr\'esenter la fonction $F(\bfx) \bfe_x$ sur le
+domaine $\Ome_F$~:
+\begin{equation}
+  \label{eq:approx_ef_enrichi}
+  \bfu(\bfx)  = \sum_{i \in N_n(\bfx)} \sum_{\alpha} \bfphi_i^\alpha a_i^\alpha   +
+  \sum_{i \in N_n(\bfx) \cap N_F}
+  \sum_{\alpha} b_i^\alpha \bfphi_i^\alpha(\bfx) F(\bfx)
+\end{equation}
+o\'e $N_F$ est l'ensemble des noeuds dont le support\index{Support} a une
+intersection avec le domaine $\Ome_F$.
+La preuve est obtenue en fixant \'e z\'ero
+les coefficients $a_i^\alpha$ et en prenant en compte
+le fait que les fonctions d'approximation \'el\'ements finis
+sont capables de repr\'esenter tous les modes rigides et
+donc le mode $\bfe_x$.
+Nous passons maintenant \'e l'utilisation concr\'ete
+de la partition de l'unit\'e pour
+la mod\'elisation de discontinuit\'es dans X-FEM.
+
+
+
+
+
+\section{Mod\'elisation de discontinuit\'es\index{Discontinuit\'es} avec X-FEM}
+\label{sec:model-de-disc}
+L'extension X-FEM de la m\'ethode des \'el\'ements finis,
+donne une grande
+flexibilit\'e dans la g\'en\'eration des maillages  4~:
+il n'est plus demand\'e au maillage de se conformer \'e des surfaces\index{Surfaces}
+qu'elles soient ext\'erieures ou internes. Pour arriver \'e cette
+flexibilit\'e,
+il faut que l'approximation soit capable de mod\'eliser des vides ou
+des discontinuit\'es au sein m\^eme des \'el\'ements. La m\'ethode la
+partition de l'unit\'e d\'evelopp\'ee par Melenk et Babu\v{s}ka (1996)
+est utilis\'ee \'e cette fin. Nous donnons dans cette section ces
+diff\'erents enrichissements. Ensuite, nous nous int\'eressons \'e la
+localisation (et l'\'evolution) de ces surfaces.
+
+
+
+\subsection{Revisite du double noeud~: la fonction Heaviside\index{Fonction!Heavyside}}
+
+L'id\'ee de l'utilisation de la partition de l'unit\'e pour repr\'esenter une
+discontinuit\'e a d\'ebut\'e par une revisite du
+concept de double noeud et sa g\'en\'eralisation~\cite{Moes:discont}.
+
+\twofigures{5cm}{crack}{5cm}{grid}{Un maillage de quatre \'el\'ements avec un double noeud (a); sans double noeud (b)}{fig:dbl_noeud}
+
+
+Avec des \'el\'ements finis conformes,
+la repr\'esentation d'un champ discontinu sur un maillage
+ne peut se faire qu'en bordure des \'el\'ements par l'utilisation
+de doubles noeuds. La figure~\ref{fig:crack} montre par exemple
+un maillage de 4 \'el\'ements dans lequel une discontinuit\'e
+a \'et\'e introduite par le biais d'un double noeud (noeuds 9 et 10).
+L'approximation \'el\'ements finis correspondante s'\'ecrit
+\begin{equation}
+\bfu^h = \sum_{i=1}^{10} \bfu_i \phi_i
+\label{eq:simdisp}
+\end{equation}
+o\'e $\bfu_i$ est le d\'eplacement (vecteur) au noeud  $i$ et $\phi_i$
+est la fonction de forme bi-lin\'eaire scalaire associ\'ee au noeud $i$.
+Chaque fonction d'approximation $\phi_i$ a un support  compact
+$\omega_i$ donn\'e par l'union des \'el\'ements connect\'es au noeud $i$.
+R\'e\'ecrivons (\ref{eq:simdisp}) afin de faire appara\'etre une
+approximation \'el\'ements finis correspondant \'e un maillage sans double
+noeud, figure~\ref{fig:grid}, et un terme suppl\'ementaire.
+D\'efinissons le d\'eplacement moyen $\bfa$ et le saut $\bfb$
+\begin{equation}
+\bfa = \frac{\bfu_{9} + \bfu_{10}}{2} \quad
+\bfb = \frac{\bfu_{9} - \bfu_{10}}{2}
+\label{eq:cfem}
+\end{equation}
+En inversant ce syst\'eme, il vient
+\begin{equation}
+\bfu_{9} = \bfa + \bfb \quad \bfu_{10} = \bfa - \bfb
+\end{equation}
+L'approximation \'el\'ements finis~(\ref{eq:simdisp}) peut alors
+se r\'e\'ecrire
+\begin{equation}
+\bfu^h = \sum_{i=1}^{8} \bfu_i \phi_i + \bfa (\phi_{9} + \phi_{10}) +
+\bfb (\phi_{9} + \phi_{10}) H(\bfx)
+\label{eq:last}
+\end{equation}
+o\'e $H(\bfx)$ est une fonction discontinue donn\'ee par
+\begin{equation}
+H(x,y) = \begin{cases}
+1 & \mbox{for}\quad y > 0 \\
+-1 & \mbox{for}\quad  y<0
+\end{cases}
+\label{hdef}
+\end{equation}
+La somme des fonctions d'approximation associ\'ees aux noeuds 9 et 10
+dans le maillage figure~\ref{fig:crack} correspond \'e la fonction
+d'approximation localis\'ee sur le noeud 11 dans le maillage figure~\ref{fig:grid}.
+On peut donc r\'e\'ecrire~(\ref{eq:last}) comme
+\begin{equation}
+\bfu^h = \sum_{i=0}^{8} \bfu_i \phi_i + \bfu_{11} \phi_{11}
++ \bfb \phi_{11} H(\bfx)
+\label{eq:last2}
+\end{equation}
+Les deux premiers termes du membre de droite correspondent
+\'e une approximation \'el\'ement fini classique sur le maillage
+figure~\ref{fig:grid}. La fonction d'approximation
+intervenant dans le
+troisi\'eme terme est le produit d'une fonction d'approximation
+classique
+$\phi_{11}$ par la fonction discontinue $H(\bfx)$.
+Ce troisi\'eme terme
+peut s'interpr\'eter comme un enrichissement de la base
+\'el\'ements finis par une technique de type partition de l'unit\'e.
+La d\'erivation que nous venons de mener sur un petit maillage de
+quatre \'el\'ements peut \^etre r\'eit\'er\'ee sur n'importe
+quel  maillage 1D, 2D ou 3D contenant une discontinuit\'e
+mod\'elis\'ee par doubles noeuds. Cette d\'erivation m\'enera au m\^eme
+constat~: la mod\'elisation d'une discontinuit\'e\index{Discontinuit\'e} par double noeud
+est \'equivalente \'e la mod\'elisation \'el\'ements finis classique
+si on lui ajoute des termes correspondant \'e l'enrichissement
+par la partition de l'unit\'e
+des noeuds situ\'es sur le parcours de la discontinuit\'e.
+Notons que les noeuds qui sont enrichis (ex-doubles noeuds)
+sont caract\'eris\'es par le
+fait que leur support est coup\'e en deux par la discontinuit\'e.
+
+\subsection{G\'en\'eralisation du double noeud}
+Supposons maintenant que l'on souhaite mod\'eliser une discontinuit\'e
+qui ne suit pas le bord des \'el\'ements. Nous
+proposons d'enrichir
+tous les noeuds dont le support est (compl\'etement) coup\'e en deux
+par la  discontinuit\'e~\cite{Moes:discont}.
+En ces noeuds, nous ajoutons un degr\'e
+de libert\'e (vectoriel) agissant sur la fonction d'approximation classique
+au noeud multipli\'ee par une fonction discontinue $H(\bfx)$ valant 1 d'un
+c\'et\'e de la fissure et -1 de l'autre.
+Par exemple, sur la figure~\ref{fig:uniform-heavyside}, les noeuds encercl\'es seront enrichis.
+
+% \twofigures{6cm}{uniform-heavyside}{6cm}{general-heavyside}{Surface de discontinuit\'e
+% plac\'ee sur un maillage uniforme (a) et non uniforme (b).
+% Les noeuds marqu\'es d'un point noir sont enrichis par la fonction Heaviside.}{fig:both_disc}
+\onefigure{6cm}{uniform-heavyside}{Surface de discontinuit\'e
+plac\'ee sur un maillage uniforme. Les noeuds marqu\'es d'un point noir sont enrichis par la fonction Heaviside.}
+
+
+\subsection{Mod\'elisation d'une fissure\index{Fissure}}
+
+Passons maintenant \'e une ligne de discontinuit\'e qui ne s\'epare pas le
+domaine en deux zones distinctes, c'est-\'e-dire une fissure. Un noeud
+dont le support n'est pas totalement coup\'e par la discontinuit\'e
+\index{Discontinuit\'e} ne peut \^etre enrichi par la fonction
+$H$\index{Fonction!Heavyside} car cela conduirait \'e allonger
+artificiellement la discontinuit\'e. Par exemple, si pour le maillage
+de la figure~\ref{fig:tip}, les noeuds $C$ et $D$ sont enrichis par
+la discontinuit\'e, la fissure sera active jusqu'au point $q$ (le
+champ de d\'eplacement sera discontinu jusqu'au point $q$). D'un autre
+c\'et\'e, si seuls les noeuds $A$ et $B$ sont enrichis par la
+discontinuit\'e, le champ de d\'eplacement n'est discontinu que jusqu'au
+point $p$ et la fissure appara\'et malheureusement plus courte.
+
+Afin de repr\'esenter la fissure sur sa ``bonne longueur'', les noeuds
+dont le support contient la pointe de fissure\index{pointe de
+fissure} (noeuds avec carr\'e figure~\ref{fig:tip}) sont enrichis avec
+des fonctions discontinues jusqu'au point $t$ mais pas au-del\'e. De
+telles fonctions sont fournies par les modes de d\'eplacement
+asymptotiques\index{Asymptotique} (\'elastiques si le calcul est
+\'elastique) en pointe de fissure. Cet
+enrichissement\index{Enrichissement}, d\'ej\'e utilis\'e
+par~\cite{TBlack:minim} et \cite{Stroub:GFEM1}, permet en outre des
+calculs pr\'ecis puisque les caract\'eristiques asymptotiques du champ
+de d\'eplacement sont incorpor\'ees dans le calcul.
+
+\onefigure{6cm}{tip}{Les noeuds entour\'es d'un carr\'e sont
+                            enrichis par les modes asymptotiques en
+                            pointe de fissure.}
+
+
+Nous sommes maintenant en mesure de d\'etailler la mod\'elisation par X-FEM
+d'une fissure compl\'ete dont la position est quelconque par rapport au maillage
+(voir illustration figure~\ref{fig:both}). L'approximation \'el\'ements finis enrichie s'\'ecrit~:
+
+\begin{eqnarray*}
+\bfu^h(\bfx) & = & \sum_{i\in I} \bfu_i \phi_i(\bfx) +
+\sum_{i\in L} \bfa_i \phi_i(\bfx) H(\bfx) \\ \nonumber
+& + & \sum_{i\in K_1} \phi_i(\bfx) (\sum_{l=1}^{4} \bfb_{i,1}^{l}  F^l_{1}(\bfx)) +
+\sum_{i\in K_2} \phi_i(\bfx) (\sum_{l=1}^{4} \bfb_{i,2}^{l}  F^l_{2}(\bfx)) \nonumber
+\label{eq:appgen}
+\end{eqnarray*}
+o\'e~:
+\begin{itemize}
+\item $I$ est l'ensemble des noeuds du maillage ;
+\item $\bfu_i$ est le degr\'e de libert\'e (vectoriel) classique au noeud $i$ ;
+\item $\phi_i$ est la fonction de forme (scalaire) associ\'ee au noeud $i$ ;
+\item $L\subset I$ est l'ensemble des noeuds enrichis par
+la discontinuit\'e et  les coefficients $\bfa_i$ sont les
+degr\'es de libert\'e (vectoriels) correspondants.
+Un noeud appartient \'e $L$ si son support est coup\'e par
+la fissure mais ne contient aucune de ses pointes (ces
+noeuds sont encercl\'es sur la figure~\ref{fig:both} dans
+le cas d'un maillage uniforme et non uniforme) ;
+
+\item $K_1\subset I$ et $K_2\subset I$ sont les ensembles
+des noeuds \'e enrichir pour mod\'eliser les fonds de fissures
+1 et 2, respectivement.
+Les degr\'es de libert\'e correspondants sont
+$\bfb_{i,1}^{l}$ et $\bfb_{i,2}^{l}$, $l=1,\ldots,4$.
+Un noeud appartient \'e $K_1$
+($K_2$)  si son support contient la premi\'ere (seconde)
+pointe de fissure. Ces noeuds sont entour\'es d'un carr\'e
+figure~\ref{fig:both}.
+\end{itemize}
+
+\twofigures{5cm}{uniform}{5cm}{general}{Fissure plac\'ee sur un maillage uniforme (a)
+et non uniforme (b). Les noeuds encercl\'es sont enrichis par la fonction $H(\bfx)$
+et les noeuds entour\'es d'un carr\'e sont enrichis par les modes asymptotiques \index{Asympotique!modes asymptotiques} en fond
+de fissure.}{fig:both}
+
+Les fonctions $F^l_1(\bfx), l=1,\ldots,4$ mod\'elisant le fond de fissure
+sont donn\'ees en \'elasticit\'e par~:
+\begin{eqnarray}
+\label{enrich_fun}
+\{F_1^l(\bfx)\} & \equiv \left\{ \sqrt{r}
+\mbox{sin}(\frac{\theta}{2}), \sqrt{r} \mbox{cos}(\frac{\theta}{2}),
+\sqrt{r}\mbox{sin}(\frac{\theta}{2})\mbox{sin}(\theta),
+\sqrt{r}\mbox{cos}(\frac{\theta}{2})\mbox{sin}(\theta) \right\}
+\end{eqnarray}
+o\'e $(r,\theta)$ sont les coordonn\'ees polaires
+dans les axes locaux en fond de fissure
+(``tip'' 1 sur la  figure~\ref{fig:local}).
+\onefigure{6cm}{local}{Axes locaux pour les coordonn\'ees polaires en pointe de fissure.}
+
+Les figures \ref{fig:f1-1}, \ref{fig:f1-2}, \ref{fig:f1-3} et \ref{fig:f1-4} illustrent respectivement les fonctions
+ $\{F_1^1(\bfx)\}$, $\{F_1^2(\bfx)\}$ , $\{F_1^3(\bfx)\}$ et  $\{F_1^4(\bfx)\}$.
+
+\fourfigures{5cm}{f1-1}{5cm}{f1-2}{5cm}{f1-3}{5cm}{f1-4}{visualisation des fonctions $\{F_1^1(\bfx)\}$ (a) ; $\{F_1^2(\bfx)\}$ (b)~; $\{F_1^3(\bfx)\}$ (c)~; $\{F_1^4(\bfx)\}$ (d)~;}
+
+Il est \'e noter que la deuxi\'eme fonction est discontinue sur la fissure ($cos(\frac{2 8pi}{2} = - cos(0) $).
+De mani\'ere similaire les fonctions $F^l_2(\bfx)$ sont \'egalement
+donn\'ees par~(\ref{enrich_fun}); le rep\'ere de coordonn\'ees
+polaires \'etant maintenant d\'efini pour la seconde pointe de fissure.
+
+
+
+
+
+
+
+
+
+La fonction $H(\bfx)$ est discontinue sur la fissure
+et de valeur constante de part et d'autre de celle-ci~:
++1.0 d'un c\'et\'e et -1.0 de l'autre.
+La d\'etermination des fonctions d'enrichissement F et H en
+un point quelconque s'exprime ais\'ement si l'on repr\'esente
+la fissure par level sets. Ceci sera expos\'e plus loin dans
+cette section.
+
+\subsection{Extension au 3D, plaques fissur\'ees et fissures \'e branches\index{Fissure!branches}}
+L'extension au cas tridimensionnel de la mod\'elisation de fissures
+par X-FEM a \'et\'e r\'ealis\'ee par~\cite{Sukumar:3D}. Cette extension est
+assez directe. Tout comme dans le cas bi-dimensionnel, le fait qu'un
+noeud soit enrichi ou non et le type d'enrichissement d\'epend de la
+position relative du support associ\'e au noeud par rapport au front
+de la fissure et \'e son int\'erieur. Le support d'un noeud est un
+volume, le front de fissure une courbe (ou plusieurs courbes
+disjointes) et l'int\'erieur de la fissure est une surface.
+
+L'extension aux plaques pour le mod\'ele de
+Reissner-Mindlin a \'et\'e r\'ealis\'ee dans
+~\cite{Dolbow:melosh} et \cite{Dolbow:plate2}.
+La formulation \'el\'ements finis de d\'epart
+est celle du MITC4 d\'evelopp\'ee par
+Bathe et al. (1990)\nocite{Bathe:MITC}
+qui est connue pour ses bonnes propri\'et\'es
+vis-\'e-vis du bloquage en cisaillement.
+Les champs de rotation et de d\'eplacement transversal
+sont enrichis pour mod\'eliser
+la fissure. L'enrichissement en fond de fissure
+est bas\'e sur les champs asymptotiques
+obtenus par Knowles et Wang (1960). \nocite{Knowles:plate}
+
+Lorsque plus de deux segments aboutissent
+en un point de la fissure,
+(fissures en Y ou en croix),
+un soin particulier doit \^etre apport\'e \'e
+l'enrichissement. Cette extension a \'et\'e r\'ealis\'ee
+dans \cite{Daux:holes}.
+En  un point o\`u plus de deux branches
+aboutissent, l'enrichissement fait intervenir une fonction
+dite de jonction.
+Dans le cas o\`u le maillage se conforme \'e la fissure
+\'e branches, l'enrichissement conduit \'e la m\^eme mod\'elisation
+que la mod\'elisation classique par doubles noeuds
+(et triples au noeud A).
+Les diff\'erents
+types d'enrichissement pour une fissure en Y sont illustr\'es
+figure~\ref{fig:enrich_mesh2}.
+
+       \onefigure{7cm}{enrich_mesh2}{Strat\'egie pour la mod\'elisation\
+       d'une fissure en Y. Les diff\'erents types d'enrichissement sont
+       indiqu\'es.}
+
+
+Dans le cadre de X-FEM,
+la mod\'elisation de la cin\'ematique
+de bandes de cisaillement est un
+cas particulier de la mod\'elisation de fissures~:
+une bande de cisaillement est une fissure sans fond
+\'e discontinuit\'e purement tangentielle.
+Tout noeud dont le support est coup\'e par la bande
+est enrichi \'e l'aide d'une fonction vectorielle
+parall\'ele \'e la bande et dont la direction s'inverse
+au passage de la bande~\cite{Belytschko:circle}.
+La mod\'elisation de discontinuit\'e de type
+rotation (cr\'eation du mode rigide
+de rotation pour un disque trac\'e sur le maillage)
+est \'egalement propos\'ee dans~\cite{Belytschko:circle}.
+
+
+
+\subsection{Mod\'elisation de trous}
+\label{sec:trou_un}
+La mod\'elisation classique
+de trous par la m\'ethode des \'el\'ements finis
+impose au maillage de se conformer \'e la fronti\'ere
+de ces trous. La m\'ethode X-FEM permet de se d\'ebarrasser
+de cette contrainte.
+Pour un noeud dont le support coupe la fronti\'ere
+du trou, la fonction d'approximation classique
+est multipli\'ee par une fonction valant 1.0 dans
+la mati\'ere et 0.0 dans les trous.
+Un noeud dont le support est compl\'etement
+\'e l'int\'erieur du trou ne donne pas
+lieu \'e la cr\'eation de degr\'es de libert\'e.
+Il est \'e noter qu'un noeud peut \^etre actif m\^eme si il
+est situ\'e dans un trou. Ce qui importe est le fait que
+son support couvre de la mati\'ere ou non.
+La figure~\ref{fig:mesh_holes}
+illustre la s\'election des noeuds
+\'e \'eliminer et les noeuds pour lesquels
+les fonctions d'approximation  doivent
+\^etre modifi\'ees dans le cas de deux trous
+plac\'es sur un maillage.
+
+    \onefigure{7cm}{mesh_holes}{S\'election des noeuds pour le traitement des trous dans X-FEM.}
+
+
+Au niveau de l'impl\'ementation, la m\'ethode
+propos\'ee ci-dessus revient pour les
+\'el\'ements coup\'es par le trous \'e
+restreindre l'int\'egration
+\'e la ``fraction mati\'ere de l'\'el\'ement''\cite{Daux:holes}.
+
+
+\section{Localisation et \'evolution des surfaces par level sets\index{level sets}}
+\label{sec:local-et-evol}
+Dans la section pr\'ec\'edente, les fronti\'eres des trous\index{Trous}
+et des fissures \'etaient d\'ecrites par des entit\'es g\'eom\'etriques
+(segments de droite).
+Cette description peut-\^etre qualifi\'ee d'explicite
+(ou ``lagrangienne'') puisque
+la fronti\'ere est d\'ecrite par l'ensemble des points appartenant
+\'e cette fronti\'ere.
+Une autre description, implicite (``eul\'erienne''), est possible.
+
+\subsection{Description d'une surface par level set\index{Surface!level set}}
+
+Cette description consiste \'e transformer la repr\'esentation explicite
+de la fronti\'ere en un champ de valeur d\'efinie dans un voisinage de
+cette fronti\'ere. La vision eul\'erienne d'une surface et les
+algorithmes de propagation qui en d\'ecoulent sont \'e la base de la
+m\'ethode des level sets dont les pionniers sont Sethian et
+Osher~\cite{osher-sethian,Sethian:book}. Le champ dont nous parlons
+est appel\'e ``level set'' que nous traduirons par fonction de niveau.
+La fonction de niveau associ\'ee \'e une fronti\'ere donne en chaque noeud
+du maillage la distance de ce point \'e la fronti\'ere. Le signe plac\'e
+devant la distance indique si le point se trouve d'un c\'et\'e ou de
+l'autre de la fronti\'ere. Pour un trou, la fonction de niveau est
+choisie arbitrairement n\'egative \'e l'int\'erieur du trou et positive \'e
+l'ext\'erieur du trou avec une valeur donnant la plus courte distance
+\'e la fronti\'ere du trou. L'iso-z\'ero de la fonction de niveau donne la
+position du bord du trou. En pratique, la fonction de niveau est
+calcul\'ee aux noeuds et interpol\'ee entre les noeuds par les fonctions
+de base \'el\'ements finis classiques. Pour des \'el\'ements triangulaires,
+l'iso z\'ero est donc un segment de droite et pour un t\'etra\'edre un
+morceau de plan. Une fois cette fonction de niveau cr\'e\'ee, elle
+permet de g\'erer les op\'erations g\'eom\'etriques n\'ecessaires \'e la
+mod\'elisation de trous par X-FEM, \'e savoir~: trouver les \'el\'ements
+coup\'es par le bord d'un trou, \'eliminer les noeuds dont le support
+est totalement \'e l'int\'erieur d'un trou et modifier la fonction
+d'approximation associ\'ee aux noeuds dont le support est coup\'e par le
+bord d'un trou.
+
+Une fissure peut \'egalement \^etre rep\'er\'ee par level sets.
+Alors que pour un trou une seule fonction suffit, il en faut deux
+pour une fissure. En effet, une fissure ne s\'epare pas un domaine
+en deux zones distinctes.
+La premi\'ere level set, baptis\'ee $ls_\mathrm{n}$,
+donne la position de la surface sur laquelle est pos\'ee la fissure.
+La seconde, baptis\'ee $ls_\mathrm{t}$, permet de localiser le front
+de la fissure sur cette surface. La figure~\ref{fig:lsn_lst}
+illustre ces deux level sets pour la
+localisation d'une fissure en
+2D et  en 3D.
+
+
+    \twofigures{7cm}{lset1_color}{7cm}{lset3d}{Localisation d'un fissure par deux
+    level sets en 2D (a) et 3D (b).}{fig:lsn_lst}
+
+
+Les level sets $ls_\mathrm{n}$ et $ls_\mathrm{t}$ donnent respectivement les distances normale et
+tangentielle \'e la fissure.
+En un point proche du front de fissure, le calcul des fonctions
+d'enrichissement~(\ref{enrich_fun}) n\'ecessite le calcul des param\'etres
+$r$ et $\theta$ dont la signification g\'eom\'etrique est donn\'ee sur la
+figure~\ref{fig:local_axis}.
+Ces deux param\'etres ont une expression simple en terme des deux
+level sets~:
+\begin{equation}
+  \label{eq:rtheta}
+  r = \sqrt{ls_\mathrm{n}^2 + ls_\mathrm{t}^2}, \quad \theta = \tan^{-1}(\frac{ls_\mathrm{n}}{ls_\mathrm{t}})
+\end{equation}
+
+
+
+      \onefigure{6cm}{local_axis}{Signification des param\'etres $r$ et $\theta$ en front de fissure.}
+
+\subsection{Evolution d'une level set sous un champ de vitesse \index{Level sets!\'evolution}}
+
+Nous consid\'erons ici une fonction level set, $\phi$,
+soumise \'e un champ de
+vitesse, $\bfV$ (pour fixer les id\'ees, une cavit\'e qui croit dans un
+mat\'eriau).
+La mise \'e jour de la level set pour conna\'etre la nouvelle
+position de la cavit\'e apr\'es un pas de temps $\Delta t$ se d\'ecompose en
+trois \'etapes \cite{Sethian:book}~:
+\begin{itemize}
+\item \underline{Phase d'extension de la vitesse~:} la vitesse n'est en
+    g\'en\'eral connue que sur la surface physique consid\'er\'ee
+    (cavit\'e par exemple). Or, pour mettre \'e jour
+    la level set (voir \'equation~(\ref{eq:1})), il
+    faut disposer de cette vitesse partout. La premi\'ere phase
+    consiste donc en une ``extension'' du champ des vitesses
+    depuis la surface vers tout le domaine.
+    Dans cette phase, on cherche \'e r\'esoudre  l'\'equation~:
+    \begin{equation}
+    \nabla\phi.\nabla V_{\phi}=0
+    \label{eq:3}
+    \end{equation}
+    qui impose \'e la vitesse normale de s'\'etendre de mani\'ere
+    constante selon les lignes de plus grandes pentes.
+
+\item \underline{Phase de propagation~:\index{Propagation}} elle permet de
+    calculer la nouvelle level set. L'\'evolution de la level set
+    est donn\'ee par l'\'equation
+    \begin{equation}
+        \frac{\partial\phi}{\partial t}+\bfV \cdot  \nabla\phi  = 0
+        \label{eq:1}
+    \end{equation}
+    Cette \'equation est une \'equation de transport sous le champ
+    de vitesse $\bfV$.
+    Comme le gradient de la level set repr\'esente la normale au iso-surface,
+    il est aussi courant d'\'ecrire~(\ref{eq:1}) sous la forme
+    \begin{equation}
+        \frac{\partial\phi}{\partial t}+V_{\phi}\left|\nabla\phi\right|=0
+        \label{eq:2}
+    \end{equation}
+    o\`u $V_{\phi}$ est la vitesse normale de la surface.
+    L'\'equation~(\ref{eq:2}) est discr\'etis\'ee sur un pas
+    de temps pour donner la nouvelle valeur
+    de la level set \'e l'issue de ce pas de temps.
+\item \underline{Phase de r\'e-initialisation~:} la nouvelle valeur de la
+    level set
+    n'est plus n\'ecessairement rigoureusement
+    une distance sign\'ee apr\'es propagation.
+    Il est alors bon de la
+    r\'e\-initia\-liser en r\'esolvant l'\'equation~(\ref{eq:4})~:
+    \begin{equation}
+        \left|\nabla\phi\right|=1
+        \label{eq:4}
+    \end{equation}
+\end{itemize}
+
+\ajouter{peut-\'etre faut-il d\'etailler plus d'o\'e viennent ces \'equations...pour moi ce n'est pas clair.De m\'eme,
+ l'\'equivalence avec \ref{eq:hamilton38} et \ref{eq:hamilton39} ne saute pas aux yeux  }
+
+
+Les \'equations (\ref{eq:3}) et (\ref{eq:4}) se pr\'etent mal
+\'e une r\'esolution directe, on leur pr\'ef\'ere la recherche
+de la solution stationnaire des probl\'emes suivants~:
+\begin{equation}
+    \frac{\partial
+    V_{\phi}}{\partial\tau}+\textrm{sign}(\phi)\frac{\nabla\phi}{\left|\nabla\phi\right|}.\nabla V_{\phi}=0
+    \label{eq:hamilton38}
+\end{equation}
+\begin{equation}
+    \frac{\partial\phi}{\partial\tau}+\textrm{sign}\left(\phi\right)\left(\left|\nabla\phi\right|-1\right)=0
+    \label{eq:hamilton39}
+\end{equation}
+Il ne faut pas confondre le param\'etre $\tau$ intervenant dans ces
+deux \'equations (temps virtuel vers
+une solution stationnaire) et le temps physique $t$ intervenant dans
+(\ref{eq:2}).
+
+On constate que les \'equations \'e r\'esoudre pour
+la propagation d'une level set sont toutes
+de la m\'eme forme (dite de Hamilton-Jacobi)~:
+\begin{equation}
+\frac{\partial\ldots}{\partial t^*}+F \left|\nabla\ldots\right|=f
+\end{equation}
+o\'e $t^*$ est le temps r\'eel ou un temps virtuel.
+La signification des op\'erateurs $F$ et $f$ est donn\'ee dans le
+tableau ci-dessous.
+\begin{table}[htbp]
+\begin{center}\begin{tabular}{|c|p{6cm}|c|c|c|}
+\hline
+&
+Phase&
+$\ldots$&
+$F$&
+$f$\tabularnewline
+\hline
+$(1)$&
+Extension des vitesses&
+$V_{\phi}$&
+$\textrm{sign}(\phi)\frac{\nabla\phi}{\left|\nabla\phi\right|}\cdot\frac{\nabla V_{\phi}}{\left|\nabla V_{\phi}\right|}$&
+$0$\tabularnewline
+\hline
+$(2)$&
+Propagation des level sets &
+$\phi$&
+$V_{\phi}$&
+$0$\tabularnewline
+\hline
+$(3)$&
+R\'einitialisation&
+$\phi$&
+$\textrm{sign}(\phi)$&
+$\textrm{sign}(\phi)$ \tabularnewline
+\hline
+\end{tabular}\end{center}
+\end{table}
+
+La r\'esolution de cette \'equation de Hamilton-Jacobi \index{Hamilton-Jacobi}
+sur un maillage \'el\'ements finis quelconque peut se faire
+par exemple \'e l'aide d'une m\'ethode de Runge et Kutta du second ordre en temps
+et avec une formulation explicite de mise \'e jour des
+noeuds \cite{barth-sethian,OsherFedkiw02}.
+Il est \'e noter que la fonction \'e propager
+est tr\'es  r\'eguli\'ere
+(contrairement \'e une approche de type Volume Of Fluid).
+Enfin, une condition de stabilit\'e classique (CFL)
+p\'ese sur le pas de temps
+dont la valeur d\'epend de la taille des \'el\'ements et de
+l'op\'erateur $F$.
+
+Les fissures \'etant repr\'esent\'ees par deux level sets, ces derni\'eres
+doivent \^etre propag\'ees. L'ordre des op\'erations doit faire l'objet
+d'un soin particulier \cite{Moes3DGrowthII}. Outre la
+r\'e-initialisation, une r\'e-orthogonalisation est effectu\'ee pour
+s'assurer que les gradients des deux level sets restent orthogonaux.
+
+
+
+
+\subsection{Mod\'elisation de discontinuit\'es dans la d\'eriv\'ee du champ}
+
+Les surfaces de discontinuit\'e
+dans la d\'eriv\'ee du champ sont importantes  pour mod\'eliser les interfaces entre mat\'eriaux.
+
+
+Consid\'erons un domaine $\Ome$ compos\'e
+de deux mat\'eriaux occupant les r\'egions
+$\Ome_1$ et $\Ome_2$, figure~\ref{fig:1dbar}.
+Pour mod\'eliser l'interface
+mat\'eriau situ\'ee sur
+$\Gam = \overline{\Ome_1} \cap  \overline{\Ome_2}$,
+il faut que le champ d'approximation en d\'eplacement
+contienne des modes discontinus de d\'eformation
+au passage de l'interface, cette discontinuit\'e
+\'etant une caract\'eristique importante
+de la solution du probl\'eme.
+
+
+
+    \onefigure{5cm}{1dbar}{Un probl\'eme bi-mat\'eriaux avec une interface
+  non maill\'ee.}
+
+
+Lorsque le maillage respecte l'interface,
+la d\'eformation \'el\'ements finis est discontinue au travers
+de l'interface par le fait
+de la faible r\'egularit\'e ($C^0$)
+de l'approximation \'el\'ements finis.
+Lorsque le maillage ne respecte pas l'interface,
+la base \'el\'ements finis doit \^etre enrichie \'e l'aide de
+fonctions \'e d\'eriv\'ee discontinue sur l'interface.
+L'approximation enrichie s'\'ecrit
+de mani\'ere g\'en\'erale~:
+\begin{equation}
+\bfu^h(\bfx)  =  \sum_{i\in I} \bfu_i \phi_i(\bfx) +
+\sum_{i\in D} \bfa_i \phi_i(\bfx) F(\bfx)
+\end{equation}
+o\'e $D$ est l'ensemble des noeuds dont au moins un
+des \'el\'ements du support
+est coup\'e par l'interface mat\'eriau $\Gam$ et
+$F(\bfx)$ est une fonction continue mais
+\'e d\'eriv\'ee discontinue sur l'interface.
+La fonction de niveau $ls(\bfx)$ associ\'ee
+\'e l'interface donne la position de cette
+interface (contour sur lequel $ls = 0$) et
+sa valeur absolue repr\'esente en tout point de $\Ome$
+la distance \'e l'interface.
+La fonction $|ls(\bfx)|$ est donc continue
+mais \'e d\'eriv\'ee discontinue sur l'interface.
+C'est un choix possible pour la fonction d'enrichissement
+$F$ \cite{Sukumar:inclusion}.
+
+
+       \onefigure{9cm}{fct_enrich_bw}{Diff\'erents choix pour la fonction
+  d'enrichissement associ\'ee \'e une interface entre deux mat\'eriaux.}
+
+
+
+Afin de tester ce choix,
+prenons le probl\'eme d'un carr\'e compos\'e de deux mat\'eriaux,
+figure~\ref{fig:1dbar}. La fonction
+$F^1 = |ls(\bfx)|$ est repr\'esent\'ee
+figure~\ref{fig:fct_enrich_bw} pour une coupe selon $y=0$.
+Les coefficients de Poisson
+des deux mat\'eriaux sont pris \'egaux \'e z\'ero pour
+rendre le probl\'eme unidimensionnel selon $x$ mais
+les modules de Young sont diff\'erents~:
+$E_1 = 1$ et $E_2 = 10$. Le bord gauche du carr\'e
+est fix\'e alors que le bord droit est soumis \'e un
+d\'eplacement de valeur 1.0 selon $x$.
+La solution en d\'eplacement de ce probl\'eme est lin\'eaire
+de part et d'autre de l'interface et \'e
+d\'eriv\'ee normale discontinue
+sur l'interface.
+
+
+
+Si le maillage se conforme \'e l'interface, la solution \'el\'ements finis
+classique co\'encide avec la solution exacte. Si par contre, le
+maillage ne se conforme pas \'e l'interface, l'erreur est diff\'erente
+de z\'ero. L'erreur relative en \'energie pour le calcul \'el\'ements finis
+classique est donn\'ee dans la seconde colonne du tableau~\ref{tab:1D}
+pour un maillage de $10 \times 10$ \'el\'ements en fonction du d\'efaut
+d'alignement, $\delta$, du maillage par rapport \'e l'interface. Afin
+de r\'eduire cette erreur, enrichissons les noeuds dont le support
+coupe l'interface \'e l'aide de la fonction $F^1$. Les erreurs sont
+donn\'ees dans la troisi\'eme colonne du tableau~\ref{tab:1D}. Notons
+que lorsque $\delta=0$ aucun noeud n'est enrichi car cela conduirait
+\'e une matrice de raideur singuli\'ere; la fonction $F^1$ \'etant d\'ej\'e
+contenue dans la base \'el\'ements finis classique. Les erreurs obtenues
+avec X-FEM sont plus faibles que pour le calcul \'el\'ements finis
+classique mais encore \'elev\'ees en regard de la simplicit\'e de la
+solution exacte.
+
+
+Consid\'erons une autre fonction
+d'enrichissement\index{Enrichissement} $F^1(\bfx)$ r\'egularis\'ee
+repr\'esent\'ee figure~\ref{fig:fct_enrich_bw}. Cette fonction co\'encide
+avec $|ls(\bfx)|$ sur les \'el\'ements coup\'es par l'interface et est
+constante en dehors de ces \'el\'ements. L'erreur \index{Erreur}
+obtenue, colonne~4 du tableau~\ref{tab:1D}, est maintenant z\'ero
+num\'eriquement. On peut d'ailleurs montrer que cet enrichissement
+permet \'e l'approximation de repr\'esenter parfaitement la solution
+exacte.
+
+\begin{table}[htb]
+\begin{center}
+
+\begin{tabular}{c|c|cc} \hline
+%& & \multicolumn{2}{c}{} \\
+      & FEM &\multicolumn{2}{c}{X-FEM} \\
+$\delta$ & & $F^1$ & $F^1$ + r\'egularisation \\ \hline
+%% & & \\ \hline
+0.00 & $3.0 \times 10^{-8}$  & $3.0 \times 10^{-8}$   &  $3.0 \times 10^{-8}$ \\ \hline
+0.01 & $2.6 \times 10^{-2}$ &  $8.3 \times 10^{-2}$ & $3.0 \times 10^{-8}$  \\
+0.05 & $4.9 \times 10^{-2}$ &  $1.6 \times 10^{-1}$ & $2.8 \times 10^{-8}$  \\
+0.10 & $5.6 \times 10^{-2}$ &  $1.8 \times 10^{-1}$ & $2.1 \times 10^{-8}$  \\
+0.15 & $5.1 \times 10^{-2}$   &  $1.8 \times 10^{-1}$ & $3.8 \times 10^{-8}$  \\
+0.19 & $2.2 \times 10^{-2}$   &  $1.6 \times 10^{-1}$ & $3.6 \times 10^{-8}$  \\ \hline
+\end{tabular}
+\vspace*{0.1in}
+\caption{Erreur relative en \'energie en fonction de la position
+de l'interface (probl\'eme figure~\ref{fig:fct_enrich_bw})
+pour le calcul \'el\'ements finis classique (FEM) et le calcul par
+X-FEM pour deux types de fonction d'enrichissement.}
+\label{tab:1D}
+\end{center}
+\end{table}
+
+
+Consid\'erons maintenant un exemple o\`u l'interface mat\'eriau n'est pas
+rectiligne. La figure~\ref{fig:bimaterial} montre le probl\'eme d'une
+inclusion \'elastique circulaire. Le chargement en d\'eplacement est
+normal \'e la surface ext\'erieure de rayon $b$
+\cite{Sukumar:inclusion}. Dans le mod\'ele num\'erique, on consid\'ere un
+carr\'e ($L \times L$, $L = 2$) avec une inclusion circulaire en son
+centre de rayon $a=0.4$. Sur le bord de ce carr\'e, les tractions
+exactes correspondant au probl\'eme figure~\ref{fig:bimaterial} (avec
+$a = 0.4$ et $b = 2.0$) sont impos\'ees.
+
+
+\onefigure{6cm}{bimaterial}{Le probl\'eme d'une inclusion circulaire \'elastique.}
+
+
+
+Des maillages quasi-uniformes d'\'el\'ements
+triangulaires \'e trois noeuds et de plus en plus raffin\'es sont
+utilis\'es pour \'etudier la convergence de l'erreur
+en \'energie. La figure \ref{fig:graph2Dinclusion} donne la
+convergence \index{Convergence} en \'energie dans diff\'erents cas de figure.
+La courbe ``FEM'' correspond \'e une approche \'el\'ements finis
+classique dans laquelle le maillage respecte l'interface.
+La convergence est d'ordre 1 conform\'ement \'e la pr\'evision
+th\'eorique. La courbe ``FEM non conforming'' correspond \'e un
+calcul \'el\'ements finis standard avec un maillage ne respectant
+pas l'interface. La convergence est tr\'es m\'ediocre et explique la
+n\'ecessit\'e dans l'approche \'el\'ements finis de mailler les
+interfaces
+mat\'eriaux.
+La courbe ``XFEM 1 + smoothing'' correspond \'e l'enrichissement
+avec $F^1$ r\'egularis\'e \index{Enrichissement!r\'egularis\'e}.
+La fonction  $F^1$ r\'egularis\'ee
+est \'egale \'e  la valeur absolue de la level set sur les
+\'el\'ements coup\'es par l'interface mat\'eriau et est
+``la plus constante possible'' en dehors de ces
+\'el\'ements \cite{Sukumar:inclusion}.
+Enfin, la courbe ``XFEM 2'' donne la convergence pour un nouvel
+enrichissement propos\'e dans \cite{MoesCloirec02}.
+La fonction d'enrichissement s'\'ecrit
+\begin{equation}
+F^2(\bfx) = \sum_i  |ls_i| N_i(\bfx)  - | \sum_i ls_i N_i(\bfx) |
+\label{eq:5}
+\end{equation}
+Il s'agit de la diff\'erence entre l'interpol\'ee des valeurs
+absolues nodales de la level set et la valeur absolue de la level
+set.
+Ce dernier enrichissement donne une convergence qui semble optimale.
+Cette fonction d'enrichissement n'est non nulle que sur les
+\'el\'ements coup\'es par l'interface. Elle est illustr\'ee sur la
+figure~\ref{fig:fct_enrich_bw} (fonction $F^2$).
+
+
+
+ \onefigure{13cm}{graph2Dinclusion_3}{Convergence de l'erreur
+pour une inclusion circulaire. La valeur de $\alpha$ indique le taux de
+convergence en fonction de la taille moyenne des \'el\'ements
+(calcul\'ee par $h=\sqrt{2 A/N}$ o\`u $A$ est l'aire du domaine et N le
+nombre d'\'el\'ements).}
+
+
+
+La m\'eme \'etude de convergence a \'et\'e r\'ealis\'ee en 3D pour une
+inclusion sph\'erique.
+Les convergences observ\'ees sont donn\'ees sur la
+figure~\ref{fig:graph3Dinclusion}. On note \'e nouveau que
+l'enrichissement (\ref{eq:5}) semble donner une convergence optimale.
+
+
+\onefigure{13cm}{graph3Dinclusion_4}{Convergence de l'erreur
+pour une inclusion sph\'erique. La valeur de $\alpha$ indique le taux de
+convergence en fonction de la taille moyenne des \'el\'ements
+(calcul\'ee par $h=(6 V/N)^{1/3}$ o\`u $V$ est le volume du domaine
+ du domaine et N le nombre d'\'el\'ements).}

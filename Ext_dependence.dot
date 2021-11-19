@@ -1,0 +1,28 @@
+digraph E {
+    xInterfaceMumps -> mumps
+    xInterfaceMumps -> mpi
+    mumps -> blas
+    mumps -> mpi
+    mumps -> metis
+    mumps -> ParMetis
+    mumps -> scotch
+    mumps -> ptScotch
+    mumps -> scalapack
+    xInterfacePastix -> pastix
+    xInterfacePastix -> mpi
+    pastix -> lapack
+    pastix -> mpi
+    xInterfaceSuperLU -> superlu
+    superlu -> blas
+    xInterfaceTaucs -> taucs
+    taucs -> lapack
+    taucs -> blas
+    xGeom -> CGAL
+    xGeom -> ANN
+    CGAL -> gmp
+    CGAL -> mpfr
+    xInterfaceParMetis->ParMetis
+    xInterfaceParMetis->mpi
+    xTool->mpi
+}
+

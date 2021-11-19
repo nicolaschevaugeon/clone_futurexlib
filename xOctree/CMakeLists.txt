@@ -1,0 +1,67 @@
+cmake_minimum_required(VERSION 3.13...3.19)
+
+
+
+message(STATUS "=============== --")
+message(STATUS "entering xOctree --")
+message(STATUS "=============== --")
+
+
+project(
+    xOctree
+    VERSION 1.0
+    LANGUAGES CXX)
+
+# Only do these if this is the main project, and not if it is included through add_subdirectory
+if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
+    # Enforce C++17 as required by the compiler
+    set(CMAKE_CXX_STANDARD 17)
+    set(CMAKE_CXX_STANDARD_REQUIRED ON)
+    set(CMAKE_CXX_EXTENSIONS OFF)
+    
+    # By default, we build shared libs
+    set(BUILD_SHARED_LIBS "SHARED")
+endif()
+
+
+
+set(XOCTREE_SOURCE
+# Headers   
+src/oAlgorithm.h
+src/oExport.h
+src/oField.h
+src/oKeyManager.h
+src/oLevelSet.h
+src/oLevelSetOperators.h
+src/oMapping.h
+src/oOctree.h
+src/oTopo.h
+# Sources
+src/oExport.cc
+src/oKeyManager.cc
+src/oLevelSet.cc
+src/oLevelSetOperators.cc
+src/oOctree.cc
+src/oOctreeAnisotropic.cc
+src/oTopo.cc
+)
+
+
+add_library(xOctree ${BUILD_SHARED_LIBS} ${XOCTREE_SOURCE})
+target_include_directories(xOctree PUBLIC src)
+
+
+# Make alias
+add_library(xOctree::xOctree ALIAS xOctree)
+# Export to a Config.cmake script
+export(TARGETS xOctree NAMESPACE xOctree:: FILE xOctreeConfig.cmake)
+set(CMAKE_EXPORT_PACKAGE_REGISTRY ON)
+export(PACKAGE xOctree)
+
+# Install
+install_target_in_destination(xOctree)
+
+# Tests
+#if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME AND BUILD_TESTING)
+#add_subdirectory(test)
+#endif()

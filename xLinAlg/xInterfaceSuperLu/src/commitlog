@@ -1,0 +1,37 @@
+****************************************************
+****************************************************
+Sept 2 2008 Nicolas Chevaugeon nicolas.chevaugeon@ec-nantes.fr
+****************************************************
+****************************************************
+modified file :
+ *xLinearSystemSolverLU.h, added :
+  typedef xCSRMatrix xLinearSystemSolverLU::matrix_type
+  typedef xCSRVector xLinearSystemSolverLU::vector_type
+  
+****************************************************
+****************************************************
+Aug 29 2008 Nicolas Chevaugeon nicolas.chevaugeon@ec-nantes.fr
+****************************************************
+****************************************************
+
+Added files : 
+commitlog (the present file)
+
+Modified Files:
+
+* File:  xLinearSystemSolverLU.h, xLinearSystemSolverLU.cc
+member solve had an interface change :
+int solve(xCSRMatrix * A, xCSRVector& RHS, xCSRVector& SOL );
+changed to 
+int solve(xCSRMatrix & A, const xCSRVector& RHS, xCSRVector& SOL );
+
+RHS is now a const ref, and A is a reference to a xCSRMatrix, instead of a pointer. Not that a reference to a matrice is passed and not a const ref ! the solve is 'inplace' !
+
+a new state is added for this class : verbose.
+it can be set with void xLinearSystemSolverLU::setVerbosity(bool _verbose).
+
+if verbose is true, lots of details about the solve will be put on screen.
+if verbose =false, solve print nothing.
+
+verbose=false is the default value.
+

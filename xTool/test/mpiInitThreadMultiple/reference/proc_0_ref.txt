@@ -1,0 +1,4 @@
+proc 0 ( proc dump 0 )thread 0 got 4
+proc 0 ( proc dump 0 )thread 1 got 8
+proc 0 ( proc dump 0 )thread 2 got 12
+proc 0 ( proc dump 0 )thread 3 got 16

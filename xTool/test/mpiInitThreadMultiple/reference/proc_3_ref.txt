@@ -1,0 +1,4 @@
+proc 3 ( proc dump 3 )thread 0 got 40
+proc 3 ( proc dump 3 )thread 1 got 80
+proc 3 ( proc dump 3 )thread 2 got 120
+proc 3 ( proc dump 3 )thread 3 got 160

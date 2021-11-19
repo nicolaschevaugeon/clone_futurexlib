@@ -1,0 +1,15 @@
+### I'M PROC 3
+Mesh statistc for current partition : 
+ V 0 E 0 F 0 R 0
+## FIRST PASS RANDOM PARTITIONING ON 2 PARTITIONS
+Mesh statistc for current partition : 
+ V 0 E 0 F 0 R 0
+## SECOND PASS METIS PARTITIONNING ON 2 PARTITIONS
+Mesh statistc for current partition : 
+ V 0 E 0 F 0 R 0
+## THIRD PASS METIS PARTITIONNING -> BACK TO 1 PARTITION
+Mesh statistc for current partition : 
+ V 0 E 0 F 0 R 0
+## FOURTH PASS METIS PARTITIONNING 4 PARTITIONS
+Mesh statistc for current partition : 
+ V 50 E 194 F 243 R 98

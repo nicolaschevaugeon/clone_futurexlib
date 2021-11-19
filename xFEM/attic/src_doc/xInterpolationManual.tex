@@ -1,0 +1,169 @@
+\clearpage
+\section{la notions d'approximation}
+
+\subsection{Les champs physiques}
+
+\paragraph*{Remarque :}
+Dans un langage orient\'e objet d\'edi\'e \`a la m\'ethode des  \'el\'ements
+finis, on s'attend \`a trouver des classes \guil{\'el\'ements finis}. Une
+telle classe existe (\code{xFiniteElement}), mais il ne s'agit en
+aucun cas d'une biblioth\'eque d'\'el\'ements au sens des codes \'el\'ements
+finis. L'utilisation de cette classe n'est g\'en\'eralement pas utiles
+dans la plupart de cas.
+
+\paragraph*{Motivation :}
+D'un point de vue conceptuel, la m\'ethode des \'el\'ements finis repose
+sur l'\'ecriture du principe variationnel \`a un ou plusieurs champ
+\'ecrit sur un domaine d\'ecoup\'e en \'el\'ements g\'eom\'etriques sur lesquelles
+certains champs (le d\'eplacement, pour une formulation en
+d\'eplacement) sont  approch\'es. Pour la m\'ethode de Galerkin continu,
+l'interpolation des champs est continu sur le domaine \'etudi\'e.
+
+Prenons l'approximation du champ de temp\'erature $\bfT(\bfx)$ sur un
+domaine $\Ome$~:
+\begin{equation}
+  \label{eq:approx_T}
+  \bfT(\bfx) \mid_{\Ome^{e}} = \sum_{i}^{N^{e}}  a_i
+  \bfphi_i^{e}(\bfx)
+\end{equation}
+L'\'equation~\ref{eq:approx_T} regroupe trois notions importantes
+repr\'esent\'ees par des classes diff\'erentes. $\bfT(\bfx)$ est un
+\textbf{champ} approch\'e   dont l'approximation est fonction des
+\textbf{valeurs} nodales $a_i$ et des \textbf{fonctions de forme}
+$\bfphi_i(\bfx)$ :
+
+\paragraph*{Impl\'ementation :}
+Ces trois notions sont introduite de la mani\'ere suivante :
+\begin{longtable}{p{4.5cm}p{.01cm}p{10cm}}
+& & \\
+-- les coefficients nodaux $a_i$  &  & ils sont ici  des r\'eels (\code{Double}) est sont stock\'es dans des objets de classes \code{xValueDouble} (section~\ref{section_xValkey}) et sont g\'er\'es par un manager de double de classe \doxygen{xDoubleManager} ; \\
+& & \\
+-- Les fonctions $\bfphi_i(\bfx)$ &  & elles ne sont pas
+explicit\'ees, mais sont d\'eclar\'ees par  l'espace d'approximation
+d\'efini par la classe \doxygen{xSpace}. Cette classes permet de
+d\'efinir le type de fonction d'approximation utilis\'ees. Elle est
+g\'en\'erale et est d\'eriv\'ee en :
+\begin{description}
+    \item[--] \code{xSpaceLagrange},   espace  des fonctions de Lagrange ;
+    \item[--] \code{xSpaceConstante}, espace  des fonctions constantes par \'el\'ements ;
+    \item[--]\code{xSpaceXFEM},  espace  des fonctions d'enrichissement   d\'efinissant les fonctions Heaviside et les fonctions $F^l_i(\bfx)$  (Eq:~\ref{enrich_fun}). Lors d'enrichissement, les champs de fonctions classiques sont ajout\'es aux champs de fonctions d'enrichissement. On utilise alors la classe \doxygen{xSpaceComposite} pour cr\'eer  un espace compos\'e de deux sous-espaces. Ainsi, ceci permet de red\'efinir le nombre total de degr\'es de libert\'e par noeud.
+\end{description}
+    La classe \code{xSpace} permet de d\'efinir un lien entre les cl\'es de valeur (c'est \`a dire les coefficients $a_i$) et les fonctions de formes associ\'es $\bfphi_i$. Cette classe poss\'ede des fonctions qui, \`a partir d'un objet de classe \code{xGeom} (element $e$ par exemple),  donne un vecteur de cl\'es contenant les cl\'es de valeurs ($a_i$) et les fonctions associ\'ees \`a ces cl\'es ($\bfphi_i$).
+    \\
+& & \\
+-- le champ approch\'e  $\bfT(\bfx)$ &  & il est, quant \`a lui, stock\'e dans un objet de classe \doxygen{xField}. Un objet de classe \code{xField} est d\'efini par la connaissance de l'espace d'approximation (objet de classe \code{xSpace}) et les coefficients  nodales  $a_i$ par l'interm\'ediaire du \code{xDoubleManager}. \\
+& &
+\end{longtable}
+
+\inheritgraph{14cm}{xSpace}
+
+
+\paragraph*{Utilisation :}
+La d\'eclaration  d'objets \code{xValue}, \code{xSpace} et
+\code{xField} ne suffit pas \`a g\'en\'erer compl\'etement l'approximation.
+Pour que cette approximation soit effective, il est n\'ecessaire
+d'utiliser une fonction \textbf{g\'en\'erique} d\'efinie dans le fichier
+\code{xAlgorithm.h} et appel\'ee \code{DeclareInterpolation()}. Ainsi,
+pour cr\'eer un champ de temp\'erature \code{temp} sur un maillage
+\code{mesh}, il est n\'ecessaire d'effectuer les op\'erations suivantes
+:
+\begin{description}
+\item[--] d\'eclarer un gestionnaire de cl\'es de valeurs r\'eelles ;
+\item[--] d\'efinir un espace de fonction de Lagrange d\'edi\'e \`a la temp\'erature ;
+\item[--] d\'efinir le champs de temp\'erature en associant le gestionnaire de cl\'e et l'espace des fonctions ;
+\item[--] d\'efinir un cr\'eateur de r\'eels. Ce cr\'eateur d\'erive  de classe abstraite \doxygen{xValueCreator<T>}.
+Celle classe d\'efinit le probl\'eme \`a r\'esoudre en interpr\'etant le jeu de donn\'ees et en cr\'eant les diff\'erents type
+des valeurs (\code{xValueDouble, xValueLinearCombination, ...}) en fonction du probl\'eme. Cette partie est en g\'en\'eral
+ \`a d\'evelopper \`a chaque type de probl\'eme \`a r\'esoudre. Elle prend une cl\'e du (\code{xValKey}) et retourne une valeur
+  (???????????? a pr\'eciser) ;
+\item[--] d\'eclarer l'interpolation : cette fonction g\'en\'erique permet d'allouer la m\'emoire pour le champs de temp\'erature
+sur le maillage \code{mesh}. Il g\'en\'ere ainsi les cl\'es    de
+\code{xValueDouble} pour chaque degr\'e de libert\'e cr\'e\'e pour le champs
+\code{temp}, en balayant tout les \'el\'ements du maillage (\'el\'ements de
+dimension 2 pour un maillage surfacique).
+\end{description}
+
+Ceci se traduit de la mani\'ere suivante :
+\begin{verbatim}
+    xDoubleManager vals;
+    xSpaceLagrange temp_space("TEMPERATURE", SCALAR, DEGREE_ONE);
+    xField         temp(&vals, temp_space);
+    xValueCreator<xValueDouble>  creator_double;
+
+    DeclareInterpolation(temp, creator_double, mesh.begin(2), mesh.end(2));
+
+    xStateDofCreator<xValueDouble> snh(double_manager, "dofs");
+    DeclareState(temp, snh, mesh.begin(2), mesh.end(2));
+\end{verbatim}
+\paragraph*{Commentaire :}
+Notons que l'\'ecriture des lignes ci-dessus v\'erifie les r\'egles de
+programmation standard (bien qu'elles concerne des classes
+fournissant des services parfois abstraits ou informatifs). Ainsi,
+on effectue~:
+\begin{enumerate}
+\item la d\'eclataion les variables du programmes (ici des objets) ;
+\item les actions sur les variables (initialisation,  transformation, fonctions, subroutine, ...)
+\end{enumerate}
+En \code{C++} comme en Fortran, les variables permettent de
+param\'etrer les actions. En revanche, en \code{C++}, les actions
+peuvent elles-m\'emes \'etre des objets.
+
+Les deux derni\'ere lignes, ci-dessus, permettent ainsi de d\'efinir un
+"cr\'eateur d'\'etat" (qui est une variable qui d\'efinie les actions \'e
+effectuer), et d'effectuer l'action proprement dite par la fonction
+DeclareState() qui utilise le cr\'eateur pour g\'en\'erer les \'etats.
+
+
+
+
+\subsection{La classe \code{xMesh}}
+
+Pour tout calcul \'el\'ements finis se pose la question de la g\'en\'eration
+du maillage. Il est possible de charger des maillages issus de
+l'utilitaire \code{gmsh} (voir section \textbf{\textit{??}}), mais
+il est possible de d\'efinir  un maillage directement dans
+l'application. Pour cela la classe \doxygen{xMesh} dispose d'un
+certain nombre de commandes.
+
+
+Pour cr\'eer le maillage de la figure~\ref{maillage2elements}, la
+classe \code{xMesh} peut \'etre utiliser de la mani\'ere suivante~:
+\begin{figure}[!htb]
+\centering
+    \begin{picture}(250,120)(0,0)
+    \put(050,25){\framebox(75,75)[cc]{\textbf{1}}}
+    \put(125,25){\framebox(75,75)[cc]{\textbf{2}}}
+    \put(50,12){0}
+    \put(125,12){1}
+    \put(200,12){2}
+    \put(50,105){3}
+    \put(125,105){4}
+    \put(200,105){5}
+%   \put(050,25){\graphpaper(0,0)(125,75)}
+    \end{picture}
+\caption{maillage de deux \'el\'ements} \label{maillage2elements}
+\end{figure}
+
+\begin{verbatim}
+  xMesh mesh;
+
+  mesh.createVertex(0, 0., 0., 0., 0);
+  mesh.createVertex(1, 1., 0., 0., 0);
+  mesh.createVertex(2, 2., 0., 0., 0);
+  mesh.createVertex(3, 0., 1., 0., 0);
+  mesh.createVertex(4, 1., 1., 0., 0);
+  mesh.createVertex(5, 2., 1., 0., 0);
+
+  mesh.createFaceWithVertices(0,1,4,3,mesh.getGEntity(100,2));
+  mesh.createFaceWithVertices(1,2,5,4,mesh.getGEntity(100,2));
+  AOMD::classifyUnclassifiedVerices(&mesh);
+
+  mesh.exportGmsh("mesh.msh");
+\end{verbatim}
+
+\code{xMesh} Les commandes relatives \`a la cr\'eation de maillage,
+comme \code{createVertex}, se trouvent dans la librairie
+\webify{www.scorec.rpi.edu/AOMD}{AOMD}. \dependgraph{8cm}{xMesh}
+
+La fonction \code{mesh.exportGmsh()} permet d'exporter le   maillage
+dans un fichier destin\'e \`a l'utilitaire \code{gmsh}.

@@ -1,0 +1,211 @@
+
+
+
+\section{Pre-required}
+
+You first need an account on the SVN server. Ask to your supervisor if you haven't any.
+
+Once provided with a login account on the network and on the SVN
+server, you will need a repository to work with (see
+section~\ref{CVS-principe}). Files in repository\index{repository}
+should be downloaded on your own disk workspace in order to modify them or to develop new application.
+
+At ECN, a disk workspace is shared on most of the servers. This workspace is call \code{/glouton} and the working copy must be done in it. Every user has its
+own working copy, and all of them are organised the same way.
+Your working copy is in a directory labelled by your group, your name and the sub-directory (\code{develop/}) , which is your development directory :
+(\code{/glouton/<groupname>/<usename>/develop/}).
+
+A working copy of all the library you need to modify must be made in
+sub-directories of  \code{develop/}:for instance, the library
+\code{xfem} in the directory
+\code{/glouton/<groupname> /<usename> /develop/Xfem/}. The working copy \code{Xfem/}
+contains your local version of the whole common library \code{xfem}.
+
+In general you will do development for your application in a sub-directory located in \\ 
+ \code{/glouton/<groupname>/<usename>/develop/Applis/}. This working copy will be maintened in the Applis repository. For other part of the library (mandatory to compile your application) there is no reason to dowload a working copy of all module if you don't intend to modify them. In most case 
+you will just create a symbolic links (shortcuts) to the directories of softserver (\code{/glouton/struct/softserver/LATEST/}  which contains the lastest version of the whole librairies.
+
+
+\subsection{Softserver}
+
+In ECN, a virtual user called \code{softserver}\index{softserver}
+has been created to download and to check automatically the libraries. Every day or
+every week, tasks (scripts) are launched for maintenance.
+\begin{itemize}
+\item Updates are made from the SVN server to download the latest version of the libraries managed by the SVN server of ECN
+\item updates are made from  external SVN server to download the latest version of associated libraries (MeshAdapt, ...)
+\item copies of the external libraries  are made on directory \code{/glouton/struct/softserver/LATEST}  
+\item source files are compiled on different platforms 
+\item test-cases are run to verify compatibility of the latest version with specified tests
+\item ...
+\end{itemize}
+
+Thus, all the libraries used at ECN are up-to-date in the 
+directory of \code{softserver}. For this reason symbolic links can
+be made by every one in  ECN on the sub-directories of \\
+\code{/glouton/struct/softserver/LATEST}. Links for common module may point to this
+directory (recommended).
+
+
+\subsection{The all libraires}
+
+Here is the list of all the librairies you may need for your developments. Most of them are just to be accessible with symbolic links. This list is the content of the directory\\ \code{/glouton/struct/softserver/LATEST}.\\
+
+
+Internal librairies (developed at ECN):
+\begin{center}
+% use packages: array
+\begin{tabular}{p{3.75cm} p{11.75cm}}
+\code{Applis/}  &   is the repository of all the user applications developed in ECN.   \\
+\code{MeshMachine/}  &  is a specific application developed by Eric Bechet \\
+\code{SolverInterfaces/}   &   is the general interface for any solver libraries 
+located in \code{/glouton/struct/softserver/LATEST/Solver}. \\
+\code{Xfem/}  &   is the basic classes and functions of \code{xfem}.\\
+\code{Xext/}  &   is  a local (ECN) extension  of \code{xfem}.\\
+\code{Xcrack/}  &   is a local (ECN) extension  of \code{xfem} containing development on crack propagation. \\
+\code{Util/}  &   are utilities to   build \code{Makefile}, ...   You probably won't modify this library and a symbolic  link can be made to   \code{/glouton/struct/softserver/LATEST/Util}. for more information, see chapter~\ref{Util}\\
+\end{tabular}
+\end{center}
+External librairies (developed at ECN):
+\begin{center}
+% use packages: array
+\begin{tabular}{p{3.75cm} p{11.75cm}}
+\code{Itk/}  &     is a library to manage medical digitally sampled representation (scanned data).\\
+\code{MeshAdapt/}  &    provides  capabilities for  doing mesh adaptation.\\
+\code{Solver/}   &  contains different solvers for linear system (superLU, PetscSeq, Taucs, Mtl, Itl ...) used by \code{xfem}.  A symbolic link must be made to \code{/glouton/struct/softserver/LATEST/Solver}. \\
+\end{tabular}
+\end{center}
+
+
+In ECN, projects are deposit in the repository \code{Applis/}   where
+special inherited classes are generated from  basic classes of
+\code{xfem}.
+
+
+
+\section{Installation \index{installation} \index{SVN!installation of librairies} }\label{first_installation}
+
+The simplest way to install the development toolkit of \code{xfem}
+is to follow the steps below:
+
+\begin{enumerate}
+\item Create your own subdirectory in the \code{/glouton} tree if not exists:
+
+    \begin{verbatim}
+    cd /glouton/<groupname>/<usename>
+    mkdir develop
+    \end{verbatim}
+(\code{develop} is the standard name of the development directory in
+ECN.)
+
+\item Modify the \code{.bashrc} file in your home (\code{cd \$HOME}) directory by adding the following lines:
+    \begin{verbatim}
+    export DISTROOT=/glouton/struct/softserver/LATEST
+    export DEVROOT=/glouton/struct/$USER/develop
+    if [ -f $DISTROOT/Util/ecnUtil/bashrc.partial ]; then
+        . $DISTROOT/Util/ecnUtil/bashrc.partial
+    fi
+    \end{verbatim}
+    Warning : on the location of your own scratch directory (here \code{/glouton} ), the upper path may be different. It could
+    be \code{export DEVROOT=/glouton/struct/\$USER/develop}, depending of your group name \code{<groupname>} ans the machine you use.
+    It might be standardized at time.\index{\$DEVROOT} \index{\$DISTROOT} \index{export}
+
+
+\item Execute your \code{.bashrc} file with the command: \code{source .bashrc}. \index{.bashrc}
+
+
+
+\item checkout the library you need:
+    \begin{itemize}
+        \item Go in your develop directory :
+        \begin{verbatim}
+   cd $DEVROOT
+        \end{verbatim} 
+	A general common \code{alias} is defined in the file \code{bashrc.partial} so that this latest command can be resume with :
+        \begin{verbatim}
+   cdd
+        \end{verbatim} 
+	
+        \item if you need to work with   \code{Xfem} library:
+        \begin{verbatim}
+   svn checkout https://svn.ec-nantes.fr/public/Xfem/trunk  Xfem
+        \end{verbatim}         You  need to give your SVN-password once, but after the first connection, the password will not be necessary. \\
+
+	\item for \code{SolverInterfaces/}:
+        \begin{verbatim}
+   svn checkout https://svn.ec-nantes.fr/public/SolverInterfaces/trunk  
+	                                                       SolverInterfaces
+        \end{verbatim}          	
+	\item for \code{Util/}:
+        \begin{verbatim}
+   svn checkout https://svn.ec-nantes.fr/public/Util/trunk  Util
+        \end{verbatim}        
+	\item for \code{Meshmachine/}:
+        \begin{verbatim}
+   svn checkout  https://svn/ecn-nantes.fr/public/MeshMachine/trunk   
+                                                            MeshMachine
+        \end{verbatim}     	
+	
+	\item for \code{Applis/}:
+        \begin{verbatim}
+   svn checkout https://svn.ec-nantes.fr/ecn/Applis/trunk  Applis
+        \end{verbatim}	If you want to checkout only one application (a part of the module \code{Applis}) on your local directory, you have to create you local directory with the command \code{mkdir}, and then to download the repository you need.  For instance, for the application \code{Adapt} :
+        \begin{verbatim}
+   cd $DEVROOT
+   mkdir Applis
+   cd Applis
+   mkdir Adapt
+   cd $DEVROOT
+   svn checkout https://svn.ec-nantes.fr/ecn/Applis/trunk/Adapt 
+                                                            Applis/Adapt
+        \end{verbatim} To define a symblic link to this application, see the point 5 below .\\
+	
+	
+		
+        \item for \code{Xext/}:
+        \begin{verbatim}
+   svn checkout https://svn.ec-nantes.fr/ecn/Xext/trunk  Xext   
+       
+        \end{verbatim} 
+
+        \item for \code{Xcrack/}:
+        \begin{verbatim}
+   svn checkout https://svn.ec-nantes.fr/ecn/Xcrack/trunk   Xcrack    
+    
+        \end{verbatim} 
+    \end{itemize}
+ 
+  
+    
+\item for \code{Trellis} and \code{Solver} or for libraries that you won't modify but whose you just have to use the up-to-date version, make symbolic links (shortcuts) to
+the \code{softserver} \index{softserver}  folders: \index{symbolic links} ,\index{ln -s}
+        \begin{verbatim}
+        cd $DEVROOT
+        ln -s $DISTROOT/Solver Solver
+        ln -s $DISTROOT/Trellis Trellis
+        ln -s $DISTROOT/Itk Itk
+        \end{verbatim}
+        and for libraries that you haven't checked out, for instance :
+        \begin{verbatim}
+        ln -s $DISTROOT/Util Util
+        ln -s $DISTROOT/Xfem Xfem
+        ln -s $DISTROOT/Xext Xext
+        ln -s $DISTROOT/Applis Applis
+        ln -s $DISTROOT/Xcrack Xcrack
+        \end{verbatim}
+\end{enumerate}
+
+If you need to get a link for a particular application of \code{Applis}, for instance \code{Applis/Adapt}, you just define a link for this application by :
+        \begin{verbatim}
+        cd $DEVROOT/Applis
+        ln -s $DISTROOT/Applis/Adapt Adapt
+        \end{verbatim}
+
+
+
+
+\paragraph*{Parallele development:}
+
+The upper steps avoid to make anything special for parallele
+developments. All is automatized as a function of the computer
+architecture.

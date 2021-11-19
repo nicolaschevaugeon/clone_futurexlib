@@ -1,0 +1,44 @@
+Util:
+----
+ calculus/Integrator.h
+ calculus/LagrangeMapping.cc
+ calculus/LagrangeMapping.h
+ calculus/Mapping.cc
+ calculus/Mapping.h
+ include/MSMapping.h
+ src/MSMapping.cc
+   Made changes to make functions compatible with newest release of Simmetrix SMS (v5.4).  Had to change mType through #define.
+- acbauer 1/27/05
+-----
+octree/OctreeSrc.cc
+octree/o_internals.h
+Changes to get rid of a memory leak.
+- acbauer 1/6/05
+------
+src/mVector.cc
+calculus/LagrangeMapping.cc, LagrangeMappingBuilder.cc
+  Changed files so that routines only use "public" AOMD header files in AOMD/cint
+- acbauer 7/8/04
+-----
+calculus/Integrator.cc
+  Changed integration order from max(1,order) to order/2+1 for an edge.
+-acbauer /6/16/04
+-----
+MODIFIED:  calculus/BezierMappingBuilder.*,MappingBuilder.h
+ADDED:  calculus/LagrangeMappingBuilder.*
+DELETED:  calculus/MappingBuilder.cc
+  Changes to get rid of some memory leaks associated with creating FiniteElementFields and moved the static Fields in FiniteElementField class to Field class.  Made appropriate changes so that everything works fine. 
+-acbauer 6/16/04
+-------
+Makefile
+include/mVector.h
+octree/o_internals.cc
+
+	some changes to compile with the Microsoft Visual Studio 6.0 compiler
+
+-nuggehal 05/03/04
+------
+
+octree/o_internals.cc    syntax of 'pow' function edited
+
+-nuggehal   03-25-04

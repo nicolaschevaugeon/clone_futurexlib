@@ -1,0 +1,311 @@
+\section{The library  \code{Util}\index{Library!Util}}\label{Util}
+
+\textnormal{(contribution de Y. Guetari)} 
+
+The library \code{Util/} contains:
+\begin{itemize}
+\item The library \code{buildUtil/} contains utilities for easier library and executable building.
+\item specific utility scripts for ECN (\code{ecnUtil/}\index{Library!ecnUtil}).
+\end{itemize}
+
+
+
+
+\subsection{Use of \code{buildUtil} \index{Library!buildUtil}: Basic
+operations}
+
+The library \code{Util} provides utilities for developpers. These
+utilities are accessible with the \code{make} command. This command
+\code{make}  compile sources files and links them  to create a executable. In order to help developpers, new commands have been
+added:\index{Compilation!standard}
+
+\begin{center}
+% use packages: array
+\begin{longtable}{p{7.75cm}  p{7.75cm}}
+\code{make distclean NODEP=1}   & To fully clean a distribution. Compulsory if a \code{.h} file is added or removed \\
+& \\
+\code{make setup NODEP=1}   & To create links before compiling \\
+& \\
+\code{make}             & To actually compile and create the library \\
+& \\
+\code{make VERS=opt}        & Same as above but with optimization flags \\
+& \\
+\code{make check}       & To check all test cases. See results in \code{verif\_result.txt} \\
+& \\
+\code{make check VERS=opt}      & To check all test cases with the optimized code version \\
+& \\
+\code{make checkO}      & equivalent as \code{make check VERS=opt}    \\
+& \\
+\code{make checkone DIR=<directory>}   &    To check only the <directory> problem, depending on its location. See results in \code{verif\_result.txt} \\
+& \\
+\code{make checkone VERS=opt DIR=<directory>}   &    same as above in the optimized version\\
+& \\
+\code{make checkone\_update DIR=[directory]}   &    To check only the [directory] problem,  and update the reference file with the result file  \\
+& \\
+\code{make checkone DIR=test/toto VERS=opt}     &   Same as above but with the optimized code version \\
+& \\
+\code{make doc}     &   create the Doxygen documentation of the module (library).\\
+& \\
+\code{make latex}     &   compile this LaTeX documentation (in \code{\$DEVROOT/Xfem/Xfem/Xfem/src\_doc}).
+\end{longtable}
+\end{center}
+
+
+You must add the option \code{METIS=1} for compilation
+\index{Compilation!cluster} on the cluster \code{Pegase}.
+
+
+\subsection{Utility scripts of \code{ecnUtil}}\label{ecnUtil} \index{Library!\code{ecnUtil}}
+
+
+Specific tools are developed at ECN to automate some tasks related
+to directories management. They are located in
+\code{/scratch/softserver/LATEST/Util/ecnUtil/} and can be called
+like the following example:
+\begin{verbatim}
+cd /scratch/<username>
+/scratch/softserver/LATEST/Util/ecnUtil/<script>
+\end{verbatim}
+
+where \code{<script>} is one of the scripts discribed in the
+following table:
+
+\begin{center}
+% use packages: array
+\begin{longtable}{p{4cm} p{5.2cm} p{5.4cm}}
+\textbf{Script name} & \textbf{Descriptio}n &   \textbf{Use} \\
+& & \\
+ \code{create-devel}  & Creates an executable test-case under
+the subdirectory \code{devel/} of the current module. The new
+test-case will contain an empty skeleton of a test-case with:
+\begin{itemize} \item an empty directory \code{data/}
+\item two minimal files \code{main.cc} and \code{main.h}
+\item an empty directory \code{reference/}
+\item the link directory \code{SVN/} (not to be touched)
+\end{itemize} & \begin{enumerate} \item Go to your subdirectory \code{devel/} : \code{cd devel/}
+\item  Type out: \code{create-devel [name]}
+\item The system will ask you for your password for every new item to be created  \end{enumerate} \\
+& & \\
+\code{create-module} & Creates a new module (\code{appli}) in the
+existant repository (e.g. \code{My\_First\_Module/} in the
+repository \code{Applis/}) The new module will contain the minimal
+components of the new appli  &
+\begin{enumerate}
+\item Go to the subdirectory \code{develop/}
+\item Type out: \code{create-module Applis [name]}
+\item  The system will ask you for your password for every new item to be created
+\end{enumerate} \\
+& & \\
+\code{move-devel-to-test} & Moves a test-case directory from \code{devel/} to \code{test/} so that it is automatically executed when a \code{make check} is made & TO BE TESTED\\
+& & \\
+\code{update-all-reference} & Replaces each files in \code{reference} by the corresponding file in \code{results}.  &  TO BE TESTED \\
+& & \\
+\code{update-reference} & Same as above but only for the current
+directory \code{reference/} &  TO BE TESTED
+\end{longtable}
+\end{center}
+
+
+To easily use the development environment, you need to call options
+defined in bashrc.partial. 
+A canevas of the configuration file
+\code{.bashrc} is available in the home directory. There's no need to get the
+whole file bashrc.partial, but the path to the development directory
+must (at-least!) be specified in it (\code{export
+DEVROOT=<development directory>}, for example: \code{export
+DEVROOT=/scratch/\$USER/develop}). Otherwise, compilation wouldn't
+be possible in this directory (see the whole instructions in
+installation).
+
+
+
+
+
+\section{Compiling and executing a test-case}
+
+
+
+
+To compile \index{Compilation!standard} and execute a program
+located in a test-case directory (for instance
+\code{Xfem/Xfem/Xfem/test/} for the \code{xfem} library). 
+Go to the
+directory containing the \code{Makefile} file and   perform the
+following sequence of instructions:
+
+On standard server (\code{mosix1, mosix2, ...}):
+\begin{itemize}
+\item First compile the library (upper level: the module):
+    \begin{itemize}
+    \item[1.] \code{make distclean NODEP=1}
+    \item[2.] \code{make setup NODEP=1}
+    \item[3.] \code{make}
+    \end{itemize}
+\item Then compile your test-case:
+    \begin{itemize}
+    \item[4.] \code{make checkone DIR=test/<test-name>}
+\end{itemize}
+\end{itemize}
+(Here you did use the \code{Util}  library (see~\ref{Util}) by using
+specific keywords with the \code{make} command.)\\
+
+
+On a HPC cluster  \index{Compilation!cluster}
+(\code{pegase}(\code{master0})):
+\begin{itemize}
+\item First compile the library (upper level: the module):
+    \begin{itemize}
+    \item[1.] \code{make distclean NODEP=1}
+    \item[2.] \code{make setup  METIS=1 NODEP=1}
+    \item[3.] \code{make METIS=1 }
+    \end{itemize}
+\item Then compile your test-case:
+    \begin{itemize}
+    \item[4.] \code{make checkone  METIS=1 DIR=test/<test-name>}
+\end{itemize}
+\end{itemize}
+You can also use the option \code{make -j$n$} (with no space) to
+execute the \code{make} command on $n$  processors. This make a
+parallele compilation on several nodes of the cluster
+(\code{profile} file needed) or a much faster compilation even on other servers (mosix1, mosix2, ...).
+
+
+
+
+
+\subsection{Application example} \index{installation!test}
+
+A typical example of development is presented here. It describes a
+test-case existing in \code{Xfem/Xfem/Xfem/test/} \index{Xfem!test}
+. In this example, a boundary condition (L2 projection) is imposed
+on a border of a 2D domain. Watch here the files organisation. It is
+the typical structure of the directories you may create  in your
+\code{devel/} directory.\\
+
+\begin{description}
+\item[] mechanics\_bc\_l2
+   \begin{description}
+	\item[$\llcorner$]main.cc  : C++ file containing the main source code
+	\item[$\llcorner$]main.h : file containing the declaration of the C++ classe
+	\item[$\llcorner$]main : executable file of the application
+	\item[$\llcorner$]data
+		\begin{description}
+		\item[$\llcorner$] law.mat : material parameters
+		\item[$\llcorner$] main.dat : data describing the problem to treat
+		\item[$\llcorner$] square\_5.msh : the mesh file (gmsh format)
+		\item[$\llcorner$] .svn : automatically created by SVN (don't modify or copy it)
+		\end{description}  
+	\item[$\llcorner$]reference:
+		\begin{description}
+		\item[$\llcorner$] DISPLACEMENT.pos : result filechosen as a reference
+		\item[$\llcorner$] .svn
+		\end{description}  
+	\item[$\llcorner$]results:
+		\begin{description}
+		\item[$\llcorner$] DISPLACEMENT.pos : result file of the local version of the application
+		\item[$\llcorner$] dcl.dbg : debugging file created by main.cc
+		\item[$\llcorner$] ess.dbg : same as above 
+		\item[$\llcorner$] rcond.txt  : same as above 
+		\item[$\llcorner$] sym.dbg : same as above 
+		\item[$\llcorner$] res.dbg : same as above 
+		\end{description}  
+   \end{description}
+\end{description}
+
+
+
+
+
+
+
+\subsection{Create or modify an application}
+
+The best way (recommended) is to create a new reposity in the SVN
+module \code{Applis/}. Make a copy of an existing application which
+will be the starting point of your developments, or modify an
+existing application you want to improve.
+
+
+
+\begin{enumerate}
+\item Start by creating your test subdirectory. Choose your location (directory \code{devel/} or 		\code{test/}) and use
+	the script \code{create-devel} to start with (details in
+	section~\ref{ecnUtil}).
+\item Open \code{emacs} (see~\ref{sec:emacs}) and create/modify your \code{.geo} file, save it in 		\code{data/}.
+\item Now open a terminal and go to your \code{data/} subdirectory. Launch \code{gmsh}   (by command: 		\code{gmsh \&}, see~\ref{gmsh})
+\item In \code{gmsh}, open your \code{.geo} file and create the corresponding mesh file. Choose \guil{mesh} 	mode and generate a \guil{2D} mesh. Save the resulting file. You won't have to specify a name or 	saving location for it. It is automatically saved in the subdirectory from which you opened your 	\code{.geo} and will have the same name.
+\item Go back to the test directory and create \code{main.cc}. Make all required includes. Save.
+\item Run this program (first compile dependent libraries), for that use the following command :
+\begin{verbatim}
+      make -C <path_of_the_Makefile_is> setup
+      make -C <path_of_the_Makefile_is> 
+\end{verbatim}
+For a better visibility of the compilation error, use emacs and execute the command in the dialog box of emacs (or command \touche{F8}, make sure that the command above is writen and \touche{return} : see~\ref{DevelopEnvironTool} for more details (depending on the  file\code{.emacs})). 
+\item  A subdirectory \code{results/} is generated in the  test-directory. Open it to see the results you asked for.
+\item Choose among these results files the ones you would like to use as reference, copy them into subdirectory \code{reference/}.
+\end{enumerate}
+
+
+
+
+\subsection{Committing a modification of a library  to the Community}\label{common_commit}
+
+As many users develop individually at the same time, one has to get
+sure his modifications are functional \guil{harmless} before
+committing them into the basic source.
+
+
+A special sequence of operations is needed to be performed before
+making SVN commit\index{CVS!commit}. This sequence ensures that the
+manipulation will not be unsafe for the common version.
+
+\begin{enumerate}
+\item  Update the local version with svn-server's one, this will merge the local modifications with the external committed ones:
+\begin{verbatim}
+   svn update  <library>
+\end{verbatim}
+This operation \guil{patches} the modifications of the SVN version
+to your own version. These patches are possible where you didn't
+modify at time the same part of the source files than the ones you
+patch. Else, a conflict is detected and the patches is added with
+\code{+} and \code{-} character to indicate the different
+modifications, yours against the SVN one. 
+You are unlucky ! You have to resolve the conflict before committing and indicat to SVN that the problem is resolved by:
+\begin{verbatim}
+   svn resolved  <file>
+\end{verbatim}
+If the \code{update} was successful :
+\item  Compile and run test-cases: (description)\index{run}
+\begin{verbatim}
+   make distclean NODEP=1
+   make setup NODEP =1 
+   make
+\end{verbatim}
+
+If no problem is encountered doing this, do:
+
+\begin{verbatim}
+   make check
+\end{verbatim}
+
+The last command compiles and executes all test-cases existing in
+the subdirectory \code{test/}.
+
+\item  \code{verif\_result.txt} is a file that records a comparison between the results files this execution has
+generated and the reference \index{test!reference}
+results files stocked in the directory \code{reference/}.\index{test!results} \index{file!reference}
+
+Check (carefully!) the result of this execution in
+\code{verif\_result.txt}. If this comparison is conclusive, you can
+commit to the svn-server's files:\index{file!result}
+
+\item  Commit the common files:
+\begin{verbatim}
+   cdd
+   svn commit <library>
+\end{verbatim}
+where \code{<library>} is \code{Xfem}, \code{Xext}, \code{Xcrack} or \code{Applis}.
+\end{enumerate}
+
+The repository gets then the committed files. They will be compiled and
+executed automatically by night by softserver.

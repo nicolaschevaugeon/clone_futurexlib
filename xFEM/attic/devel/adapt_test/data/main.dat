@@ -1,0 +1,46 @@
+# lines starting by a # are comment lines
+##########
+# COMPUTER INFORMATION
+MESH_FILE_TYPE   = msh
+#MESH_FILE        = data/cube.msh
+MESH_FILE        = data/square_5.msh
+EXPORT_FORMAT    = gmsh
+# PHYSICAL INFORMATION
+REGIME           = static
+ANALYSIS         = thermic
+
+###################################################
+ZONE 121  = {MAT_CLASS = elastic MAT_PARAM = data/law.mat}
+####################################################
+####################################################
+
+
+##2D case
+BC_LINE  111 ={  TRACTION_Y      FIX =   1.0 }
+BC_LINE  109 ={  TRACTION_Y      FIX =  -1.0 }
+#BC_LINE  109 ={  STRESS      FIX =   1.0 }
+#BC_LINE  110 ={  STRESS      FIX =   1.0 }
+#BC_LINE  111 ={  STRESS      FIX =   1.0 }
+#BC_LINE  112 ={  STRESS      FIX =   1.0 }
+
+BC_POINT 101 ={  DISPLACEMENT_X             FIX = 0.0 
+                 DISPLACEMENT_Y             FIX = 0.0 }              
+BC_POINT 102 ={  DISPLACEMENT_Y             FIX = 0.0 }
+##3D case
+#BC_POINT 101 ={  DISPLACEMENT_X             FIX = 0.0 
+#                 DISPLACEMENT_Y             FIX = 0.0               
+#                 DISPLACEMENT_Z             FIX = 0.0 }              
+#BC_POINT 102 ={  DISPLACEMENT_Y             FIX = 0.0 
+#                 DISPLACEMENT_Z             FIX = 0.0 } 
+#BC_POINT 103 ={  DISPLACEMENT_Z             FIX = 0.0 } 
+
+#BC_SURFACE  219 ={  TRACTION_Y    FIX =   1.0 }
+#BC_SURFACE  224 ={  TRACTION_Y    FIX =  -1.0 }
+
+
+
+
+
+
+
+

@@ -1,0 +1,14 @@
+    Util Library is a subproject of eXlibris C++ Library 
+    under the GNU Lesser General Public License.
+    See the NOTICE.md & LICENSE.md files for terms 
+    and conditions.
+    It contains cmake modules and scripts to compile and 
+    install eXlibris.
+
+    Copyright (c) 2001-2019 Nicolas MOES 
+    Contact : <nicolas.moes@ec-nantes.fr>
+
+    CONTRIBUTORS      :	  Gilles Marckmann, Alexis Salzman
+
+
+

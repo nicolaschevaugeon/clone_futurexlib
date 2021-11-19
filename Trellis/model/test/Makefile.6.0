@@ -1,0 +1,48 @@
+CC = CC
+CFLAGS = -g 
+INCDIR = -I.. -I../model -I../entities -I/net/usr47/fem/mbeall/util/include 
+DEFINES = -DSUN4 -DDEBUG
+LIBS = ../lib/$(ARCH)/libshapesmodel.a ../lib/$(ARCH)/libmodel.a /usr27/fem/mbeall/util/lib/$(ARCH)/libutil.a ../libShapes.a /usr/local/lang2/SC2.0.1/libF77.a
+
+PAR = /usr/local/parasolid/6.0
+
+
+PARLIBS = ../lib/$(ARCH)/libpar6model.a ../lib/$(ARCH)/libmodel.a /net/usr47/fem/mbeall/util/lib/$(ARCH)/libutil.a  $(PAR)/parasolid.lib ../lib/$(ARCH)/frustrum.o $(PAR)/fg.lib 
+
+dirs := entities model
+dirs2 := entities:model
+temp := $(foreach dir,$(dirs),$(wildcard $(dir)/*.cc))
+hdrs := $(foreach dir,$(dirs),$(wildcard $(dir)/*.h))
+files := $(temp) $(foreach dir,$(dirs),$(wildcard $(dir)/*.h))
+srcs := $(notdir $(temp))
+objs := $(srcs:.cc=.o)
+obj2 := $(addprefix obj/$(ARCH)/,$(objs))
+VPATH = obj/$(ARCH):$(dirs2)
+
+/tmp/mbeall/preadmodel : obj/$(ARCH)/preadmodel.o 
+	$(CC) $< $(PARLIBS) -I$(PAR) $(INCDIR) -o $@
+
+readmodel : obj/$(ARCH)/readmodel.o
+	$(CC) $< $(LIBS) $(INCDIR) -o $@
+
+obj/$(ARCH)/%.o: %.cc
+	$(CC) $(DEFINES) $(INCDIR) $(CFLAGS)  -c $< -o $@
+
+%.o: %.cc
+	$(CC) $(DEFINES) $(INCDIR) $(CFLAGS)  -c $< -o obj/$(ARCH)/$@
+
+clean :
+	rm $(obj2)
+
+print: $(files)
+	ppc $?
+	touch print
+
+printh: $(hdrs)
+	ppc $?
+	touch  printh
+
+depend:
+	makedepend  -I(PAR) $(INCDIR) $(temp)
+
+# DO NOT DELETE THIS LINE -- make depend depends on it.

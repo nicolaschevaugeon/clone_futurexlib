@@ -1,0 +1,78 @@
+CC = CC
+CFLAGS = -g 
+DEFINES = -DSUN4 -DDEBUG
+SHAPES = /usr/local/shapes/latest
+FORTRANLIB = /opt/cc3/SUNWspro/lib/libF77.so
+
+UTILINC = -I$(DEVROOT)/framework/util/0.1/include
+MODELINC = -I$(DEVROOT)/framework/model/0.4/include
+MESHINC = -I$(DEVROOT)/framework/mesh/0.3/include
+ATTINC = -I$(DISTROOT)/framework/attributes/0.4/include
+ANINC = -I$(DEVROOT)/framework/analysis/0.3/include
+UTILLIB = -L$(DEVROOT)/framework/util/0.1/lib/$(ARCH) -lutil
+MODELLIB = -L$(DEVROOT)/framework/model/0.4/lib/$(ARCH) -lshapesmodel -lmodel
+PMODELLIB = -L$(DEVROOT)/framework/model/0.4/lib/$(ARCH) -lparasolidmodel -lmodel
+MESHLIB = -L$(DEVROOT)/framework/mesh/0.3/lib/$(ARCH) -lmesh
+ATTLIB = -L$(DISTROOT)/framework/attributes/0.4/lib/$(ARCH) -lattributes
+ANLIB = -L$(DEVROOT)/framework/analysis/0.3/lib/$(ARCH) -lanalysis
+
+INCDIR = $(MODELINC) $(UTILINC) $(MESHINC) $(ANINC) $(ATTINC)
+
+LIBS = $(MODELLIB) $(MESHLIB) $(UTILLIB) -L$(SHAPES)/lib -lShapesIcdt -lShapesMT -lShapes -lelf -lm
+
+M2LIBS = ../lib/$(ARCH)/libm2model.a ../lib/$(ARCH)/libmodel.a /net/usr47/fem/mbeall/util/lib/$(ARCH)/libutil.a 
+
+SGILIBS = ../lib/$(ARCH)/libshapesmodel.a ../lib/$(ARCH)/libmodel.a /net/usr47/fem/mbeall/util/lib/$(ARCH)/libutil.a $(SHAPES)/lib/libShapesMT.a $(SHAPES)/lib/libShapes.a -lm
+
+PAR = /usr/local/parasolid/8.0
+
+
+#PARLIBS =  $(PMODELLIB) $(MESHLIB) $(UTILLIB) ../lib/$(ARCH)/frustrum.o -L$(PAR) -lparasolid -R$(PAR)
+PARLIBS =  $(PMODELLIB) $(MESHLIB) $(UTILLIB) $(PAR)/libfrustrum.a $(PAR)/fg.lib $(PAR)/libparasolid.a -R$(PAR)
+
+dirs := entities model
+dirs2 := entities:model
+temp := $(foreach dir,$(dirs),$(wildcard $(dir)/*.cc))
+hdrs := $(foreach dir,$(dirs),$(wildcard $(dir)/*.h))
+files := $(temp) $(foreach dir,$(dirs),$(wildcard $(dir)/*.h))
+srcs := $(notdir $(temp))
+objs := $(srcs:.cc=.o)
+obj2 := $(addprefix obj/$(ARCH)/,$(objs))
+VPATH = obj/$(ARCH):$(dirs2)
+
+preadmodel : obj/$(ARCH)/preadmodel.o 
+	$(CC) $< $(PARLIBS) -I$(PAR) $(INCDIR) -o /tmp/$@
+
+readmodel : obj/$(ARCH)/readmodel.o
+	$(CC) $< $(LIBS) $(INCDIR) -o $@
+
+m2readmodel : obj/$(ARCH)/m2readmodel.o
+	$(CC) $< $(M2LIBS) $(INCDIR) -o $@
+
+sgi.readmodel : obj/$(ARCH)/readmodel.o
+	$(CC) $< $(SGILIBS) $(INCDIR) -o $@
+
+pure.readmodel : obj/$(ARCH)/readmodel.o
+	purify $(CC) $< $(LIBS) $(INCDIR) -o $@
+
+obj/$(ARCH)/%.o: %.cc
+	$(CC) $(DEFINES) $(INCDIR) $(CFLAGS)  -c $< -o $@
+
+%.o: %.cc
+	$(CC) $(DEFINES) $(INCDIR) $(CFLAGS)  -c $< -o obj/$(ARCH)/$@
+
+clean :
+	rm $(obj2)
+
+print: $(files)
+	ppc $?
+	touch print
+
+printh: $(hdrs)
+	ppc $?
+	touch  printh
+
+depend:
+	makedepend  -I(PAR) $(INCDIR) $(temp)
+
+# DO NOT DELETE THIS LINE -- make depend depends on it.

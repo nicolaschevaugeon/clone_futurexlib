@@ -1,0 +1,14 @@
+Retriving data for 'sum rand alloc' (GB) 0.84
+========================================
+Retriving data for 'dealloc' (GB) -0.73
+========================================
+Retriving data for 'a small chunck in foo' (B) 40.00
+========================================
+Retriving data for 'alloc+dealloc' (MB) 115.20
+========================================
+Retriving data for foo (MB) 115.20
+========================================
+Retriving data for small chunck j 168.00B
+========================================
+Retriving data for small chunck k 78.13KB
+========================================

@@ -1,0 +1,318 @@
+
+
+
+\section{Documentation \index{Documentation}}
+
+Le d\'eveloppement de librairies  ne peut se faire sans une
+documentation pr\'ecise et syst\'ematique. La documentation de
+\code{xfem} a \'et\'e choisie de deux types. D'une part une
+documentation syst\'ematique construite \`a partir des les fichiers
+sources \code{xObjet.h} et \code{xObjet.cc}, d'autre part une
+documentation \'elargie regroupant les aspects informatiques et
+th\'eoriques autour de la librairie \code{xfem}.
+
+\subsubsection{Doxygen \index{Documentation!Doxygen}}\label{doxygen}
+
+\webify{http://www.stack.nl/~dimitri/doxygen/}{Doxygen} est une
+application permettant la g\'en\'eration automatique de documentation.
+Le code C++ est interpr\'et\'e et les structures des classes sont mises
+en forme par des sch\'emas de hi\'erarchie de classe et des
+descriptions. Ceci permet de connaître l'impl\'ementation des classes
+sans avoir \`a chercher dans les fichiers sources.
+ 
+Cette documentation de bases peut-\^etre augment\'ee de commentaires
+faits par les d\'eveloppeurs. Ces commentaires sont plac\'es dans le
+code source lui m\^eme (fichier \code{.h}) par l'interm\'ediaire de
+marqueurs particuliers ( voir~:
+\webify{http://www.stack.nl/~dimitri/doxygen/docblocks.html}{Documenting
+the code} sur le site de Doxygen).
+
+Ces commentaires peuvent \^etre agr\'ement\'e de mise en forme
+particuli\`ere par des commandes sp\'eciales (voir~:
+\webify{http://www.stack.nl/~dimitri/doxygen/commands.html}{Special
+Commands}  sur le site de Doxygen).
+
+L'ex\'ecution de Doxygen s'effectue par la commande~: \code{make doc}.
+
+Les formats de sorties possibles de Doxygen sont le HTML, le LATEX
+et le RTF. La documentation Doxygen en html est lisible \`a
+l'emplacement
+\pdflaunch{../../../../doc/html/main.html}{\texttt{\$DEVROOT/Xfem/Xfem/doc/html/mainpage.html}}.
+
+
+\subsubsection{La documentation Latex}\label{doclatex}
+
+La version \LaTeX~de la documentation Doxygen n'a pas \'et\'e retenue
+comme support pour la documentation \'elargie de la librairie
+\code{xfem}. En effet, ce mode de fonctionnement alourdirait la
+librairie et serait un frein \`a la lisibilit\'e des lignes de codes
+pour les d\'eveloppeurs.
+
+Une documentation \LaTeX~ind\'ependante a \'et\'e mise en place afin de
+fournir aux nouveaux utilisateurs~:
+\begin{itemize}
+\item l'explication des principes de fonctionnement de la plate-forme de d\'eveloppement~;
+\item la proc\'edure d'installation des librairies~;
+\item des informations sur les diff\'erentes librairies associ\'ees~;
+\item des informations sur les outils utilis\'es pour d\'evelopper des applications X-FEM~;
+\item les commandes de bases \`a utiliser pour compiler~;
+\item les bases th\'eoriques sur la m\'ethode de \'el\'ements finis \'etendus~;
+\item les notions d\'ecrites par les principales classes  C++ de \code{xfem} et le lien avec la th\'eorie.
+\item un support permettant d'avoir une vue d'ensemble de la librairie.
+\end{itemize}
+
+Cette documentation est l'objectif du pr\'esent guide.
+
+
+\section{Comment est construit ce document}
+
+Ce document est construit \`a partir de fichiers sources
+\LaTeX~~situ\'es dans le r\'epertoire~:
+ \code{\$DEVROOT/Xfem/Xfem/Xfem/src\_doc/}.
+
+
+Le fichier principal est le fichier \code{XfemGuide.tex}. Il permet
+de g\'en\'erer le document \code{XfemGuide.pdf} \`a partir de diff\'erentes
+sources \code{.tex} \index{LaTeX!sources} ainsi que de figures
+\index{LaTeX!figures} situ\'ees dans le sous-r\'epertoire
+\code{scr\_doc/figures/}.
+
+\onefigure{5cm}{XfemXfemRepository}{arborescence de la
+documentation}
+
+
+\subsection{g\'en\'eration du manuel}
+
+La commande \code{make doc} d\'efinie par
+\code{\$DEVROOT/Util/buildUtil/buildUtil/make.common} et n\'ecessaire
+\`a la generation de la documentation Doxygen.
+
+La commande \code{make latex}  g\'en\`ere  la pr\'esente documentation
+\LaTeX.
+
+
+% 
+% \subsection{Utilisation de script Perl}
+% 
+% Une des particularit\'es de cette documentation est, \`a l'instar de
+% Doxygen, de pouvoir s'appuyer sur une documentation au sein m\^eme des
+% codes sources. Cette id\'ee est reprise des m\'ethodes de documentation
+% d'ITK (\web{http://www.itk.org/}). Ceci se fait, encore une fois,
+% par l'utilisation de commentaires sp\'eciaux.
+% 
+% 
+% Ces commentaires sont interpr\'et\'es par l'utilisation d'un script en
+% Perl (repris d'ITK) situ\'e dans le r\'epertoire
+% \code{\$DEVROOT/Xfem/Xfem/Xfem} et nomm\'e
+% \code{parser\_src\_to\_tex.pl}. Ce
+% \guil{parser}\index{LaTeX!parser} g\'en\`ere des fichiers \code{.tex} \`a
+% partir des fichiers \code{.h} et  \code{.cc} et les place dans les
+% sous-r\'epertoires \code{tex\_from\_h} et \code{tex\_from\_cc}. Pour
+% que cela puisse ce faire, les commandes \LaTeX~doivent \^etre
+% directement plac\'ees entre les textes \code{Software Guide :
+% BeginLatex} et \code{Software Guide : EndLatex} dans des
+% commentaires des fichiers \code{.h} et \code{.cc}. Les commentaires
+% des fichiers prennent alors la forme de l'exemple suivant~:
+% \begin{verbatim}
+% /*
+%  Software Guide : BeginLatex
+%     \section{la classe \code{xValue}}
+%     \subsection{Notions}
+%     xValue est une classe contenant les informations sur les coefficients 
+%     scalaires d'une approximation.
+%     \begin{equation}\label{eq:approx_ef2_2}
+%     \bfu(\bfx) \mid_{\Ome_e} = \sum_{i \in N_n} \sum_{\alpha} a_i^\alpha
+%     \bfphi_i^\alpha(\bfx)
+%     \end{equation}
+%     Les coefficients scalaires $a_i^\alpha$ sont repr\'esent\'es par des objets de
+%     classe \code{xValue}.
+%  Software Guide : EndLatex
+% */
+% \end{verbatim}
+% 
+% La lecture se fait au fil  du texte et des lignes de codes sources
+% \index{LaTeX!code source} peuvent \^etre incorpor\'ees \`a la
+% documentation \LaTeX~par l'utilisation de s\'eparateur \code{Software
+% Guide : BeginCodeSnippet} et \code{Software Guide : EndCodeSnippet}.
+% Le fichier source s'\'ecrit alors~:
+% 
+% \begin{verbatim}
+% /*
+%  Software Guide : BeginLatex
+%     L'impl\'ementation se fait de la mani\`ere suivante~:
+%     Software Guide : EndLatex
+% */
+% / Software Guide : BeginCodeSnippet
+% xValueLinearCombination::xValueLinearCombination(const coeffs_t& c, const
+%                                              values_t& v, double coeff_last)
+%     : coeffs(c), values(v)
+% {
+%   std::cout << "creating value average with " << values.size() << " values "
+%                                                                 << std::endl;
+%   v_last = new xValueDouble;
+%   v_last->setVal(1.0);
+%   v_last->setState(new xStateOfValueFixed(v_last));
+%   coeffs.push_back(coeff_last);
+%   values.push_back(v_last);
+% }
+% // Software Guide : EndCodeSnippet
+% /*
+%  Software Guide : BeginLatex
+%     où \verb|v_last| est d\'efini par ...
+%  Software Guide : EndLatex
+% */
+% \end{verbatim}
+% 
+% 
+% 
+% Les fichiers \code{.tex} ainsi cr\'e\'es peuvent \^etre inclus dans la
+% documentation \LaTeX~par une simple commande. Le fichier issu de
+% \code{xValue.h} est inclus dans la documentation avec la commande
+% \code{{\textbackslash}texfromh\{xValue\}}. Cette commande sp\'eciale
+% est l'une des nombreuses commandes d\'ecrite dans la section suivante.
+% 
+% ATTENTION : l'utilisation du script d\'ecrit ci-dessus est possible,
+% mais a \'et\'e d\'esactiv\'ee (mis en commentaire dans le
+% \code{make.common}) car inutilis\'e pour le moment.
+% 
+
+\subsection{commandes sp\'eciales}
+
+Afin de faciliter la r\'edaction de la documentation, un certain
+nombres de commandes ont \'et\'e d\'efinies dans le fichier
+\code{XfemGuideConfiguration.tex} par la commande
+\index{LaTeX!{\textbackslash}\code{newcommand}}
+{\textbackslash}\code{newcommand}.
+
+\subsubsection{commandes de liens hypertextes}
+
+Les commandes permettant de cr\'eer des liens hypertextes d\'ependent du
+types de liens et du type d'affichage d\'esir\'e.
+
+\begin{center}
+% use packages: array
+\begin{longtable}{p{6cm} | p{9cm}}
+ \textbf{commandes} & \textbf{description} \\
+ \hline
+\code{{\textbackslash}pdflaunch\{chemin\}\{texte\}} & Le lien \code{chemin} est cr\'e\'e sur le mot   \code{texte}. Ici,
+le chemin peut-\^etre le chemin relatif (\code{../../../../doc/html/figure1.gif}).\\
+\hline
+\code{{\textbackslash}doxygen\{xClasse\}} &  Le mot   \code{xClasse} est \'ecrit dans le texte et renvoie vers la
+documentation   Doxygen \index{Doxygen!classes} concernant cette classe. Pour la classe \code{xValue} il faut \'ecrire
+le mot \code{xValue} \`a la place de \code{xClasse}. Le chemin relatif utilis\'e sera
+\code{\{../../../../doc/html/classxfem\_1\_1xValue.html\}}      \\
+\hline
+\code{{\textbackslash}web\{url\}} &  Le lien vers l'adresse \code{url} est cr\'e\'e sur le texte  \code{url}  \\
+ \hline
+\code{{\textbackslash}webify\{url\}\{texte\}} &  Le lien vers
+l'adresse \code{url} est cr\'e\'e sur le texte  \code{texte}. Cette
+commande est similaire \`a \code{{\textbackslash}pdflaunch}
+\end{longtable}
+\end{center}
+
+
+
+
+
+
+\subsubsection{Mise en forme de texte particulier}
+
+Des raccourcis permettent de mettre en forme le texte :
+
+\begin{center}
+% use packages: array
+\begin{longtable}{p{7cm} | p{8cm}}
+ \textbf{commandes} & \textbf{description} \\
+ \hline
+\code{{\textbackslash}code\{cmd\}} & Le texte \guil{cmd} est ecrit : \code{cmd}. Il distingue les mots d\'esignant
+des commandes du texte lui-m\^eme. \\
+\hline
+\code{{\textbackslash}touche\{CAR\}} & Le mot \guil{CAR} est ecrit : \touche{CAR}. Il permet de distinguer le texte de
+la touche correspondante au texte. \\
+\hline \code{{\textbackslash}guil\{this is written in english\}} &
+Le texte \textit{this is written in english} est ecrit entre
+guillements : \guil{this is written in english}.
+\end{longtable}
+\end{center}
+
+
+
+
+\subsubsection{Le code \LaTeX~des fichiers \code{.h}}
+
+ \code{{\textbackslash}texfromh\{xClasse\}} est equivalent \`a la
+ commande~:\\ \code{{\textbackslash}input\{../../../../doc/tex\_from\_h/xClasse.tex\}}.
+
+
+
+\subsubsection{Les figures}
+
+Des raccourcis permettent de mettre en forme rapidement les figures
+et les informations qui leur sont associ\'ees. Une seule ligne de
+commande et n\'ecessaire pour introduire une figure dans la
+documentation :
+
+
+
+\begin{center}
+% use packages: array
+\begin{longtable}{p{8cm} | p{7cm}}
+ \textbf{commandes} & \textbf{description} \\
+ \hline
+\code{{\textbackslash}onefigure\{larg\}\{dess\}\{leg\}} &  le fichier image \code{dess} est introduit comme image
+de largeur \code{larg}. Le nom du fichier est introduit sans extension, et les extensions .pdf, .png, .jpg, .eps, .mps
+sont successivement test\'ees pour chercher le fichier correspondant. La figure pourra alors \^etre appel\'ee par la r\'ef\'erence :
+\code{{\textbackslash}ref\{fig$:$dess\}}. \code{leg} est la l\'egende qui sera appos\'ee sous la figure.\\
+\hline
+\code{{\textbackslash}twofigures\{l1\}\{fic1\}\{l2\}\{fic2\} \{leg\}\{lab\}} &  Cette commande permet de pr\'esenter une figure
+compos\'ee de deux sub-figures \index{LaTeX!subfigures} provenant des fichiers \code{fic1} et \code{fic2}, et affich\'ees avec
+ les largeurs respectives \code{l1} et \code{l2}.   Les noms de fichier sont introduits sans extension, et les extensions .pdf,
+ .png, .jpg, .eps, .mps sont successivement test\'ees pour chercher les fichiers correspondants. La figure pourra alors \^etre
+ appel\'ee par la reference : \code{{\textbackslash}ref\{lab\}} alors que chaque sub-figures aura pour r\'ef\'erence respectivement
+  \code{{\textbackslash}ref\{fig$:$fic1\}}  et \code{{\textbackslash}ref\{fig$:$fic2\}} . \code{leg} est la l\'egende qui sera
+   appos\'ee sous la figure.\\
+\hline
+\code{{\textbackslash}fourfigures\{l1\}\{fic1\}\{l2\}\{fic2\} \{l3\}\{fic3\}\{l4\}\{fic4\}\{leg\}} &  Cette commande permet de
+pr\'esenter une figure compos\'ee de quatre sub-figures provenant des fichiers \code{fic1},  \code{fic2},  \code{fic3} et \code{fic4}
+ de  largeurs respectives \code{l1}, \code{l2}, \code{l3}   et \code{l4}, de r\'ef\'erence
+ respective \code{{\textbackslash}ref\{fig$:$fic1\}}, \code{{\textbackslash}ref\{fig$:$fic2\}},
+  \code{{\textbackslash}ref\{fig$:$fic3\}} et \code{{\textbackslash}ref\{fig$:$fic4\}}.
+     La figure globale n'a pas de r\'ef\'erencement.  La l\'egende  appos\'ee sous la figure globale sera  \code{leg} \\
+\hline
+\code{{\textbackslash}fourturnedfigures\{l1\}\{fic1\}\{l2\} \{fic2\}\{l3\}\{fic3\}\{l4\}\{fic4\}\{leg\}} &  Cette
+ commande est identique \`a la pr\'ec\'edente mais chaque figure est tourn\'ee  de $90^\circ$.  \\
+\hline
+\code{{\textbackslash}inheritgraph\{larg\}\{xClass\}} &  le   diagramme d'h\'eritage de la classe  \code{xClass} est
+introduit comme image de largeur \code{larg}. Une l\'egende automatique est appos\'ee sous la figure.\\
+\hline
+\code{{\textbackslash}collabgraph\{larg\}\{xClass\}} &  le   diagramme de collaboration de la classe  \code{xClass}
+est introduit comme image de largeur \code{larg}. Une l\'egende automatique est appos\'ee sous la figure.\\
+\hline
+\code{{\textbackslash}dependgraph\{larg\}\{xClass\}} &  le   diagramme de dependance de la classe  \code{xClass} est
+introduit comme image de largeur \code{larg}. Une l\'egende automatique est appos\'ee sous la figure.\\
+\hline
+\end{longtable}
+\end{center}
+
+Exemples :
+
+\begin{verbatim}
+\onefigure{4cm}{efg_support}{Trois supports couvrant un point $\bfx$.}
+
+\twofigures{6cm}{uniform}{6cm}{general}{Surface de discontinuit\'e
+plac\'ee sur un maillage uniforme (a) et non uniforme (b). Les noeuds
+encercl\'es sont enrichis par la fonction Heaviside.}{fig:both_disc}
+
+\fourfigures90{5cm}{f1-1}{5cm}{f1-2}{5cm}{f1-3}{5cm}{f1-4}
+{visualisation des fonctions $\{F_1^l(\bfx)\}$}
+\end{verbatim}
+
+
+
+
+\subsubsection{Les \'equations \index{LaTeX!\'equations}}
+
+Des raccourcis permettent \'egalement de mettre en forme les \'equations
+en respectant les notations. La liste est longue. Nous invitons les
+personnes int\'eress\'ees \`a aller voir le fichier
+\code{XfemGuideConfiguration.tex}.

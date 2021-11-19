@@ -1,0 +1,3 @@
+NAME          = mega_caoutchouc
+YOUNG_MODULUS = 1.0
+POISSON_RATIO = 0.3

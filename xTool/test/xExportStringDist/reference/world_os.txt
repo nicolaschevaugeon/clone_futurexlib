@@ -1,0 +1,4 @@
+message from world proc 0
+message from world proc 1
+message from world proc 2
+message from world proc 3

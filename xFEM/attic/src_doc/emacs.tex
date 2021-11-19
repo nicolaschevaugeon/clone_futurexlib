@@ -1,0 +1,983 @@
+
+
+\section{Emacs   \emph{(en fran\,cais)}  \\ \textnormal{(contribution de Christophe Pallier)} }\label{sec:emacs}
+
+
+ \emph{ (Extrait de  http://www.pallier.org/ressources/intro\_emacs/intro\_emacs.html de Christophe Pallier) }
+
+\code{emacs}\index{Emacs} est sans doute le  programme le plus
+puissant sous linux pour les d\'eveloppeurs, mais aussi le plus \'esot\'eriques. Le but de cette partie est
+de faciliter la prise de contact avec Emacs. Il s'adresse donc \`a
+ceux qui voudraient bien l'essayer mais se sentent un peu
+\guil{perdus} face \'e l'aust\'erit\'e de son \'ecran d'accueil.
+
+
+
+\subsection{Pourquoi utiliser Emacs ?}
+
+
+Par rapport \'e des \'editeurs plus modernes (\code{nedit}, \code{gedit}, ...), Emacs, est d'un abord
+r\'ebarbatif. L'un des principaux int\'er\'ets d'Emacs r\'eside dans les
+modes qui sp\'ecialisent son comportement en fonction du type de
+fichiers sur lequel on travaille. Cela se r\'ev\'ele tr\'es appr\'eciable
+lorsque on r\'edige un programme en C ou en Perl.
+
+
+Un autre aspect int\'eressant d'Emacs est qu'il peut servir
+d'environnement au sein duquel on commande certains programmes
+interactifs. Cela permet d'utiliser divers programmes \`a l'int\'erieur
+d'un environnement unique. On peut \'egalement   \guil{explorer} son
+syst\'eme de fichiers avec le mode \guil{dired}.
+
+Le principal \'ecueil du d\'ebutant, sans nul doute, ce sont les
+s\'equences de touches \'e m\'emoriser. En r\'ealit\'e, pourtant, seuls quelques
+ s\'equences de touches  suffisent pour r\'ealiser 99\% des t\'eches. Apr\'es quelques heures d'utilisation elles deviennent
+automatiques.
+
+\subsection{Cr\'eer, ouvrir et fermer des fichiers}
+
+Sur la ligne de commande d'un terminal, tapez \code{emacs \& }.
+
+Quand emacs appara\'et, appuyez sur la touche
+\touche{Ctrl}\index{Emacs!CRTL} et, tout en la maintenant enfonc\'ee,
+appuyez sur \code{x} puis \code{f} (combinaison de touches qu'on
+notera \code{C-x C-f} ; notez qu'il n'est pas n\'ecessaire de rel\'echer
+la touche \touche{Ctrl}). Le message \code{Find file:} s'affiche sur
+la derni\'ere ligne (appel\'ee \code{minibuffer} selon la terminologie
+emacs). Entrez \code{test1} et appuyez sur \touche{ENTER},
+\code{test1} est le nom du fichier cr\'e\'e. Entrez quelques lignes en
+frappant normalement au clavier (par exemple \code{Ceci est un
+essai} puis  \touche{ENTER} d'Emacs). Puis appuyer sur \code{C-x
+C-s} pour sauver votre fichier, puis \code{C-x C-c} pour sortir
+d'Emacs. Le tableau suivant d\'ecrit pas \'e pas la suite d'actions que
+vous venez d'effectuer.
+
+\begin{center}
+\begin{longtable}{l l}
+\code{C-x}  \code{C-f} test1 \touche{ENTER}  &  ouvre un nouveau fichier au nom de test1 \\
+\code{Ceci est un essai} \touche{ENTER}   &     \'ecrit sur la premi\'ere ligne\\
+\code{d'Emacs}   &      \'ecrit sur la deuxi\'eme ligne\\
+ \code{C-x}  \code{C-s}   &     sauve le fichier\\
+ \code{C-x}  \code{C-c}   &     quitte emacs
+\end{longtable}
+\end{center}
+
+
+Vous pouvez v\'erifier le contenu du fichier que vous venez de cr\'eer
+en entrant la commande \code{cat test1} sur une ligne de commande du
+shell . Vous devriez alors voir s'afficher les deux lignes
+\code{Ceci est un essai} et \code{d'Emacs}.
+
+Relancez Emacs et ouvrez votre fichier avec \code{C-x C-f test1}
+\touche{ENTER}. Fermez-le imm\'ediatement en tapant  \code{C-x k}
+\touche{ENTER}  (rel\'echer la touche \touche{Ctrl} avant de frapper
+\touche{K}). Ouvrez-le \'e nouveau, faites quelques modifications et
+tapez  \code{C-x k}  \touche{ENTER} . Emacs vous demande
+confirmation avant de d\'etruire (\code{kill}) le buffer \code{test1}.
+Si vous r\'epondez \code{yes}, vos modifications seront perdues ; si
+vous r\'epondez \code{no}, l'op\'eration est abandonn\'ee et vous aurez
+l'opportunit\'e de sauver votre fichier avec  \code{C-x}  \code{C-s}.
+Sachez \'egalement que si vous appuyez sur  \code{C-x}  \code{C-c}
+trop rapidement et qu'emacs vous demande si vous voulez ou non
+sauver des fichiers, vous pouvez renoncer \'e sortir en tapant
+\code{C-g}. Plus g\'en\'eralement  \code{C-g} permet d'abandonner
+l'action courante. C'est une combinaison de touches tr\'es utile !
+Effectivement, si Emacs ne r\'epond plus, ou si vous ne comprenez plus
+o\'e vous \'etes, tapez sur  \code{C-g}, \'eventuellement \'e plusieurs
+reprises ; il y aura alors toutes les chances que vous vous
+retrouviez dans une situation mieux ma\'etris\'ee.
+
+Il y a d'autres fa\'eons d'ouvrir le fichier \code{test1}. Tout
+d'abord vous auriez pu \'ecrire \code{emacs test1} sur la ligne de
+commande. Encore une autre fa\'eon, de l'int\'erieur d'Emacs, est
+d'utiliser  \code{C-x}  \code{C-f} puis la touche \touche{TAB} pour
+obtenir la compl\'etion automatique de nom de fichier: Essayez
+\code{C-x C-f te} \touche{TAB}\index{Emacs!TAB} ; si \code{test} est
+le seul nom de fichier qui commence par \code{te}, il s'affichera
+directement. Si par contre il y a d'autres fichiers dont le nom
+commence par \code{te}, alors leur liste s'affichera dans une
+fen\'etre. Vous pouvez d\'eplacer le curseur dans cette fen\'etre avec la
+s\'equence  \code{C-x  o} (tapez cela plusieurs fois, et observez
+comment le curseur se d\'eplace de fen\'etre en fen\'etre); utilisez les
+fl\'eches pour d\'eplacer le curseur sur le nom du fichier qui vous
+int\'eresse et tapez \touche{ENTER}.
+
+Emacs permet bien s\'er d'ouvrir plusieurs fichiers simultan\'ement ;
+pour cela, utilisez  \code{C-x C-f} plusieurs fois. Chaque fichier
+s'ouvre dans un nouveau buffer. Pour passer d'un buffer \'e l'autre,
+on peut utiliser  \code{C-x b} et taper le nom du fichier
+destination (sans oublier que la compl\'etion du nom par \touche{TAB}
+fonctionne). Une autre mani\'ere consiste \'e afficher la liste des
+buffers avec  \code{C-x C-b}; on peut alors se d\'eplacer vers cette
+liste avec un  \code{C-x o} suivi de d\'eplacements avec les fl\'eches.
+Finalement,  \code{C-x 1} supprime les fen\'etres suppl\'ementaires et
+permet de retrouver le buffer courant dans une seule fen\'etre dans
+l'\'ecran d'Emacs. Fa\'etes l'exercice suivant:
+\begin{center}
+\begin{tabular}{p{7cm} p{7cm}}
+ \code{C-x}  \code{C-f test1} \touche{ENTER}  & ouvre le fichier \code{test1} \Large{ }\\
+ \code{C-h t}  & ouvre le tutorial d'emacs dans un nouveau buffer \\
+ \code{C-x b} \touche{ENTER}  &  retourne a \code{test1} \\
+ \code{C-x C-b C-x o C-n} \touche{ENTER}  \code{C-x o C-x 1}  & se promener
+\end{tabular}
+\end{center}
+
+Finalement, voici un r\'ecapitulatif de commandes utiles pour naviguer
+d'un fichier ou d'une fen\'etre \'e l'autre. Dans la derni\'ere colonne,
+nous avons indiqu\'e le nom de la fonction Emacs associ\'ee \'e la
+s\'equence de touche. Cela est utile si vous d\'esirez changer les
+fonctions des touches. (En fait, Emacs poss\'ede de nombreuses
+fonctions dont seule une minorit\'e sont associ\'ees \'e des s\'equences de
+touches. On peut cependant ex\'ecuter n'importe quelle fonction en
+tapant \touche{Esc}\code{-x} suivit du nom de la fonction).
+
+\begin{center}
+\begin{longtable}{p{2.5cm} p{7.5cm} p{5cm} }
+ \code{C-x  C-c}     &  quitte emacs             & \code{save-buffers-kill-emacs} \\
+ \code{C-g}          &  abandonne l'action courante      & \code{keyboard-quit} \\
+ \code{C-x   C-f}    &  ouvre ou cr\'ee un fichier     & \code{find-file} \\
+ \code{C-x   C-s}    &  sauve le buffer courant      & \code{save-buffer} \\
+ \code{C-x   C-w}    &  sauve dans un nouveau fichier    &  \code{write-file} \\
+ \code{C-x k}    &  ferme le buffer courant          & \code{kill-buffer } \\
+ \code{C-x b}    & change de buffer      & \code{switch-to-buffer} \\
+ \code{C-x  C-b}  &     affiche la liste des buffers     &  \code{list-buffers} \\
+ \code{C-x  1}   &  ferme toutes les fen\'etres sauf la courante   & \code{delete-other-windows} \\
+ \code{C-x  o}   &  d\'eplace le curseur vers une autre fen\'etre    & \code{other-window} \\
+ \code{C-x  5 f}  &     ouvre un fichier dans une autre fen\'etre X    & \code{find-file-other-frame} \\
+ \code{C-x  5 0}  &     d\'etruit la fen\'etre X (frame)             & \code{delete-frame} \\
+\end{longtable}
+\end{center}
+
+\subsection{Se d\'eplacer et \'editer un fichier}
+
+Le tableau suivant liste les touches de d\'eplacement les plus
+utilis\'ees. Sous la plupart des syst\'emes Linux, la touche
+\touche{Echap} fait office de touche \code{META}\index{Emacs!META}
+(dans le langage de la documentation d'Emacs) donc \code{M-$>$}
+signifie appuyer sur \touche{Echap} et \touche{$>$} simultan\'ement.
+Notez que ces combinaisons de touches fonctionnent de la m\'eme fa\'eon
+sur les lignes de commande des shells \code{bash} et \code{tcsh},
+ainsi que dans de nombreux programmes interactifs tels que
+\code{gnuplot}, \code{octave}... Ainsi votre apprentissage sera vite
+rentabilis\'e.
+
+ \begin{center}
+\begin{longtable}{l l l }
+ \code{C-v} ou \code{ M-v }  &  avancer vers le bas ou vers le haut  &  \code{scroll-up}, \code{scroll-down} \\
+ \code{M-$>$ }  &   aller en fin de fichier      &  \code{end-of-buffer}\\
+ \code{M-$<$ }  &   aller en d\'ebut de fichier    &  \code{beginning-of-buffer} \\
+ \code{C-a}      &  aller en d\'ebut ligne     &  \code{beginning-of-line} \\
+ \code{C-e }     &  aller en fin de ligne    &  \code{end-of-line} \\
+ \code{C-p }     &  line pr\'ec\'edente      &  \code{previous-line} \\
+ \code{C-n }     &  ligne suivante       &  \code{next-line} \\
+ \code{C-d }     &  effacer le caract\'ere sous le curseur  &     \code{delete-char} \\
+ \code{C-k }     &  effacer jusqu'\'e la fin de la ligne  &   \code{kill-line} \\
+ \code{C-x u}    &  annuler l'action pr\'ec\'edente      &  \code{undo}
+\end{longtable}
+\end{center}
+
+\subsection{Couper/Copier/Coller}
+
+Ouvrez un fichier ou bien cr\'eez-le avec Emacs. D\'eplacez le curseur
+au d\'ebut d'un passage que vous souhaitez couper ou coller. Appuyez
+sur  \code{C-}\touche{SPC}: cela pose une \guil{marque} au d\'ebut du
+passage. D\'eplacez vous jusqu'\'e la fin du passage, puis tapez
+\code{C-w} pour couper le texte (ou \code{M-w} pour le copier).
+Allez l\'e o\'e vous voulez le coller, puis tapez  \code{C-y}
+(\code{yank}). Vous pouvez coller le texte (avec  \code{C-y}) \'e
+plusieurs reprises.
+
+Une propri\'et\'e int\'eressante du \guil{presse-papier} d'Emacs est qu'il
+se souvient non seulement du dernier passage copi\'e (ou coup\'e), mais
+\'egalement des pr\'ec\'edents: si vous avez coup\'e plusieurs passages,
+presser  \code{C-y} affiche le dernier, mais si vous appuyez ensuite
+sur \code{M-y}, l'avant-dernier est ins\'er\'e. On peux appuyer
+plusieurs fois sur \code{M-y} pour remonter plus en arri\'ere dans
+l'historique des passages coup\'es. Cela peut s'av\'erer tr\'es utile si
+l'on a effac\'e par inadvertance un long passage, et beaucoup
+travaill\'e depuis de fa\'eon que la commande undo ( \code{C-x u}) n'est
+plus efficace.
+
+On a souvent besoin de couper le texte jusqu'\'e la fin de la ligne
+courante; pour cela on peut utiliser  \code{C-k} ; Plusieurs
+\code{C-k} successifs effacent autant de lignes.
+
+Vous remarquerez que, contrairement \'e d'autres \'editeurs de texte, le
+texte plac\'e entre la marque et le curseur (i.e. le texte
+\guil{s\'electionn\'e}) n'appara\'et pas en video-inverse (en fait cela
+est vrai pour un Emacs d'origine, votre configuration peut varier).
+Cela peut para\'etre g\'enant au premier abord, mais il y a une bonne
+raison \'e cela (on peut poser plusieurs marques, accessible par
+\code{C-h i m emacs} \touche{ENTER} \code{m mark} \touche{ENTER}).
+Pour savoir o\'e vous avez pos\'e la derni\'ere marque (i.e. le d\'ebut de
+la r\'egion \guil{s\'electionn\'ee}), vous pouvez utiliser l'une des deux
+commandes:
+\begin{enumerate}
+\item  \code{C-x C-x}, qui \'echange la position de la marque et du curseur;
+\item  \code{C-u C-}\touche{SPACE}, qui am\'ene le curseur \'e la position de la marque.
+\end{enumerate}
+
+
+Si vous tenez absolument \'e voir le texte entre la marque et le
+curseur en vid\'eo inverse, ex\'ecutez la commande
+\code{transient-mark-mode} (tapez \code{M-x}, puis \code{transi},
+puis \touche{TAB}, vous devez voir s'afficher
+\code{transient-mark-mode}); Appuyez alors sur la touche
+\touche{ENTER}. Dans ce mode, le texte s\'electionn\'e change de
+couleur. Quand vous voudrez sortir du mode \code{selection},
+utilisez  \code{C-g}.
+
+Quelques remarques \'e propos des marques sont int\'eressantes.
+Premi\'erement, on peut poser plusieurs marques dans un texte, et
+revenir successivement de l'une \'e l'autre par  \code{C-u}
+\code{C-\touche{SPC}}. Deuxi\'emement, certaines commandes posent
+implicitement des marques. Par exemple allez au milieu d'un fichier
+texte, puis tapez \code{M-$>$} pour aller en fin de fichier. Si vous
+tapez ensuite  \code{C-u C-\touche{SPC}}, vous revenez
+automatiquement au point de d\'epart. Une marque est \'egalement pos\'ee
+implicitement quand vous effectuez une recherche de cha\'ene de
+caract\'eres.
+
+Il se peut que votre syst\'eme permette de copier/coller avec la
+souris. Par exemple, sous X-Window: cliquer \'e gauche et glissez pour
+s\'electionner du texte (si vous avez rel\'ech\'e le bouton avant d'avoir
+atteint la fin du texte \'e s\'electionner, allez en cette position,
+puis cliquez sur le bouton de droite pour \'etendre la s\'election);
+pour coller, cliquez sur le bouton du milieu. Ce m\'ecanisme est
+\'egalement utile pour copier du texte entre Emacs et une autre
+application X, par exemple une fen\'etre terminal.
+
+\subsection{Chercher/Remplacer}
+
+Pour chercher un mot, tapez  \code{C-s} puis les premi\'eres lettres
+de ce mot. Observez bien le comportement d'Emacs : \'e chaque fois que
+vous tapez une lettre, il avance dans le texte de fa\'eon
+incr\'ementale. Utilisez  \code{C-g} pour interrompre la recherche.
+Une fois le mot localis\'e, si vous d\'esirez trouver les occurrences
+suivantes, tapez \'e nouveau  \code{C-s}. Quand vous serez habitu\'e \'e
+cette recherche incr\'ementale, vous aurez du mal \'e vous en passer
+sous d'autres \'editeurs. Si vous d\'esirez revenir \'e l'endroit d'o\'e
+vous avez d\'emarr\'e la recherche, tapez  \code{C-u C-}\touche{SPC}
+(Emacs a pos\'e une marque implicitement \'e l'endroit o\'e vous avez
+commenc\'e la recherche).  \code{C-s} cherche en avant dans le texte;
+pour chercher en arri\'ere, utilisez  \code{C-r} ( \code{C-r} est bien
+utile sous \code{bash}: il permet de rechercher une ligne dans
+l'historique des commandes!).
+
+Pour chercher et remplacer des cha\'enes de caract\'eres, utilisez
+\code{M-\%}. Notez une possibilit\'e int\'eressante: il est possible
+d'entrer des retours chariots dans la cha\'ene recherch\'ee avec
+\code{C-q C-j}. Par exemple, pour ajouter syst\'ematiquement un signe
+\$ \'e la fin de chaque ligne, tapez \code{M-\%  C-q C-j}
+\touche{ENTER} \code{ \$   C-q C-j} \touche{ENTER} .
+
+Il est \'egalement possible de chercher et de remplacer en utilisant
+des expressions r\'eguli\'eres (grosso modo des \guil{wildcards}). Pour
+chercher une expression r\'eguli\'ere, utilisez \code{M-C-s}. Supposons
+par exemple que vous vouliez rechercher toutes les initiales de noms
+(une lettre majuscule suivie d'un point) dans votre texte; il vous
+suffit de taper  \code{C-M-s} \touche{SPC}  \code{[A-Z]}. Si voulez
+chercher et remplacer utilisez la command \code{M-x
+query-replace-regexp}. La description d\'etaill\'ee des expressions
+r\'eguli\'eres n\'ecessiterait plusieurs pages. Pour bien comprendre
+comment elles fonctionnent, il vous faudra lire la documentation
+en-ligne d'Emacs, ce que le paragraphe suivant va nous apprendre \'e
+faire.
+
+
+ \begin{center}
+\begin{longtable}{l l }
+  \code{C-}\touche{SPC}   &     pose une marque (p.ex. d\'ebut de s\'election) \\
+ \code{C-u  C-}\touche{SPC}   &     va \'e la derni\'ere marque \\
+ \code{C-x C-x}  &  \'echange le curseur et la marque \\
+ \code{C-w}      &  coupe le texte entre la marque et le curseur \\
+ \code{M-w }     & copie le texte entre la marque et le curseur \\
+ \code{C-y}  &  colle le presse-papier \\
+ \code{M-y}  &  remonte dans l'historique des textes coup\'es \\
+ \code{C-s} ,  \code{C-r}  &    recherche incr\'ementale
+\end{longtable}
+\end{center}
+
+
+\subsection{Utiliser l'aide}
+
+Il est tr\'es vivement recommand\'e d'apprendre \'e se servir des
+diff\'erents syst\'emes d'aide en-ligne d'Emacs, auxquels on acc\'ede par
+\code{C-h}.
+
+Par exemple, tapez  \code{C-h t}. Vous devez voir s'afficher un
+\guil{tutorial}, c'est \'e dire une documentation interactive pour
+d\'ebutant. Parcourez la rapidement, en utilisant les touches
+\code{C-v} et \code{M-v} pour descendre ou monter dans le texte.
+Quand vous en aurez assez, fermez-le avec  \code{C-x k}.
+
+La s\'equence de touche  \code{C-h i m emacs} vous emm\'ene dans la
+documentation d'Emacs, au format \code{info}. Par exemple, tapez
+\code{m regexps} pour lire les quelques pages d\'ecrivant la syntaxe
+des expressions r\'eguli\'eres (d\'eplacez vous en appuyant sur la touche
+espace, remontez en arri\'ere avec la touche \touche{U}) Tapez
+\code{C-x k} pour fermer cette documentation. Plus g\'en\'eralement
+\code{C-h i} permet d'acc\'eder \'e toutes les documentations au format
+\code{info}, notamment aux utilitaires GNU, et \'e la documentation de
+la librairie C ( \code{C-h i m libc}), ce qui est quasiment
+indispensable pour programmer en C sous Linux.  \code{C-h i h} vous
+pr\'esentera des explications plus compl\'etes pour utiliser
+efficacement le mode \code{info}.
+
+Les fonctions suivantes sont \'egalement tr\'es utiles:
+
+\begin{center}
+\begin{longtable}{p{2cm} p{12cm} }
+  \code{C-h k}  &  d\'ecrit la fonction associ\'ee \'e une touche; par exemple  \code{C-h k C-k} affiche la description de
+  la commande \code{kill-line}. \\
+ \code{C-h f}  &  d\'ecrit une fonction. Essayez, par exemple,  \code{C-h f iso-accents-mode}. \\
+ \code{C-h a}   &  liste les fonctions dont le noms contient un mot cl\'e. Par exemple,  \code{C-h a spell} vous listera
+ les fonctions li\'ees \'e la d\'etections des fautes d'orthographe. \\
+ \code{C-h p} &  liste les modules d'extensions Emacs (fichiers \code{.el} ou \code{.elc}). Pour charger un module, on doit
+ utiliser la commande \code{load-library} et fournir le nom du module. Par exemple si vous chargez le module \code{autorevert}
+ puis tapez \code{M-x auto-revert-mode}: emacs d\'etectera alors toute modification sur le disque du fichier associ\'e au buffer
+ courant.
+\end{longtable}
+\end{center}
+
+\subsection{Les modes\index{Emacs!mode}}
+
+On n'attend pas le m\'eme comportement d'un \'editeur selon qu'on
+travaille sur un texte ou un programme en C. Emacs poss\'ede des modes
+distincts pour travailler plus efficacement sur les diff\'erents type
+de fichiers. Le mode est affich\'e au milieu de la ligne d'\'etat en bas
+de l'\'ecran. Bien qu'Emacs t\'eche de d\'etecter le type de fichier \'e
+l'ouverture, il faut n\'eanmoins savoir changer manuellement de mode,
+par exemple lorsqu'on cr\'ee un nouveau fichier. Comme toujours sous
+Emacs, il suffit d'ex\'ecuter la commande ad\'equate, par exemple:
+\code{M-x text-mode}, \code{M-x latex-mode}, \code{M-x perl-mode}...
+Pour obtenir la liste des modes accessibles, tapez  \code{C-h a
+mode}. Pour avoir de l'aide sur le mode courant, tapez  \code{C-h
+m}.
+
+Emacs poss\'ede \'egalement la notion de \code{mode mineur}, qui
+sp\'ecifie, en quelque sorte, des sous-modes. Par exemple
+\code{auto-fill-mode} sp\'ecifie que emacs doit revenir
+automatiquement \'e la ligne quand une certaine colonne est atteinte.
+La remise en forme d'un paragraphe se fait manuellement avec
+\code{M-q}.
+
+Un des modules d'extension les plus remarquables d'Emacs fournit des
+modes pour \TeX~et \LaTeX. Nomm\'ee AUCTex, il rend l'\'edition de
+documents \LaTeX~tr\'es confortable : les mots cl\'es \LaTeX~sont
+color\'es, le reformatage des paragraphes tient compte des commandes
+\LaTeX~(par exemple, un environnement verbatim ne sera pas reformat\'e
+accidentellement!),  \code{C-c-c} lance la compilation par \LaTeX~ou
+le visualiseur \code{xdvi}..., etc.
+
+
+
+\subsection{Quelques \guil{trucs} en vrac}
+
+Quelques fonctions int\'eressantes:
+
+\begin{center}
+\begin{longtable}{ p{5cm} p{9cm} }
+\code{M-x ispell-buffer}  &     appelle le correcteur orthographique \\
+\code{M-x iso-accents-mode} &   permet de taper des caract\'eres accentu\'es avec un clavier am\'ericain \\
+\code{M-! }  & ex\'ecute une commande shell \\
+\code{M-| } &   ex\'ecute une commande shell sur la r\'egion courante \\
+ \code{C-x r k} et  \code{C-x r y}  &   Couper/coller des colonnes \\
+ \code{C-u 72 * } &     entrer 72 fois le caract\'ere \guil{*} \\
+ \code{C-u 3 M-x sort-numeric-fields}  &    trier un tableau sur la troisi\'eme colonne \\
+\code{M-x global-set-key }   & permet d'associer une fonction \'e une touche \\
+\code{M-x compile}   &  execute \code{make -k}
+\end{longtable}
+\end{center}
+
+%
+
+
+
+\section{Environnement de d\'eveloppement C++}\label{DevelopEnvironTool}
+
+Le plus simple, a terme, est de profiter des possibilit\'es
+\code{emacs} (voir~\ref{sec:emacs}). Il s'agit de l'outil standard
+de d\'eveloppement C++ sous linux.
+\subsection{Editeur Emacs}
+
+ Nous rappelons ici les quelques
+commandes d'\'edition utiles pour le d\'ebutant :
+\begin{description}
+ \item[]C- correspond \'e la touche \touche{Ctrl}
+ \item[]M- correspond \'e la touche \touche{Echap} (appel\'ee parfois META)
+\end{description}
+
+Premi\'eres commandes :
+\begin{center}
+\begin{longtable}{ p{5cm} p{9cm} }
+ \code{C-x   C-f} &  ouvrir    \\
+ \code{C-x   C-s} &  sauver     \\
+ \code{C-x  C-c}  &  quitter \\
+ \code{C-x  u}    &  \guil{undo} \\
+ \code{C-x  s}    &  chercher \\
+ \code{M-\%}      &  remplacer    \\
+ \code{C-w}       &  couper    \\
+ \code{M-w}       &  copier    \\
+ \code{C-y}       &  coller    \\
+ \code{C-g}       &  abandonne l'action en cours (\guil{\'echappe})   \\
+ \code{C-k}       &  efface la ligne courante   \\
+ \code{C-2}       &  divise la fen\'etre en 2  \\
+ \code{C-1}       &  repasse en mode \'e 1 seule fen\'etre
+\end{longtable}
+\end{center}
+
+Par ailleurs, le mode \code{windows} offre des raccourcis dans la
+barre de menu ( dont\code{copier, couper, coller, sauver}, ...).
+
+\subsection{Personnaliser Emacs}
+
+Emacs peut \^etre personnalis\'e par l'interm\'ediaire des touches de
+fonctions par exemple. A l'ECN, il est usuel d'utiliser les
+raccourcis suivant :
+\begin{center}
+\begin{longtable}{ p{5cm} p{9cm} }
+ \code{F1}  &  tags-search     \\
+ \code{F8}  &  compile     \\
+ \code{F3}  &  goto next error     \\
+ \code{F2}  &  recompile (last command line) \\
+ \code{F12} &   undo
+\end{longtable}
+\end{center}
+Ils sont d\'efinis dans le fichiers \code{.emacs}. Pour travailler
+avec les m\'emes raccourcis qu'un autre  d\'eveloppeur  de l'ECN, il est
+pr\'ef\'erable de recopier son fichier \code{.emacs} dans son r\'epertoire
+\code{/home}.
+
+
+Il est possible \'egalement d'activer une barre de navigation \'e partir
+de la barre de menus : menu \code{tools - Display Speedbar}. Elle
+peut \^etre lancer au d\'emarrage en ajoutant la commande suivante dasn
+le fichier \code{.emacs} :
+\begin{verbatim}
+    (when window-system   (speedbar t))
+\end{verbatim}
+L'inconvenient, de la commande ci-dessus est qu'emacs place la speedbar au milieu de l'\'ecran. 
+Un autre moyen d'afficher facilement la speedbar est de red\'efinir une touche (\touche{F4} par exemple) par la commande :
+\begin{verbatim}
+    (global-set-key [f4] 'speedbar-frame-mode)
+\end{verbatim} 
+Elle n'apparait pas au d\'emarrage, mais la touche \touche{F4} place alors la speedbar sur le c\'et\'e gauche de la fen\'etre d'\'edition.
+
+Il est assez facile de d\'efinir les fichiers visible par d\'efault dans la speedbar, ainsi que les dossiers \'e cacher. Ceci ce fait par l'interm\'ediaire des commandes suivantes :
+
+\begin{verbatim}
+    (setq speedbar-supported-extension-expressions
+      (quote (".[cc]\\(\\+\\+\\|\hh\|c\\|h\\|xx\\)?" ".tex\\(i\\(nfo\\)?\\)?"
+       ".h" ".cc" ".c" ".d" ".dbg" ".emacs" ".msh" ".dat" ".inp" ".odb" ".f\\(90\\|77\\|or\\)?"
+       ".log" "msg" "sta" "txt" "jpg" "gif" "pdf" "res" "com" "all" "cae" ".s?html"
+       "[Mm]akefile\\(\\.in\\)?" ".ml" ".mli" ".nw")))
+
+    (setq speedbar-directory-unshown-regexp "^\\.") 
+\end{verbatim} 
+
+
+Avec la \guil{speedbar}, la gestion des \code{Tags} et leur
+pr\'e-d\'efinition (voir~\ref{tags}) et les touches de raccourcis, les d\'ebutants habitu\'es aux outils en mode
+\code{windows}  pourrons trouver un  environnement  de d\'eveloppement
+relativement convivial.
+
+\onefigure{16cm}{emacs-DTK}{environnement de d\'eveloppement emacs}
+
+
+\subsection{Rechercher : les \emph{Tags}} \label{tags}
+
+Les \code{Tags} sont des indexations de fichiers permettant des
+recherches rapides de nom de classe dans une librairie, comme dans
+un moteur de recherche. Pour utiliser cette indexation, \code{emacs}
+doit conna\'etre l'endroit o\'e sont index\'es les fichiers (fichier
+\code{tags/TAGS}). Si ce fichier n'existe pas, allez dans le
+r\'epertoire de la librairie contenant le fichier \code{Makefile} et
+tapez \code{make tags}.
+
+Pour remettre \'e z\'ero la table des tags (d'indexation) dans
+\code{emacs}, il faut utiliser la commande \code{emacs} suivante :
+\begin{verbatim}
+        ESC x tags-reset-tags-tables <chemin>
+\end{verbatim}
+Elle d\'efinit le fichier tags que vous souhaitez utiliser (c'est \'e
+dire la librairie dans laquelle vous voulez chercher).
+
+
+Alors, dans \code{emacs}, la recherche sur un mot cl\'e se fait en
+pla\'eant \textbf{ le curseur sur le mot recherch\'e} et d'effectuer la
+s\'equence (M-.) :
+\begin{description}
+ \item[] \touche{ESC}~\touche{.}
+ \end{description}
+
+\code{Emacs} affiche alors  directement le fichier o\'e est d\'efini la
+classe en question.Pour refermer la fen\'etre contenant le r\'esultat
+effectuer la s\'equence (M-*) :
+
+\begin{description}
+ \item[]  \touche{ESC}~\touche{*}
+ \end{description}
+
+Si vous voulez rechercher dans plusieurs registres de \code{Tags}
+simultan\'ement, il est pr\'ef\'erable d'utiliser la commande :
+\begin{verbatim}
+        ESC x visit-tags-table <chemin>
+\end{verbatim}
+
+Enfin, l'ensemble des registres de \code{Tags} peut \^etre charg\'e au
+d\'emarrage en d\'efinissant une liste de registre dans le fichier
+\code{.emacs} :
+\begin{verbatim}
+ (setq tags-table-list
+       '(
+                "/glouton/softserver/LATEST/Xfem/Xfem/tags"
+                "/glouton/softserver/LATEST/Xext/Xext/tags"
+                "/glouton/softserver/LATEST/Xcrack/Xcrack/tags"
+                "/glouton/softserver/LATEST/SolverInterfaces/SolverBase/tags"
+                "/glouton/softserver/LATEST/SolverInterfaces/SuperLu/tags"
+                "/glouton/softserver/LATEST/SolverInterfaces/SparsKit/tags"
+         )
+)
+\end{verbatim}
+
+
+\subsection{Autre mode de recherche}
+
+Si vous chercher un mot cl\'e quelconque,   utiliser   la touche
+\touche{F1}. Cette commande cherche une cha\'ene de caract\'ere dans les
+fichiers \code{.h} et \code{.cc}. Pour chercher l'occurence
+suivante, taper (M-,) :
+\begin{description}
+ \item[]  \touche{ESC}~\touche{,}
+ \end{description}
+
+
+
+
+
+\subsection{Compiler}
+
+Il est recommand\'e de profiter des outils de d\'eveloppement (voir
+\ref{DevTools})propos\'es par la librairie \code{BuildUtil}. Cette
+derni\'ere fournit des configurations permettant de compiler et de
+g\'en\'erer les liens de mani\'ere automatique. Pour cela, vous devez
+d\'evelopper dans un repertoire de travail   \code{/devel}  et
+utiliser la commande  \code{gmake}.
+
+Dans emacs, vous pouvez utiliser le raccourci \touche{F8} qui
+propose une commande de compilation de la forme :
+\begin{verbatim}
+      make -k -C $DEVROOT/Xfem/Xfem/Xfem  -j 2
+\end{verbatim}
+A vous pouver modifier cette expression pour votre cas de figure. La
+commande \code{make} (ou \code{gmake}) doit  \^etre execut\'ee depuis le
+r\'epertoire o\'e est situ\'e le fichier \code{Makefile}, sinon il
+convient de lui indiquer o\'u ce trouve ce fichier (option \code{-C
+}).
+
+
+
+En premier lieu, avant de faire une premi\'ere compilation, il
+convient de nettoyer les r\'epertoires et d'initialiser la compilation
+:
+\begin{verbatim}
+      make  -k -C $DEVROOT/Xfem/Xfem/Xfem  distclean  NODEP=1
+      make  -k -C $DEVROOT/Xfem/Xfem/Xfem  setup      NODEP=1
+\end{verbatim}
+ou :
+\begin{verbatim}
+      make  distclean  NODEP=1
+      make  setup      NODEP=1
+\end{verbatim}
+(ajouter l'option \code{METIS=1} \'e chaque ligne si vous travaillez
+sur le cluster \code{pegase}). Cette fonction \code{setup}
+construira les d\'ependances entre fichiers et cr\'eera le r\'epertoire
+\code{Include} contenant les liens vers les fichiers sources.
+
+
+Compiler les librairies avec :
+\begin{verbatim}
+      make  -k -C $DEVROOT/Xfem/Xfem/Xfem
+\end{verbatim}
+
+Pour compiler et executer une application d\'evelopp\'ee dans le
+repertoire \code{/devel/<exemple>}:
+\begin{verbatim}
+      make  -k -C $DEVROOT/Xfem/Xfem/Xfem  checkone DIR=/devel/<exemple>
+\end{verbatim}
+
+
+
+
+
+\subsection{D\'ebugger \'e la compilation}
+
+Le d\'ebuggage \'e la compilation peut ce faire en compilant \'e partir
+d'\code{emacs} (en lan\'eant la compilation avec \touche{F8}).
+Celui-ci permet de remonter directement au ligne pr\'esentant des
+erreurs.
+
+Sinon, la technique du Write est couramment utiliser.
+
+\subsection{D\'ebugger \'e l'execution}
+
+Utiliser le d\'ebuggeur \code{ddd}.
+
+Pour utiliser un d\'ebuggeur, il convient d'ouvrir le fichier
+\code{Makefile} et d'ajouter l'option \code{-g} sur la ligne de
+compilation (\code{CXXFLAGS}. Puis lancer la commande : \code{ddd
+-}<nom de application>. Puis faire un \code{RUN}.
+
+\textit{(\'e faire...)}
+
+\subsection{Temps d'execution}
+
+Pour tester l'impl\'ementation d'une routine, il est parfois utile de
+connaitre le temps d'execution. Dans le fichier \code{Makefile}, il
+faut alors ajouter l'option \code{-pg} sur la ligne de compilation
+(\code{CXXFLAGS}. Il est alors pr\'ef\'erable de compiler en version
+optimis\'ee en ajoutant :
+\begin{verbatim}
+      VERS=opt
+\end{verbatim}
+sur la ligne de commande \code{gmake}
+
+Puis executer le code par la commande :
+\begin{verbatim}
+        gprof <nom_de_l_executable> >& listing
+\end{verbatim}
+le fichier \code{listing} contiendra les informations recherch\'ees.
+
+
+
+
+
+\section{gmsh \index{gmsh} : meshing and post-processing}\label{gmsh}
+
+
+\code{gmsh} is an automatic 3D finite element mesh generator with
+build-in pre- and post-processing facilities.
+
+See gmsh's web site : \web{http://www.geuz.org/gmsh/}
+
+
+\subsection{.geo file format}\index{gmsh!.geo} \label{gmsh_geo}
+
+see \web{http://www.geuz.org/gmsh/doc/texinfo/gmsh_4.html} for details.
+
+
+
+Gmsh's geometry module provides a simple CAD engine, using a bottom-up (boundary representation) approach: you need to first define points (using the Point command: see below), then lines (using Line, Circle, Spline, ..., commands or by extruding points), then surfaces (using for example the Plane Surface or Ruled Surface commands, or by extruding lines), and finally volumes (using the Volume command or by extruding surfaces).
+
+These geometrical entities are called "elementary" in Gmsh's jargon, and are assigned identification numbers when they are created:
+
+\begin{enumerate}
+  \item  each elementary point must possess a unique identification number;
+  \item  each elementary line must possess a unique identification number;
+  \item  each elementary surface must possess a unique identification number;
+  \item  each elementary volume must possess a unique identification number. 
+\end{enumerate}
+
+Elementary geometrical entities can then be manipulated in various ways, for example using the Translate, Rotate, Scale or Symmetry commands.
+
+Compound groups of elementary geometrical entities can also be defined and are called "physical" entities. These physical entities cannot be modified by geometry commands: their only purpose is to assemble elementary entities into larger groups, possibly modifying their orientation, so that they can be referred to by the mesh module as single entities. As is the case with elementary entities, each physical point, physical line, physical surface or physical volume must be assigned a unique identification number. See 4. Mesh module, for more information about how physical entities affect the way meshes are saved.
+
+ 
+
+The next subsections describe all the available geometry commands. 
+ 
+\subsubsection{Points}
+
+
+\begin{verbatim}
+      Point ( expression ) = { expression, expression, expression, expression };
+
+      Physical Point ( expression | char-expression ) = { expression-list };
+\end{verbatim}
+ 
+\subsubsection{Lines}
+
+\begin{verbatim}
+      Bezier ( expression ) = { expression-list };
+
+      BSpline ( expression ) = { expression-list };
+ 
+      Circle ( expression ) = { expression, expression, expression };
+
+      CatmullRom ( expression ) = { expression-list }; 
+
+      Ellipse ( expression ) = { expression, expression, expression, expression };
+
+      Line ( expression ) = { expression, expression };
+
+      Spline ( expression ) = { expression-list };
+
+      Line Loop ( expression ) = { expression-list };
+
+      Physical Line ( expression | char-expression ) = 
+                                                    { expression-list };
+\end{verbatim}
+
+\subsubsection{Surfaces}
+
+\begin{verbatim}
+      Plane Surface ( expression ) = { expression-list };
+
+      Ruled Surface ( expression ) = { expression-list };
+
+      Surface Loop ( expression ) = { expression-list };
+
+      Physical Surface ( expression | char-expression ) = { expression-list };
+\end{verbatim}
+
+
+\subsubsection{Volumes}
+
+\begin{verbatim}
+      Volume ( expression ) = { expression-list };
+
+      Physical Volume ( expression | char-expression ) = { expression-list };
+\end{verbatim}
+ 
+
+\subsubsection{Extrusions}
+
+Lines, surfaces and volumes can also be created through extrusion of points, lines and surfaces, respectively. Here is the syntax of the geometrical extrusion commands :
+
+extrude:
+
+\begin{verbatim}
+      Extrude { expression-list } { extrude-list }
+
+      Extrude { { expression-list }, { expression-list }, expression } 
+                                                            { extrude-list }
+  
+      Extrude { { expression-list }, { expression-list }, { expression-list },
+                                                expression } { extrude-list } 
+\end{verbatim}
+  
+
+with
+\begin{verbatim}
+extrude-list: 
+  Point | Line | Surface { expression-list }; ...
+\end{verbatim}
+
+
+\subsubsection{Transformations}
+
+Geometrical transformations can be applied to elementary entities, or to copies of elementary entities (using the Duplicata command: see below). The syntax of the transformation commands is:
+
+transform:
+
+\begin{verbatim}
+      Dilate { { expression-list }, expression } { transform-list }
+
+      Rotate { { expression-list }, { expression-list }, expression } 
+                                                         { transform-list }
+
+      Symmetry { expression-list } { transform-list }
+
+      Translate { expression-list } { transform-list }
+\end{verbatim}
+ 
+   
+    
+with
+\begin{verbatim}
+transform-list: 
+  Point | Line | Surface { expression-list }; ... |
+  Duplicata { Point | Line | Surface { expression-list }; ... } |
+  transform 
+\end{verbatim}
+
+\subsubsection{Example}
+\begin{verbatim}
+      r = 3;
+      L = 3.;
+      l = L/r;
+      ta = 1/((r+1)*l);
+	      xM= L/2.;
+	      yM = L/2.;
+	      zM = 0.;
+	      xm = l/2.;
+	      ym = l/2.;
+	      zm = 0.;
+	      Point(1) = {-xM, -xM, zM,ta };
+	      Point(2) = {xM, -yM, zM,  ta};
+	      Point(3) = {xM, yM, zM,ta };
+	      Point(4) = {-xM, yM, zM,ta };
+	      Point(5) = {-xm, -ym, zm,ta };
+	      Point(6) = {xm, -ym, zm,ta };
+	      Point(7) = {xm, ym, zm,ta };
+	      Point(8) = {-xm, ym, zm, ta};
+	      Line (9) = {1, 2};
+	      Line (10) = {2, 3};
+	      Line (11) = {4, 3};
+	      Line (12) = {1, 4};
+	      Line (121) = {5, 6};
+	      Line (122) = {6, 7};
+	      Line (123) = {7, 8};
+	      Line (124) = {8, 5};
+	
+	      /* carr\'e exterieur moins carr\'e interieur */
+	      Line Loop (2000025) = {-12, 9, 10, -11, -122, -121, -124, -123};
+	      Plane Surface (1000025) = {2000025};
+	      /* carre interieur  */
+	      Line Loop (2000026) = {121, 122, 123, 124};
+	      Plane Surface (1000026) = {2000026};
+	      Transfinite Line {9,11,10,12} = ((3*r)+1) Using Power 1.0; 
+	      /*Transfinite Line {121,122,123,124} = (r+1) Using Power 1.0; */
+	      Transfinite Surface {1000025} ={1, 2, 3, 4};
+	      Transfinite Surface {1000026} ={5, 6, 7, 8}; 
+	      Physical Point (101) = {1};
+	      Physical Point (102) = {2};
+	      Physical Line (201) = {9};
+	      Physical Line (202) = {10};
+	      Physical Line (203) = {11};
+	      Physical Line (204) = {12};
+	      Physical Line (1000) = {121,122,123,124};
+	      Physical Surface (301) = {1000025,1000026};
+\end{verbatim}
+
+
+
+
+\subsection{.msh file format}\index{gmsh!.msh}  \label{gmsh_msh}
+
+see \web{http://www.geuz.org/gmsh/doc/texinfo/gmsh_10.html} for details.
+
+
+
+
+
+
+\subsubsection{Version 1.0}
+
+The `.msh' file format, version 1.0, is Gmsh's old native mesh file format, now superseded by the format described in 9.1.2 Version 2.0 ASCII.
+
+In the `.msh' file format, version 1.0, the file is divided in two sections, defining the nodes (\$NOD-\$ENDNOD) and the elements (\$ELM-\$ENDELM) in the mesh:
+
+ 	
+\begin{verbatim}
+$NOD
+number-of-nodes
+node-number x-coord y-coord z-coord
+...
+$ENDNOD
+$ELM
+number-of-elements
+elm-number elm-type reg-phys reg-elem number-of-nodes node-number-list
+...
+$ENDELM
+\end{verbatim}
+
+
+where
+
+\begin{longtable}{p{4cm} p{11cm}}
+\code{number-of-nodes} &
+    is the number of nodes in the mesh.\\
+\\
+\code{node-number} &
+    is the number (index) of the n-th node in the mesh. \\
+\code{x-coord y-coord z-coord} &
+    are the floating point values giving the X, Y and Z coordinates of the n-th node.\\
+\\
+\code{number-of-elements} &
+    is the number of elements in the mesh.\\
+\\
+\code{elm-number} &
+    is the number (index) of the n-th element in the mesh. \\
+\\
+\code{elm-type} &
+    defines the geometrical type of the n-th element (see~\ref{code_elem_type}).\\
+    
+
+\code{reg-phys} &
+    is the number of the physical entity to which the element belongs.\\
+
+\code{reg-elem} &
+    is the number of the elementary entity to which the element belongs.\\
+
+\code{number-of-nodes} &
+    is the number of nodes for the n-th element. \\
+
+\code{node-number-list} &
+    is the list of the number-of-nodes node numbers of the n-th element.  \\
+\end{longtable}
+
+
+\subsubsection{Version 2.0 ASCII}
+
+The version 2.0 of the `.msh' file format is Gmsh's new native mesh file format. It is very similar to the old one, but is more general: it contains information about itself and allows to associate an arbitrary number of integer tags with each element. It also exists in both ASCII and binary form.
+
+The `.msh' file format, version 2.0, is divided in three main sections, defining the file format (\$MeshFormat-\$EndMeshFormat), the nodes (\$Nodes-\$EndNodes) and the elements (\$Elements-\$EndElements) in the mesh:
+
+ 	
+\begin{verbatim}
+$MeshFormat
+2.0 file-type data-size
+$EndMeshFormat
+$Nodes
+number-of-nodes
+node-number x-coord y-coord z-coord
+...
+$EndNodes
+$Elements
+number-of-elements
+elm-number elm-type number-of-tags < tag > ... node-number-list
+...
+$EndElements
+\end{verbatim}
+
+
+where
+
+\begin{longtable}{p{4cm} p{11cm}}
+\code{file-type} &
+    is an integer equal to 0 in the ASCII file format.\\
+
+\code{data-size} &
+    is an integer equal to the size of the floating point numbers used in the file (currently only data-size = sizeof(double) is supported).\\
+
+\code{number-of-nodes} &
+    is the number of nodes in the mesh.\\
+
+\code{node-number} &
+    is the number (index) of the n-th node in the mesh.\\
+
+\code{x-coord y-coord z-coord} &
+    are the floating point values giving the X, Y and Z coordinates of the n-th node.\\
+
+\code{number-of-elements} &
+    is the number of elements in the mesh.\\
+
+\code{elm-number} &
+    is the number (index) of the n-th element in the mesh.\\
+
+\code{elm-type} &
+    defines the geometrical type of the n-th element (see~\ref{code_elem_type}).\\
+
+
+\code{number-of-tags} &
+    gives the number of tags for the n-th element. \\
+
+\code{tag} &
+    is an integer tag associated with the n-th element. \\
+
+\code{node-number-list}  &
+    is the list of the node numbers of the n-th element. 
+\end{longtable}
+
+Additional sections can be present in the file, which an external parser can simply ignore. One such additional section (\$PhysicalNames-\$EndPhysicalNames) associates names with physical entity identification numbers:
+ 	
+\begin{verbatim}
+$PhysicalNames
+number-of-names
+phyical-number "physical-name"
+$EndPhysicalNames 
+\end{verbatim}
+
+

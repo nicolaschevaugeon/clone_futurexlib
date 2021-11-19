@@ -1,0 +1,10 @@
+Retriving data for 'sum rand alloc' (GB) 1.41 min/max/mean/sum 0.84  1.41 1.18 3.53
+========================================
+Retriving data for 'dealloc' (GB) -1.15 min/max/mean/sum -1.15 -0.73 -0.98 -2.95
+========================================
+Retriving data for 'a small chunck in foo' (B) 40.00 min/max/mean/sum 40.00 40.00 40.00 120.00
+========================================
+Retriving data for 'alloc+dealloc' (MB) 261.82 min/max/mean/sum 115.20 261.82 199.91 599.72
+========================================
+========================================
+Retriving data for small chunck i 88.00B

@@ -1,0 +1,62 @@
+PROC3 :
+ has a number of remote copies : 1 on procs :  0 Owner is 0
+ Am I Owner ? 0
+ has c number of remote copies : 2 on procs :  0 2 Owner is 0
+ Am I Owner ? 0
+ has e number of remote copies : 1 on procs :  2 Owner is 2
+ Am I Owner ? 0
+ has g number of remote copies : 0 on procs :  Owner is 3
+ Am I Owner ? 1
+Testing exchange OwnerGather for int data
+P3 Send for a info 401 to 0
+P3 Send for c info 403 to 0
+P3 Send for e info 425 to 2
+OwnerGather Done
+Testing exchange OwnerScatter for int data
+P3 Receive for a info 131 from 0
+P3 Receive for c info 133 from 0
+P3 Receive for e info 335 from 2
+OwnerScatter Done
+Testing exchange AllGather for int data
+P3 Send for a info 401 to 0
+P3 Send for c info 403 to 0
+P3 Send for c info 423 to 2
+P3 Send for e info 425 to 2
+P3 Receive for a info 131 from 0
+P3 Receive for c info 133 from 0
+P3 Receive for c info 333 from 2
+P3 Receive for e info 335 from 2
+AllGather Done
+Testing exchange OwnerGather for pseudo-random size vector of pseudo-random double data
+P3 Send for a info 2 2370.487348 338.838121 to 0
+P3 Send for c info 1 2963.109185 to 0
+P3 Send for e info 0 to 2
+OwnerGather Done
+Testing exchange OwnerScatter for pseudo-random size vector of pseudo-random double data
+P3 Receive for a info 2 9481.949391 1355.352485 from 0
+P3 Receive for c info 1 11852.436739 from 0
+P3 Receive for e info 0 from 2
+OwnerScatter Done
+Testing exchange Sender Only Keys for int to pseudo-random targets
+Proc 3 Will send/receive data associated to object a to/from procs  1
+Proc 3 Will send/receive data associated to object e to/from procs  1 2
+Proc 3 Will send/receive data associated to object g to/from procs  0
+P3 Send for a info 412 to 1
+P3 Send for e info 410 to 1
+P3 Send for e info 420 to 2
+P3 Send for g info 404 to 0
+P3 Receive  1 infos from P 2: 330 For each recieved info a int is computed with rank an will be sent back: 325
+ exchange Sender Only Keys for int to pseudo-random targets Done
+Testing exchange Receive Only Keys for int from sources defined above
+P3 Receive for a info 408 from 1
+P3 Receive for e info 406 from 1
+P3 Receive for e info 415 from 2
+P3 Receive for g info 401 from 0
+ exchange Receive Only Keys for int from pseudo-random sources Done
+Testing exchange Sender Only Keys for  pseudo-random size vector of pseudo-random double data to pseudo-random targets
+P3 Send for a info 3 16353.575250 14414.057496 11866.784307 to 1
+P3 Send for e info 0 to 1
+P3 Send for e info 0 to 2
+P3 Send for g info 1 15185.462732 to 0
+P3 Receive from P 2  a block of 0 infos :
+ exchange Sender Only Keys for double vect to pseudo-random targets Done
