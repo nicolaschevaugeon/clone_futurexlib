@@ -55,8 +55,8 @@ src/xLinearSystemSolverSuperLU.cc
 
 add_library(xInterfaceSuperLu   ${BUILD_SHARED_LIBS}  ${XINTERFACESUPERLU_SOURCE}  )
 target_include_directories(xInterfaceSuperLu PUBLIC src "${CMAKE_CURRENT_BINARY_DIR}")
-target_link_libraries(xInterfaceSuperLu PUBLIC SuperLU::SuperLU xLinAlg::xSolverbase PRIVATE BLAS::BLAS)
-#add_dependencies(xInterfaceSuperLu xLinAlg::xSolverbase) # So that everything is built in the right order !
+target_link_libraries(xInterfaceSuperLu PUBLIC SuperLU::SuperLU xLinAlg::xSolverBase PRIVATE BLAS::BLAS)
+add_dependencies(xInterfaceSuperLu xLinAlg::xSolverBase) # So that everything is built in the right order !
 
 
 

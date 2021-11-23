@@ -62,8 +62,8 @@ src/xLinearSystemSolverMumps.cc
 
 add_library(xInterfaceMumps   ${BUILD_SHARED_LIBS}  ${XINTERFACEMUMPS_SOURCE}  )
 target_include_directories(xInterfaceMumps PUBLIC src)
-target_link_libraries(xInterfaceMumps PUBLIC MUMPS::MUMPS xLinAlg::xSolverbase INTERFACE  BLAS::BLAS MPI::MPI_Fortran)
-add_dependencies(xInterfaceMumps xLinAlg::xSolverbase) # So that everything is built in the right order !
+target_link_libraries(xInterfaceMumps PUBLIC MUMPS::MUMPS xLinAlg::xSolverBase INTERFACE  BLAS::BLAS MPI::MPI_Fortran)
+add_dependencies(xInterfaceMumps xLinAlg::xSolverBase) # So that everything is built in the right order !
 
 
 

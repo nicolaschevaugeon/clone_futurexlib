@@ -3,12 +3,12 @@ cmake_minimum_required(VERSION 3.13...3.19)
 
 
 message(STATUS "=============== --")
-message(STATUS "entering xLinAlg/xSolverbase --")
+message(STATUS "entering xLinAlg/xSolverBase --")
 message(STATUS "=============== --")
 
 
 project(
-    xSolverbase
+    xSolverBase
     VERSION 1.0
     LANGUAGES CXX)
 
@@ -68,22 +68,25 @@ src/xGraphMatrix.cc
 src/xLinearSystemSolverDiagonal.cc
 )
 
-add_library(xSolverbase ${BUILD_SHARED_LIBS} ${XSOLVERBASE_SOURCE})
-target_include_directories(xSolverbase PUBLIC src)
-target_link_libraries(xSolverbase PUBLIC xTool::xTool PRIVATE BLAS::BLAS)
-add_dependencies(xSolverbase xTool::xTool) 
+add_library(xSolverBase ${BUILD_SHARED_LIBS} ${XSOLVERBASE_SOURCE})
+target_include_directories(xSolverBase PUBLIC src)
+add_library(xLinAlg::xSolverBase ALIAS xSolverBase)
+
+
+target_link_libraries(xSolverBase PUBLIC xTool::xTool PRIVATE BLAS::BLAS)
+add_dependencies(xSolverBase xTool::xTool) 
 
 
 
 # Make alias
-add_library(xLinAlg::xSolverbase ALIAS xSolverbase)
+
 # Export to a Config.cmake script
-export(TARGETS xSolverbase NAMESPACE xLinAlg:: FILE xSolverbaseConfig.cmake)
+export(TARGETS xSolverBase NAMESPACE xLinAlg:: FILE xSolverBaseConfig.cmake)
 set(CMAKE_EXPORT_PACKAGE_REGISTRY ON)
-export(PACKAGE xSolverbase)
+export(PACKAGE xSolverBase)
 
 # Install
-install_target_in_destination(xSolverbase)
+#install_target_in_destination(xSolverBase)
 
 
 

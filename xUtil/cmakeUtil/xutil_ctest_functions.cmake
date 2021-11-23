@@ -28,7 +28,7 @@ function(create_tests_from_list)
   message(STATUS "installation path: ${EXECUTABLES_INSTALL_PATH}")
   set(TESTNDIFF "${XFILES_CMAKE_UTIL_PATH}/test_ndiff.sh")
 
-  message(STATUS "ARG_LIST_TESTS ${ARG_LIST_TESTS}")
+#  message(STATUS "ARG_LIST_TESTS ${ARG_LIST_TESTS}")
     
   foreach(item ${ARG_LIST_TESTS})
     set(test ${item})
@@ -60,7 +60,7 @@ function(create_tests_from_list)
           add_executable("${TARGET_NAME}" ${CMAKE_CURRENT_SOURCE_DIR}/${testname}/main.cpp )
         endif()
         target_link_libraries("${TARGET_NAME}" ${EXTERNAL_LIBRARIES} ${ARG_TARGETS})
-        message(STATUS "ARG_TARGET is ${ARG_TARGETS}")
+#        message(STATUS "ARG_TARGET is ${ARG_TARGETS}")
         set_target_properties("${TARGET_NAME}"
           PROPERTIES
           RUNTIME_OUTPUT_DIRECTORY ${INSTALL_PATH}

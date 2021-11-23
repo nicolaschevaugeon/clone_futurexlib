@@ -37,8 +37,7 @@ src/xLapackInterface.cc
 
 add_library(xInterfaceLapack ${BUILD_SHARED_LIBS} ${XINTERFACELAPACK_SOURCE})
 target_include_directories(xInterfaceLapack PUBLIC src)
-#target_include_directories(xInterfaceLapack PRIVATE ${xSolverBase_INCLUDE_DIR})
-target_link_libraries(xInterfaceLapack PUBLIC xLinAlg::xSolverbase PRIVATE LAPACK::LAPACK)
+target_link_libraries(xInterfaceLapack PUBLIC xLinAlg::xSolverBase PRIVATE LAPACK::LAPACK)
 
 
 # Make alias

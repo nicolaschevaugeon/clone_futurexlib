@@ -46,6 +46,6 @@ add_subdirectory(xSolverBase)
 
 
 #if(BUILD_XINTERFACE_MUMPS)
-  add_subdirectory(xInterfaceMumps)
+#  add_subdirectory(xInterfaceMumps)
 #endif(BUILD_XINTERFACE_MUMPS)
 

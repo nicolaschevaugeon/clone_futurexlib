@@ -197,14 +197,7 @@ add_library(xFEM ${BUILD_SHARED_LIBS} ${XFEM_SOURCE})
 target_include_directories(xFEM PUBLIC src)
 
 
-
-# GREG: BBBEAAAARRRRKKK : a corriger ! (mais un peu mieux maintenant : INTERFACE_INCLUDE_DIRECTORIES ne donne que la partie publique des includes)
-#get_target_property(XINTERFACEAOMDGENERAL_INCLUDES xInterface::xInterfaceAOMDGeneral INTERFACE_INCLUDE_DIRECTORIES)
-#get_target_property(XSOLVERBASE_INCLUDES xLinAlg::xSolverbase INTERFACE_INCLUDE_DIRECTORIES)
-#get_target_property(XINTERFACELAPACK_INCLUDES xLinAlg::xInterfaceLapack INTERFACE_INCLUDE_DIRECTORIES)
-#target_include_directories(xFEM PRIVATE ${XINTERFACEAOMDGENERAL_INCLUDES} ${XSOLVERBASE_INCLUDES} ${XINTERFACELAPACK_INCLUDES})
-
-target_link_libraries(xFEM PUBLIC xTool::xTool Trellis::AOMD Trellis::model Trellis::Util xTensor::xTensor xMapping::xMapping xGeom::xGeomTools xQuadrature::xQuadrature xMeshTools::xReader xLinAlg::xSolverbase xLinAlg::xInterfaceLapack)
+target_link_libraries(xFEM PUBLIC xTool::xTool Trellis::AOMD Trellis::model Trellis::Util xTensor::xTensor xMapping::xMapping xGeom::xGeomTools xQuadrature::xQuadrature xMeshTools::xReader xLinAlg::xSolverBase xLinAlg::xInterfaceLapack)
 
 
 # Target properties

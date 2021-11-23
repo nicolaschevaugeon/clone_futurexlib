@@ -80,12 +80,6 @@ src/xcValueJs.cc
 add_library(xCrack ${BUILD_SHARED_LIBS} ${XCRACK_SOURCE})
 target_include_directories(xCrack PUBLIC src)
 
-# GREG: BBBEAAAARRRRKKK : a corriger ! (mais un peu mieux maintenant : INTERFACE_INCLUDE_DIRECTORIES ne donne que la partie publique des includes)
-#get_target_property(XINTERFACEAOMDGENERAL_INCLUDES xInterface::xInterfaceAOMDGeneral INTERFACE_INCLUDE_DIRECTORIES)
-#get_target_property(XSOLVERBASE_INCLUDES xLinAlg::xSolverbase INTERFACE_INCLUDE_DIRECTORIES)
-#get_target_property(XINTERFACELAPACK_INCLUDES xLinAlg::xInterfaceLapack INTERFACE_INCLUDE_DIRECTORIES)
-#target_include_directories(xFEM PRIVATE ${XINTERFACEAOMDGENERAL_INCLUDES} ${XSOLVERBASE_INCLUDES} ${XINTERFACELAPACK_INCLUDES})
-
 target_link_libraries(xCrack PUBLIC  xFEM::xFEM xExport::xExport xCut::xLegacySimpleCut xLinAlg::xInterfaceSuperLu)
 
 # Target properties
@@ -122,22 +116,6 @@ install_target_in_destination(xFEM)
 #add_library(xCrack ${BUILD_SHARED_LIBS}  ${sources}  )
 #set_target_properties(xCrack   PROPERTIES COMPILE_FLAGS "-Wno-deprecated ${FLAGS}")
 
-#include_directories(
-#  ${MPI_CXX_INCLUDE_PATH}
-#  src
-#  ${Boost_INCLUDE_DIR}
-#  ${xTool_INCLUDE_DIR}
-#  ${xGeomTools_INCLUDE_DIR}
-#  ${xInterfaceAOMDGeneral_INCLUDE_DIR}
-#  ${xFEM_INCLUDE_DIR}
-#  ${xLegacySimpleCut_INCLUDE_DIR}
-#  ${Trellis_INCLUDE_DIR}
-#  ${xSolverBase_INCLUDE_DIR}
-#  ${xInterfaceSuperLu_INCLUDE_DIR}
-#  ${xInterfaceLapack_INCLUDE_DIR}
-#  ${Boost_INCLUDE_DIR}
-#  ${xQuadrature_INCLUDE_DIR}
-#	)
 
 #target_link_libraries(xCrack xLegacySimpleCut )
 

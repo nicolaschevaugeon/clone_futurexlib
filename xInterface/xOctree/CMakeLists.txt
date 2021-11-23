@@ -47,7 +47,7 @@ src/surf2LevelSet.cc
 add_library(xInterfacexOctree ${BUILD_SHARED_LIBS} ${XINTERFACEXOCTREE_SOURCE})
 target_include_directories(xInterfacexOctree PUBLIC src)
 
-target_link_libraries(xInterfacexOctree PRIVATE xTool::xTool Trellis::AOMD Trellis::model Trellis::Util xFEM::xFEM xInterface::xInterfaceAOMDGeneral  xLinAlg::xSolverbase PUBLIC xOctree::xOctree)
+target_link_libraries(xInterfacexOctree PRIVATE xTool::xTool Trellis::AOMD Trellis::model Trellis::Util xFEM::xFEM xInterface::xInterfaceAOMDGeneral  xLinAlg::xSolverBase PUBLIC xOctree::xOctree)
 
 
 

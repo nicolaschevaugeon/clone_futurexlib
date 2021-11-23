@@ -21,6 +21,6 @@ set(TEST_LIST
     ${CMAKE_CURRENT_SOURCE_DIR}/xDistBlockDenseMatrix
     )
 
-create_tests_from_list(LIST_TESTS ${TEST_LIST} TARGETS xLinAlg::xSolverbase xTool::xTool BLAS::BLAS)
+create_tests_from_list(LIST_TESTS ${TEST_LIST} TARGETS xLinAlg::xSolverBase xTool::xTool BLAS::BLAS)
 
 
