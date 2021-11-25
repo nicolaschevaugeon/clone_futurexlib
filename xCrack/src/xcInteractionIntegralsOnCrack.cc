@@ -88,13 +88,13 @@ void xcInteractionIntegralsOnCrack::computeSIFS(const xField<> &disp_l, const xI
       DeclareInterpolation(field, creator, front.getFrontMesh().begin(0), front.getFrontMesh().end(0));
       xStateDofCreator<> snh(double_manager, fieldname);
       DeclareState(field, snh, front.getFrontMesh().begin(0), front.getFrontMesh().end(0));
-      std::cout << "space size for " << fieldname << double_manager.size(fieldname) << std::endl;
+      //std::cout << "space size for " << fieldname << double_manager.size(fieldname) << " " << std::endl;
    }
    xField<> &field = *((*fields_I.begin()).second);
    // WARNING -> the keys are always there ... won't work if the crack is divided in 2 parts ! //get ol one frome svn ...
 
    const int numdofs = double_manager.size(rhss[0]->name);
-   double_manager.PrintForDebug("fieldforsifs");
+   //double_manager.PrintForDebug("fieldforsifs");
 
    // Bilinear Form for Mass Matrix
    xFormBilinearWithoutLaw<xValOperator<xtool::xIdentity<xtensor::xVector<>>>, xValOperator<xtool::xIdentity<xtensor::xVector<>>>>
@@ -162,7 +162,7 @@ void xcInteractionIntegralsOnCrack::computeSIFS(const xField<> &disp_l, const xI
 #endif
          solver.connectMatrix(M);
          solver.solve(RHS, sol);
-         cout << "Jrhs " << RHS.GetVal(1) << endl;
+         cout << fieldname << " rhs " << RHS.GetVal(1) << endl;
          Visit(xWriteSolutionVisitor<>(sol.begin()), double_manager.begin(fieldname), double_manager.end(fieldname));
          RHS.ZeroArray();
          sol.ZeroArray();
@@ -250,7 +250,40 @@ void xcInteractionIntegralsOnCrack::postResults(std::map<xcFrontPart *, std::vec
       }
       results[&front_part] = resultsfront;
    }  // end frontpart iter
-};
+}
+
+template<class T, class U, class V>
+void exportsifs(std::ostream &out, const T &parameters, const U &rhss, const V & res){
+    out.setf(ios_base::scientific);
+    out.setf(ios_base::right);
+    out << "# "
+        << "Parameters for domain integral : " << endl;
+    out << "#  "
+        << "nb_modes            :" << parameters.getInt("sifs_nb_modes") << endl;
+    out << "#  "
+        << "rho_geo             :" << parameters.getDouble("sifs_rho_geo") << endl;
+    out << "#  "
+        << "nb_layers_core      :" << parameters.getInt("sifs_nb_layers_core") << endl;
+    out << "#  "
+        << "nb_layers_cylinder  :" << parameters.getInt("sifs_nb_layers_cylinder") << endl;
+    out << "#";out.setf(ios_base::right); out.width(11);    out << "s";  out.width(12);
+    out << "x"; out.width(12); out << "y";  out.width(12); out << "z";
+    for (auto itf : rhss)
+    {
+       out.width(12);
+       out << itf->name;
+    }
+    out << std::endl;
+    for (auto its : res)
+    {
+       double s = its.first;
+       const auto & v = its.second;
+       out.width(12);
+       out << setprecision(3) << s;
+       for (auto vi :v) { out.width(12);  out << vi; }
+       out << endl;
+    }
+}
 
 void xcInteractionIntegralsOnCrack::exportSIFSOnFrontPart(const xcFrontPart &front_part) const
 {
@@ -291,10 +324,7 @@ void xcInteractionIntegralsOnCrack::exportSIFSOnFrontPart(const xcFrontPart &fro
 
          // lss_1D.getVal(e_integ, geom_integ.getUVW());
          // cout << "J " << val_j.mag() << endl;
-         std::vector<double> vals;
-         vals.push_back(xyz(0));
-         vals.push_back(xyz(1));
-         vals.push_back(xyz(2));
+         std::vector<double> vals{xyz(0), xyz(1), xyz(2)};
          for (xcRhsForInteractionsIntegrals *rhs : rhss)
          {
             xtensor::xVector<> val_k;
@@ -306,10 +336,16 @@ void xcInteractionIntegralsOnCrack::exportSIFSOnFrontPart(const xcFrontPart &fro
          res[s] = vals;
       }
    }
+
+   exportsifs(std::cout, parameters, rhss,  res);
+
    std::stringstream filename_s;
    int myrank = ParUtil::Instance()->rank();
    filename_s << front_part.front_part_name << myrank << "_s.txt";
    std::ofstream out(filename_s.str().c_str());
+
+   exportsifs(out, parameters, rhss,  res);
+   /*
    out.setf(ios_base::scientific);
    out.setf(ios_base::right);
    out << "# "
@@ -334,32 +370,23 @@ void xcInteractionIntegralsOnCrack::exportSIFSOnFrontPart(const xcFrontPart &fro
    out.width(12);
    out << "z";
 
-   std::vector<xcRhsForInteractionsIntegrals *>::const_iterator itf = rhss.begin();
-   std::vector<xcRhsForInteractionsIntegrals *>::const_iterator itfe = rhss.end();
-   for (; itf != itfe; ++itf)
+   for (auto itf : rhss)
    {
       out.width(12);
-      out << (*itf)->name;
+      out << itf->name;
    }
    out << std::endl;
-
-   std::map<double, std::vector<double>>::const_iterator its = res.begin();
-   std::map<double, std::vector<double>>::const_iterator itse = res.end();
-   for (; its != itse; ++its)
+   for (auto its : res)
    {
-      double s = its->first;
-      std::vector<double> v = its->second;
+      double s = its.first;
+      const auto & v = its.second;
       out.width(12);
       out << setprecision(3) << s;
-      for (size_t i = 0; i < v.size(); ++i)
-      {
-         out.width(12);
-         out << v[i];
-      }
+      for (auto vi :v) { out.width(12);  out << vi;}
       out << endl;
-      // copy(its->second.begin(), its->second.end(), std::ostream_iterator<double>(out, " "));
    }
    out.close();
+   */
 }
 
 }  // namespace xcrack

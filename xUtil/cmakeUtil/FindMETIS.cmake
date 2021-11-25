@@ -44,6 +44,25 @@ if(USE_PARMETIS)
     find_path(METIS_INCLUDE_DIR metis.h        PATHS ${POSSIBLE_PATHS} )
 
    endif()
+   # check version of parmetis
+   find_file(PARMETIS_HEADER parmetis.h
+     HINTS ${PARMETIS_INCLUDE_DIR}
+     NO_DEFAULT_PATH)
+   if(PARMETIS_HEADER)
+     file(READ "${PARMETIS_HEADER}" parmetisheader)
+     # get version number from defines in header file
+     string(REGEX REPLACE ".*#define PARMETIS_MAJOR_VERSION[ \t]+([0-9]+).*" "\\1"
+       PARMETIS_MAJOR_VERSION  "${parmetisheader}")
+     string(REGEX REPLACE ".*#define PARMETIS_MINOR_VERSION[ \t]+([0-9]+).*" "\\1"
+       PARMETIS_MINOR_VERSION  "${parmetisheader}")
+     string(REGEX REPLACE ".*#define PARMETIS_SUBMINOR_VERSION[ \t]+([0-9]+).*" "\\1"
+       PARMETIS_SUBMINOR_VERSION "${parmetisheader}")
+     set(PARMETIS_VERSION ${PARMETIS_MAJOR_VERSION}.${PARMETIS_MINOR_VERSION}.${PARMETIS_SUBMINOR_VERSION})
+     message(STATUS "Found Parmetis v${PARMETIS_VERSION}")
+   else()
+       message(STATUS "Can't find parmetis.h")
+       set(PARMETIS_VERSION "0.0.0")
+   endif()
 
 else()
 
@@ -57,7 +76,6 @@ else()
   
 endif()
 endif()
-#message(STATUS "JJJJJJJJJJJJJJ ${METIS_LIBRARIES};${PARMETIS_LIBRARIES}")
 
   if(NOT TARGET METIS::METIS)
     add_library(METIS::METIS IMPORTED INTERFACE)
