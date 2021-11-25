@@ -119,8 +119,6 @@ void xcInteractionIntegralsOnCrack::computeSIFS(const xField<> &disp_l, const xI
    // int mpisize = ParUtil::Instance()->size() ;
 
    // Assemble Mass Matrix
-   M.OutputMatrixMatlabFormat(cout);
-
    Assemble(L2_bilinear, assembler_mat, integration_rule_MAT, field, field, localpartfront.begin(), localpartfront.end(),
             xUpperCreatorRecursive(dim_mesh), xUpperCreatorRecursive(dim_mesh));
 
@@ -135,16 +133,12 @@ void xcInteractionIntegralsOnCrack::computeSIFS(const xField<> &disp_l, const xI
    }
    MPI_Allreduce(&sendbuf[0], &start[0], nnz, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD /* ierr*/);
 #endif
-
-   M.OutputMatrixMatlabFormat(cout);
-
    xAssemblerBasic<> assembler_rhs(RHS);
 
    // For Each Front part, assemble RHS for J
    for (xcFrontPart *pfront_part : front)
    {
       xcFrontPart &front_part = *pfront_part;
-      std::cout << rhss.size() << std::endl;
       for (xcRhsForInteractionsIntegrals *rhs : rhss)
       {
          std::string fieldname = rhs->name;
